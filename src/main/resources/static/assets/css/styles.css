@@ -9,6 +9,7 @@
 body {
     background-color: var(--gray-color);
     color: var(--cream-color);
+    font-size: 18px;
 }
 
 .bg-nav {
@@ -31,7 +32,7 @@ footer {
     position: fixed;
     bottom: 0;
     width: 100%;
-    height: 60px;
+    height: 4rem;
     background: var(--navyblue-color);
     color: var(--cream-color);
 }
@@ -59,10 +60,22 @@ footer:hover {
     position: absolute;
     right: 0;
     top: 0;
-    font-size: 250px;
+}
+
+.bug-size-home {
+    font-size: 20rem;
+}
+
+.bug-size-error {
+    font-size: 10rem;
 }
 
 .bi-bug {
     color: var(--honeysuckle-color);
+}
+
+.link {
+    text-decoration: none;
+    color: var(--navyblue-color)
 }
 
