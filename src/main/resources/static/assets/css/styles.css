@@ -1,12 +1,13 @@
 :root {
     --cream-color: #FCFEFB;
-    --honeysuckle-clor: #D85A60;
+    --honeysuckle-color: #D85A60;
     --navyblue-color: #133F50;
     --bluegrotto-color: #41A5C0;
+    --gray-color: #c8c8c8;
 }
 
 body {
-    background-color: var(--honeysuckle-clor);
+    background-color: var(--gray-color);
     color: var(--cream-color);
 }
 
@@ -59,6 +60,9 @@ footer:hover {
     right: 0;
     top: 0;
     font-size: 250px;
-    color: var(--bluegrotto-color);
+}
+
+.bi-bug {
+    color: var(--honeysuckle-color);
 }
 
