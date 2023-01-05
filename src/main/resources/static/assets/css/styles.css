@@ -1,0 +1,29 @@
+:root {
+    --cream-color: #FCFEFB;
+    --honeysuckle-clor: #D85A60;
+    --navyblue-color: #133F50;
+    --bluegrotto-color: #41A5C0;
+}
+
+body {
+    background-color: var(--honeysuckle-clor);
+    color: var(--cream-color);
+}
+
+.bg-nav {
+    background-color: var(--navyblue-color);
+}
+
+.color-nav {
+    color: var(--cream-color);
+}
+
+.color-nav:hover, .color-dark-nav:hover {
+    color: var(--bluegrotto-color);
+}
+
+.color-dark-nav {
+    color: var(--navyblue-color);
+}
+
+
