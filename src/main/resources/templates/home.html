@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="pl" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Bugtracker</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
+    <link rel="stylesheet" href="/assets/css/styles.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.3/font/bootstrap-icons.css">
+</head>
+<body>
+<div th:replace="~{header :: header}"></div>
+<div class="container text-center mt-5">
+    <div class="row align-items-start bug-parent">
+
+        <div class="col-8 bg-content rounded-start">
+            <div class="row">
+                <h1 th:text="#{home.title}" class="mt-5 mb-3"></h1>
+            </div>
+            <div class="row">
+                <p>
+                    Lorem ipsum dolor sit amet, consectetur adipiscing elit mi, interdum vitae tempus sit amet, laoreet
+                    quis elit. Nullam mattis risus vel aliquet vulputate. Cras sit
+                    amet rutrum nulla. Mauris et nisi convallis, maximus quam vitae, consequat elit. Mauris nec velit
+                    nunc. Donec
+                    quis commodo elit. Donec sit amet diam eros.
+
+                    Nam dapibus iaculis commodo. In mollis est vel nisi finibus, vel tristique quam efficitur. Donec ac
+                    nunc magna.
+                    Phasellus sollicitudin suscipit dolor vitae molestie. Phasellus sodales suscipit augue quis
+                    ultrices. Ut auctor
+                    elit ut placerat egestas. Sed congue consequat mi, eu blandit sapien euismod sed. Maecenas rutrum
+                    magna non
+                    dolor semper semper. Quisque luctus mollis est ut finibus. Nunc consequat magna eu volutpat pretium.
+                    Nam
+                    imperdiet varius purus, ut malesuada turpis placerat ac. Sed nec odio tincidunt, ultricies ante
+                    imperdiet,
+                    placerat sem. Nullam iaculis, nibh nec laoreet maximus, justo libero lacinia tortor, eget auctor
+                    nisl orci ac
+                    ipsum. Duis at fringilla erat.
+                </p>
+            </div>
+        </div>
+        <div class="col-4 bg-dark ">
+            <div class="row">
+                <i class="bi bi-bug bug-child rounded-end bug-size-home"></i>
+            </div>
+        </div>
+    </div>
+</div>
+<div th:replace="~{footer :: footer}"></div>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-OERcA2EqjJCMA+/3y+gxIOqMEjwtxJY7qPCqsdltbNJuaOe923+mo//f6V8Qbsw3"
+        crossorigin="anonymous"></script>
+</body>
+</html>
