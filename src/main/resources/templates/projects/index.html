@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="pl">
+<html lang="pl" xmlns:th="http://www.thymeleaf.org">
 <head>
   <meta charset="UTF-8">
   <title>Bugtracker</title>
@@ -10,7 +10,7 @@
 <body>
 <div class="container">
 
-  <h2 class="mt-5">Lista projektów</h2>
+  <h2 class="mt-5" th:text="#{projects.index}"></h2>
 
   <div th:each="project : ${projects}">
     <div class="card mt-4">
