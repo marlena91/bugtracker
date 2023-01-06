@@ -79,3 +79,23 @@ footer:hover {
     color: var(--navyblue-color)
 }
 
+.font-honeysuckle {
+    color: var(--honeysuckle-color);
+}
+
+.font-navyblue {
+    color: var(--navyblue-color);
+}
+
+.bg-btn {
+    color: var(--cream-color);
+    background-color: var(--navyblue-color);
+}
+
+.bg-btn:hover {
+    color: var(--bluegrotto-color);
+    background-color: var(--navyblue-color);
+}
+
+
+
