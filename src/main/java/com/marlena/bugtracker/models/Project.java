@@ -3,6 +3,7 @@ package com.marlena.bugtracker.models;
 import jakarta.persistence.*;
 import lombok.Data;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 @Entity

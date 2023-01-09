@@ -5,6 +5,7 @@ import com.marlena.bugtracker.models.Project;
 import com.marlena.bugtracker.repositories.PersonRepository;
 import com.marlena.bugtracker.repositories.ProjectRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.crossstore.ChangeSetPersister;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
@@ -22,6 +23,10 @@ public class ProjectService {
         return projectRepository.findAll();
     }
 
+    public Project findProjectById(Long id) throws ChangeSetPersister.NotFoundException {
+        return projectRepository.findById(id).orElseThrow(ChangeSetPersister.NotFoundException::new);
+    }
+
     public boolean saveProjectDetails(Project project) {
         boolean isSaved = false;
         project.setDateCreated(new Date());
@@ -34,4 +39,6 @@ public class ProjectService {
         }
         return isSaved;
     }
+
+
 }

@@ -76,7 +76,8 @@ footer:hover {
 
 .link {
     text-decoration: none;
-    color: var(--navyblue-color)
+    color: var(--navyblue-color);
+    cursor: pointer;
 }
 
 .font-honeysuckle {
@@ -87,14 +88,38 @@ footer:hover {
     color: var(--navyblue-color);
 }
 
-.bg-btn {
+.bg-btn-dark {
     color: var(--cream-color);
     background-color: var(--navyblue-color);
 }
 
-.bg-btn:hover {
+.bg-btn-dark:hover {
     color: var(--bluegrotto-color);
     background-color: var(--navyblue-color);
+}
+
+.bg-btn-red {
+    color: var(--cream-color);
+    background-color: var(--honeysuckle-color);
+}
+
+.bg-btn-red:hover {
+    color: var(--navyblue-color);
+    background-color: var(--honeysuckle-color);
+}
+
+.btn-width-8 {
+    width: 8rem;
+}
+
+
+
+.bold {
+    font-weight: bold;
+}
+
+.font-larger {
+    font-size: 1.5rem;
 }
 
 
