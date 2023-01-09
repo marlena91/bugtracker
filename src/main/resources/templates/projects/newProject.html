@@ -19,18 +19,18 @@
                 <h3 th:text="#{project.title}" class="mt-5 mb-5 font-navyblue"></h3>
             </div>
             <div class="row">
-                <form method="post">
+                <form th:action="@{/projects/saveProject}" method="post" th:object="${project}">
                     <div class="row">
                         <div class="col-8">
-                            <input class="w-100 me-2" type="text" placeholder="Nazwa">
+                            <input class="w-100 me-2" type="text" th:field="*{name}" placeholder="Nazwa">
                         </div>
                         <div class="col-4">
-                            <input class="w-100" type="text" placeholder="Kod">
+                            <input class="w-100" type="text" th:field="*{code}" placeholder="Kod">
                         </div>
                     </div>
                     <div class="row mt-2">
                         <div class="col-12">
-                            <textarea class="w-100"
+                            <textarea class="w-100" th:field="*{description}"
                                       placeholder="Opis zadania"></textarea>
                         </div>
                     </div>

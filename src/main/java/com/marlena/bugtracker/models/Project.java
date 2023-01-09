@@ -31,4 +31,17 @@ public class Project {
     @ManyToOne
     @JoinColumn(name = "creator_id", nullable = false)
     private Person creator;
+
+    @Override
+    public String toString() {
+        return "Project{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", code='" + code + '\'' +
+                ", description='" + description + '\'' +
+                ", enabled=" + enabled +
+                ", dateCreated=" + dateCreated +
+                ", creator=" + creator +
+                '}';
+    }
 }

@@ -26,9 +26,9 @@
 
     <div th:each="project : ${projects}">
         <div class="card mt-4">
-            <h5 class="card-header" th:text="${project.getName()}"></h5>
+            <h5 class="card-header font-navyblue" th:text="${project.getName()}"></h5>
             <div class="card-body">
-                <p class="card-text" th:text="${project.getDescription()}"></p>
+                <p class="card-text font-navyblue" th:text="${project.getDescription()}"></p>
             </div>
         </div>
     </div>
