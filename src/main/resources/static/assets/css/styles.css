@@ -112,8 +112,6 @@ footer:hover {
     width: 8rem;
 }
 
-
-
 .bold {
     font-weight: bold;
 }
@@ -122,5 +120,7 @@ footer:hover {
     font-size: 1.5rem;
 }
 
-
+.style-none {
+    list-style-type:none;
+}
 

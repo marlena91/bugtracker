@@ -1,9 +1,11 @@
 package com.marlena.bugtracker.models;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Pattern;
+import jakarta.validation.constraints.Size;
 import lombok.Data;
 
-import java.text.SimpleDateFormat;
 import java.util.Date;
 
 @Entity
@@ -15,11 +17,17 @@ public class Project {
     private Long id;
 
     @Column(nullable = false)
+    @NotBlank(message="Name must not be blank")
+    @Size(min=5, message="Name must be at least 5 characters long")
     private String name;
 
+    @NotBlank(message = "Code must not be blank")
+    @Pattern(regexp="(^$|[0-9]{4})", message="Code must be 4 digits")
     @Column(nullable = false, unique = true)
     private String code;
 
+    @NotBlank(message = "Description must not be blank")
+    @Size(min=10, message="Description must be at least 10 characters long")
     @Column(columnDefinition = "TEXT")
     private String description;
 

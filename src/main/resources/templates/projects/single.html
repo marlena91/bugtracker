@@ -28,14 +28,18 @@
                             <p class="card-text" th:text="${project.getDescription()}"></p>
                         </div>
                         <div class="card-footer">
-                            <small>
-                                <span th:text="#{projects.code}">Kod: </span>
-                                <span class="text-muted" th:text="${project.getCode()}"></span>
-                            </small>
-                            <small>
-                                <span th:text="#{projects.code}">Kod: </span>
-                                <span class="text-muted" th:text="${project.getCode()}"></span>
-                            </small>
+                            <p>
+                                <small>
+                                    <span class="text-muted" th:text="#{projects.code}">Kod: </span>
+                                    <span th:text="${project.getCode()}"></span>
+                                </small>
+                            </p>
+                            <p>
+                                <small>
+                                    <span class="text-muted" th:text="#{project.single.creator}">Kod: </span>
+                                    <span th:text="${project.getCreator().getUserRealName()}"></span>
+                                </small>
+                            </p>
                         </div>
                     </div>
                 </div>

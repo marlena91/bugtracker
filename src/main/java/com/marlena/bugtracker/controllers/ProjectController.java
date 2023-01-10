@@ -3,8 +3,8 @@ package com.marlena.bugtracker.controllers;
 import com.marlena.bugtracker.models.Project;
 import com.marlena.bugtracker.repositories.ProjectRepository;
 import com.marlena.bugtracker.services.ProjectService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.boot.context.config.ConfigDataResourceNotFoundException;
 import org.springframework.data.crossstore.ChangeSetPersister;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -39,25 +39,25 @@ public class ProjectController {
     @GetMapping("/new")
     public String displayNewProjectForm(Model model) {
         model.addAttribute("project", new Project());
-        return "projects/newProject.html";
-    }
-
-    @RequestMapping(value = "/saveProject", method = POST)
-    public String saveProject(@ModelAttribute("project") Project project, Errors errors) {
-        if (errors.hasErrors()) {
-            return "projects/newProject.html";
-        }
-        projectService.saveProjectDetails(project);
-        return "redirect:/projects/new";
+        return "projects/new.html";
     }
 
     @GetMapping("/{id}")
     public ModelAndView GetProjectById(@PathVariable(value = "id") Long projectId) throws ChangeSetPersister.NotFoundException {
         Project project = projectService.findProjectById(projectId);
-        ModelAndView modelAndView = new ModelAndView("projects/singleProject");
+        ModelAndView modelAndView = new ModelAndView("projects/single");
         modelAndView.addObject("project", project);
 
         return modelAndView;
+    }
+
+    @RequestMapping(value = "/saveProject", method = POST)
+    public String saveProject(@Valid @ModelAttribute("project") Project project, Errors errors) {
+        if (errors.hasErrors()) {
+            return "projects/new.html";
+        }
+        projectService.saveProjectDetails(project);
+        return "redirect:/projects/"+project.getId();
     }
 
 
