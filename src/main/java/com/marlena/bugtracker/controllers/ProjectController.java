@@ -9,10 +9,7 @@ import org.springframework.data.crossstore.ChangeSetPersister;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.Errors;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.util.List;
@@ -43,7 +40,7 @@ public class ProjectController {
     }
 
     @GetMapping("/{id}")
-    public ModelAndView GetProjectById(@PathVariable(value = "id") Long projectId) throws ChangeSetPersister.NotFoundException {
+    public ModelAndView getProjectById(@PathVariable(value = "id") Long projectId) throws ChangeSetPersister.NotFoundException {
         Project project = projectService.findProjectById(projectId);
         ModelAndView modelAndView = new ModelAndView("projects/single");
         modelAndView.addObject("project", project);
@@ -51,7 +48,7 @@ public class ProjectController {
         return modelAndView;
     }
 
-    @RequestMapping(value = "/saveProject", method = POST)
+    @PostMapping
     public String saveProject(@Valid @ModelAttribute("project") Project project, Errors errors) {
         if (errors.hasErrors()) {
             return "projects/new.html";
