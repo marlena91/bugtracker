@@ -1,11 +1,13 @@
 package com.marlena.bugtracker.services;
 
+import com.marlena.bugtracker.exceptions.ResourceNotFoundException;
 import com.marlena.bugtracker.models.Person;
 import com.marlena.bugtracker.models.Project;
 import com.marlena.bugtracker.repositories.PersonRepository;
 import com.marlena.bugtracker.repositories.ProjectRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.crossstore.ChangeSetPersister;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
@@ -23,8 +25,10 @@ public class ProjectService {
         return projectRepository.findAll();
     }
 
-    public Project findProjectById(Long id) throws ChangeSetPersister.NotFoundException {
-        return projectRepository.findById(id).orElseThrow(ChangeSetPersister.NotFoundException::new);
+    public ResponseEntity<Project> findProjectById(Long id) throws ResourceNotFoundException {
+        Project project = projectRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Project not found for this id :: " + id));
+        return ResponseEntity.ok().body(project);
     }
 
     public boolean saveProjectDetails(Project project) {
@@ -34,10 +38,21 @@ public class ProjectService {
         project.setCreator(person.get());
         Project savedProject = projectRepository.save(project);
         System.out.println(savedProject);
-        if(null != savedProject && savedProject.getId()>0){
+        if (null != savedProject && savedProject.getId() > 0) {
             isSaved = true;
         }
         return isSaved;
+    }
+
+    public ResponseEntity<Project> updateProject(Project project) throws ResourceNotFoundException {
+        Long id = project.getId();
+        Project projectToUpdate = projectRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Project not found for this id :: " + id));
+        projectToUpdate.setName(project.getName());
+        projectToUpdate.setCode(project.getCode());
+        projectToUpdate.setDescription(project.getDescription());
+        final Project updatedProject = projectRepository.save(projectToUpdate);
+        return ResponseEntity.ok(updatedProject);
     }
 
 

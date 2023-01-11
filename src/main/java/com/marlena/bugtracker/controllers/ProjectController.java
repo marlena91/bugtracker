@@ -1,11 +1,12 @@
 package com.marlena.bugtracker.controllers;
 
+import com.marlena.bugtracker.exceptions.ResourceNotFoundException;
 import com.marlena.bugtracker.models.Project;
 import com.marlena.bugtracker.repositories.ProjectRepository;
 import com.marlena.bugtracker.services.ProjectService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.crossstore.ChangeSetPersister;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.Errors;
@@ -13,8 +14,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.util.List;
-
-import static org.springframework.web.bind.annotation.RequestMethod.POST;
 
 @Controller
 @RequestMapping("projects")
@@ -40,10 +39,10 @@ public class ProjectController {
     }
 
     @GetMapping("/{id}")
-    public ModelAndView getProjectById(@PathVariable(value = "id") Long projectId) throws ChangeSetPersister.NotFoundException {
-        Project project = projectService.findProjectById(projectId);
+    public ModelAndView getProjectById(@PathVariable(value = "id") Long projectId) throws ResourceNotFoundException {
+        ResponseEntity<Project> project = projectService.findProjectById(projectId);
         ModelAndView modelAndView = new ModelAndView("projects/single");
-        modelAndView.addObject("project", project);
+        modelAndView.addObject("project", project.getBody());
 
         return modelAndView;
     }
@@ -54,6 +53,24 @@ public class ProjectController {
             return "projects/new.html";
         }
         projectService.saveProjectDetails(project);
+        return "redirect:/projects/"+project.getId();
+    }
+
+    @GetMapping("/edit/{id}")
+    public ModelAndView editProjectById(@PathVariable(value = "id") Long projectId) throws ResourceNotFoundException {
+        ResponseEntity<Project> project = projectService.findProjectById(projectId);
+        ModelAndView modelAndView = new ModelAndView("projects/edit");
+        modelAndView.addObject("project", project.getBody());
+
+        return modelAndView;
+    }
+
+    @PostMapping("/{id}")
+    public String updateProject(@Valid @ModelAttribute("project") Project project, Errors errors) throws ResourceNotFoundException {
+        if (errors.hasErrors()) {
+            return "projects/edit.html";
+        }
+        projectService.updateProject(project);
         return "redirect:/projects/"+project.getId();
     }
 
