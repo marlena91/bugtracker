@@ -1,6 +1,7 @@
 package com.marlena.bugtracker.services;
 
 import com.marlena.bugtracker.exceptions.ResourceNotFoundException;
+import com.marlena.bugtracker.filters.ProjectFilter;
 import com.marlena.bugtracker.models.Person;
 import com.marlena.bugtracker.models.Project;
 import com.marlena.bugtracker.repositories.PersonRepository;
@@ -10,6 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -18,8 +20,19 @@ public class ProjectService {
     private final ProjectRepository projectRepository;
     private final PersonRepository personRepository;
 
-    public List<Project> findAll() {
-        return projectRepository.findAll();
+    public List<Project> findAll(ProjectFilter filter) {
+        return projectRepository.findAll(filter.buildQuery());
+    }
+
+    public List<Project> findAllEnabled() {
+        return projectRepository.findAllByEnabled(true);
+    }
+
+    public Set<Person> findAllCreators(){
+        return findAllEnabled()
+                .stream()
+                .map(Project::getCreator)
+                .collect(Collectors.toSet());
     }
 
     public ResponseEntity<Project> findProjectById(Long id) throws ResourceNotFoundException {

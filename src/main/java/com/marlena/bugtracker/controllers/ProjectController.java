@@ -2,6 +2,7 @@ package com.marlena.bugtracker.controllers;
 
 import com.marlena.bugtracker.exceptions.ResourceNotFoundException;
 import com.marlena.bugtracker.models.Project;
+import com.marlena.bugtracker.filters.ProjectFilter;
 import com.marlena.bugtracker.services.ProjectService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -22,10 +23,12 @@ public class ProjectController {
     private final ProjectService projectService;
 
     @GetMapping
-    public ModelAndView getAllProjects() {
-        List<Project> projects = projectService.findAll();
+    public ModelAndView getAllProjects(@ModelAttribute ProjectFilter filter) {
+        List<Project> projects = projectService.findAll(filter);
         ModelAndView modelAndView = new ModelAndView("projects/index");
         modelAndView.addObject("projects", projects);
+        modelAndView.addObject("filter", filter);
+        modelAndView.addObject("creators", projectService.findAllCreators());
 
         return modelAndView;
     }
