@@ -6,13 +6,10 @@ import com.marlena.bugtracker.models.Project;
 import com.marlena.bugtracker.repositories.PersonRepository;
 import com.marlena.bugtracker.repositories.ProjectRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.crossstore.ChangeSetPersister;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
-import java.util.Date;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 @RequiredArgsConstructor
@@ -53,6 +50,15 @@ public class ProjectService {
         projectToUpdate.setDescription(project.getDescription());
         final Project updatedProject = projectRepository.save(projectToUpdate);
         return ResponseEntity.ok(updatedProject);
+    }
+
+    public Map<String, Boolean> deleteProject(Long id) throws ResourceNotFoundException {
+        Project project = projectRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Pot found for this id :: " + id));
+        projectRepository.delete(project);
+        Map<String, Boolean> response = new HashMap<>();
+        response.put("deleted", Boolean.TRUE);
+        return response;
     }
 
 

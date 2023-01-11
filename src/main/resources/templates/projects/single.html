@@ -50,7 +50,7 @@
     <div class="row justify-content-end mb-5">
         <div class="col-4 mb-5">
             <a th:href="@{/projects/edit/{id}(id=${project.getId()})}" class="btn bg-btn-dark btn-width-8 m-2" th:text="#{project.single.edit.button}"></a>
-            <a th:href="@{/projects}" class="btn bg-btn-red btn-width-8 m-2" th:text="#{project.single.delete.button}"></a>
+            <a th:href="@{/projects/delete/{id}(id=${project.getId()})}" class="btn bg-btn-red btn-width-8 m-2" th:text="#{project.single.delete.button}"></a>
         </div>
     </div>
 </div>

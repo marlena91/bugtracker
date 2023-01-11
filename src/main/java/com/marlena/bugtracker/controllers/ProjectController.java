@@ -2,7 +2,6 @@ package com.marlena.bugtracker.controllers;
 
 import com.marlena.bugtracker.exceptions.ResourceNotFoundException;
 import com.marlena.bugtracker.models.Project;
-import com.marlena.bugtracker.repositories.ProjectRepository;
 import com.marlena.bugtracker.services.ProjectService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -21,7 +20,6 @@ import java.util.List;
 public class ProjectController {
 
     private final ProjectService projectService;
-    private final ProjectRepository projectRepository;
 
     @GetMapping
     public ModelAndView getAllProjects() {
@@ -72,6 +70,12 @@ public class ProjectController {
         }
         projectService.updateProject(project);
         return "redirect:/projects/"+project.getId();
+    }
+
+    @GetMapping("/delete/{id}")
+    public String deleteProject(@PathVariable(value="id") Long projectId) throws ResourceNotFoundException {
+        projectService.deleteProject(projectId);
+        return "redirect:/projects";
     }
 
 
