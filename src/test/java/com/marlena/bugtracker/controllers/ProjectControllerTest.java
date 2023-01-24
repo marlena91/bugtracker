@@ -34,7 +34,7 @@ class ProjectControllerTest {
                 project
         );
 
-        doReturn(projects).when(projectService).findAll(any());
+        doReturn(projects).when(projectService).findAll(any(), any());
         doReturn(Collections.emptySet()).when(projectService).findAllCreators();
 
         mockMvc.perform(get("/projects"))

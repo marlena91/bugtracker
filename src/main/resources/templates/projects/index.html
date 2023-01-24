@@ -75,6 +75,15 @@
 
                 </div>
             </div>
+            <div class="row">
+                <ul class="pagination col-12 m-5 justify-content-center m-5">
+                    <li class="m-2 rounded" th:each="pageNumber : ${#numbers.sequence(0, projects.getTotalPages() - 1)}">
+                        <a th:href="@{'/projects?page=' + ${pageNumber}}"
+                           th:text="${pageNumber + 1}"
+                           class="page-link"></a>
+                    </li>
+                </ul>
+            </div>
         </div>
     </div>
 
