@@ -25,10 +25,10 @@ public class SecurityConfig {
                         .anyRequest().authenticated()
                 )
                 .formLogin((form) -> form
-                        .loginPage("/login")
+                        .loginPage("/login").defaultSuccessUrl("/my-profile").failureUrl("/login?error=true")
                         .permitAll()
                 )
-                .logout((logout) -> logout.permitAll());
+                .logout().logoutSuccessUrl("/login?logout=true").invalidateHttpSession(true).permitAll();
 
         return http.build();
     }

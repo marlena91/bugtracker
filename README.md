@@ -1,6 +1,6 @@
 ```properties
 
-# spring-security-demo.properties
+# SPRING_CONFIG_LOCATION=C:\spring\spring-security-demo.properties
 spring.datasource.url=jdbc:postgresql://localhost:5436/wsb_bugtracker
 spring.datasource.username=wsb
 spring.datasource.password=secret
