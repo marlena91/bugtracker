@@ -70,6 +70,14 @@ footer:hover {
     font-size: 10rem;
 }
 
+.bug-size-login {
+    font-size: 12rem;
+}
+
+.bug-size-login-error {
+    font-size: 14rem;
+}
+
 .bi-bug {
     color: var(--honeysuckle-color);
 }

@@ -45,7 +45,7 @@
         </div>
         <div class="col-4 bg-dark ">
             <div class="row">
-                <i class="bi bi-bug bug-child rounded-end bug-size-error"></i>
+                <i class="bi bi-bug bug-child rounded-end" th:classappend="${param.error} ? bug-size-login-error : bug-size-login"></i>
             </div>
         </div>
     </div>

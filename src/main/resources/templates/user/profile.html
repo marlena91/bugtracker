@@ -19,9 +19,14 @@
         <h1 th:text="#{home.title}" class="mt-5 mb-3"></h1>
       </div>
       <div class="row">
-        <p>
-         TEST
-        </p>
+          <div class="container mt-5 p-5 login">
+            <div class="text-center" style="max-width:500px;">
+              <h3 class="title-style coral" th:text="${'Welcome - ' + username}"></h3>
+            </div>
+            <div class="row">
+              <p class="coral text-center" th:text="${'You logged in as - ' + roles}"></p>
+            </div>
+          </div>
       </div>
     </div>
     <div class="col-4 bg-dark ">
