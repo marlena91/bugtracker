@@ -27,6 +27,9 @@
                             <div th:if="${param.error}" class="alert alert-danger">
                                 <span th:text="#{login.error}"></span>
                             </div>
+                            <div th:if="${param.logout}" class="alert alert-info">
+                                <span th:text="#{login.logout}"></span>
+                            </div>
                             <div class="row mt-3 ">
                                 <input class="form-control" type="text" name="username" id="username" th:placeholder="#{login.username}"/>
                             </div>
@@ -45,7 +48,9 @@
         </div>
         <div class="col-4 bg-dark ">
             <div class="row">
-                <i class="bi bi-bug bug-child rounded-end" th:classappend="${param.error} ? bug-size-login-error : bug-size-login"></i>
+                <i class="bi bi-bug bug-child rounded-end"
+                   th:classappend="${param.error} or ${param.logout} ? bug-size-login-info : bug-size-login">
+                </i>
             </div>
         </div>
     </div>
