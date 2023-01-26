@@ -25,7 +25,7 @@ public class PersonController {
     @GetMapping
     public ModelAndView getAllUsers(){
         List<Person> users = userService.findAll();
-        ModelAndView modelAndView = new ModelAndView("user/users");
+        ModelAndView modelAndView = new ModelAndView("users/users");
         modelAndView.addObject("users", users);
 
         return modelAndView;
@@ -43,7 +43,7 @@ public class PersonController {
     @GetMapping("/new")
     public String displayNewUserForm(Model model) {
         model.addAttribute("user", new Person());
-        return "user/new";
+        return "users/new";
     }
 
     @PostMapping

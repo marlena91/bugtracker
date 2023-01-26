@@ -26,8 +26,8 @@
             <div class="row">
                 <h1 class="mt-3 text-center font-honeysuckle bold" th:text="#{users.index}"></h1>
             </div>
-            <div class="row justify-content-around">
-                <div th:each="user : ${users}" class="col-3 card mt-4">
+            <div class="row justify-content-center">
+                <div th:each="user : ${users}" class="col-3 card mt-4 me-2">
                     <a th:href="@{/users/{id}(id=${user.getId()})}"
                        class="card-header link bold font-larger" th:text="${user.getUserRealName()}"></a>
                     <div class="card-body">

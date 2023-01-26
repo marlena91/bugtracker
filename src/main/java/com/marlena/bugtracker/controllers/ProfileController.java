@@ -14,6 +14,6 @@ public class ProfileController {
     public String displayUserProfile(Model model, Authentication authentication) {
         model.addAttribute("username", authentication.getName());
         model.addAttribute("roles", authentication.getAuthorities().toString());
-        return "user/profile.html";
+        return "users/profile.html";
     }
 }
