@@ -33,10 +33,6 @@ public class PersonService {
 
     public boolean saveUserDetails(Person user) {
         boolean isSaved = false;
-        Optional<Authority> authority = authorityRepository.findById(1L);
-        Set<Authority> authorities = new HashSet<>();
-        authorities.add(authority.get());
-        user.setAuthorities(authorities);
         Person savedUser = personRepository.save(user);
         System.out.println(savedUser);
         if (null != savedUser && savedUser.getId() > 0) {

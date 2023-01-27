@@ -28,24 +28,51 @@
             <div class="row justify-content-center">
                 <div class="col-8">
                     <form th:action="@{/users}" method="post" th:object="${user}">
-                        <div class="form-group  mt-2">
-                            <label for="userLogin" th:text="#{user.new.login}" class="font-navyblue"></label>
-                            <input type="text" class="form-control" id="userLogin" th:field="*{login}">
-                        </div>
-                        <div class="form-group mt-2">
-                            <label for="userEmail" th:text="#{user.new.email}" class="font-navyblue"></label>
-                            <input type="text" class="form-control" id="userEmail" th:field="*{email}">
-                        </div>
-                        <div class="form-group  mt-2">
-                            <label for="userRealName" th:text="#{user.new.name}"
-                                   class="font-navyblue"></label>
-                            <input type="text" class="form-control" id="userRealName"  th:field="*{userRealName}">
-                        </div>
-                        <div class="form-group  mt-2">
-                            <label for="userPassword" th:text="#{user.new.password}"
-                                   class="font-navyblue"></label>
-                            <input type="password" class="form-control" id="userPassword"  th:field="*{password}">
-                        </div>
+                        <div class="row">
+                                <div class="form-group  mt-2">
+                                    <label for="userLogin" th:text="#{user.new.login}" class="font-navyblue"></label>
+                                    <input type="text" class="form-control" id="userLogin" th:field="*{login}">
+                                </div>
+                                <div class="form-group mt-2">
+                                    <label for="userEmail" th:text="#{user.new.email}" class="font-navyblue"></label>
+                                    <input type="text" class="form-control" id="userEmail" th:field="*{email}">
+                                </div>
+                                <div class="form-group  mt-2">
+                                    <label for="userRealName" th:text="#{user.new.name}"
+                                           class="font-navyblue"></label>
+                                    <input type="text" class="form-control" id="userRealName"
+                                           th:field="*{userRealName}">
+                                </div>
+                                <div class="form-group  mt-2">
+                                    <label for="userPassword" th:text="#{user.new.password}"
+                                           class="font-navyblue"></label>
+                                    <input type="password" class="form-control" id="userPassword"
+                                           th:field="*{password}">
+                                </div>
+                                <div class="form-group d-flex align-items-center mt-2">
+                                    <div class="form-check m-2">
+                                        <input th:field="*{authorities}" value="1" class="form-check-input"
+                                               type="radio" name="adminOption" id="adminOption">
+                                        <label class="form-check-label font-navyblue" for="adminOption">
+                                            Admin
+                                        </label>
+                                    </div>
+                                    <div class="form-check m-2">
+                                        <input th:field="*{authorities}" value="3" class="form-check-input"
+                                               type="radio" name="leaderOption" id="leaderOption">
+                                        <label class="form-check-label font-navyblue" for="leaderOption">
+                                            Leader
+                                        </label>
+                                    </div>
+                                    <div class="form-check m-2">
+                                        <input th:field="*{authorities}" value="4" class="form-check-input"
+                                               type="radio" name="userOption" id="userOption" >
+                                        <label class="form-check-label font-navyblue" for="userOption">
+                                            User
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
                         <div class="row mt-4">
                             <div class="col d-flex justify-content-end align-items-end">
                                 <button type="submit" class="btn btn-lg bg-btn-dark mb-5"
