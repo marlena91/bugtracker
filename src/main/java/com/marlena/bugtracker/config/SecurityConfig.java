@@ -22,6 +22,9 @@ public class SecurityConfig {
                 .authorizeHttpRequests((requests) -> requests
                         .requestMatchers("/", "/home").permitAll()
                         .requestMatchers("/assets/**").permitAll()
+                        .requestMatchers("/users/new").hasRole("ADMIN")
+                        .requestMatchers("/users").hasRole("LEADER")
+                        .requestMatchers("/projects/new").hasRole("LEADER")
                         .anyRequest().authenticated()
                 )
                 .formLogin((form) -> form
@@ -33,14 +36,14 @@ public class SecurityConfig {
         return http.build();
     }
 
-    @Bean
-    public InMemoryUserDetailsManager userDetailsService() {
-        PasswordEncoder encoder = PasswordEncoderFactories.createDelegatingPasswordEncoder();
-        UserDetails user = User.withUsername("demo")
-                .password(encoder.encode("secret"))
-                .roles("USER")
-                .build();
-        return new InMemoryUserDetailsManager(user);
-    }
+//    @Bean
+//    public InMemoryUserDetailsManager userDetailsService() {
+//        PasswordEncoder encoder = PasswordEncoderFactories.createDelegatingPasswordEncoder();
+//        UserDetails user = User.withUsername("demo")
+//                .password(encoder.encode("secret"))
+//                .roles("USER")
+//                .build();
+//        return new InMemoryUserDetailsManager(user);
+//    }
 
 }

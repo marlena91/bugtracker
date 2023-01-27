@@ -2,7 +2,6 @@ package com.marlena.bugtracker.controllers;
 
 import com.marlena.bugtracker.exceptions.ResourceNotFoundException;
 import com.marlena.bugtracker.models.Person;
-import com.marlena.bugtracker.models.Project;
 import com.marlena.bugtracker.services.PersonService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
