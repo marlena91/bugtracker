@@ -9,10 +9,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
-import java.util.HashSet;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 
 @Service
 @RequiredArgsConstructor
@@ -34,7 +31,6 @@ public class PersonService {
     public boolean saveUserDetails(Person user) {
         boolean isSaved = false;
         Person savedUser = personRepository.save(user);
-        System.out.println(savedUser);
         if (null != savedUser && savedUser.getId() > 0) {
             isSaved = true;
         }
