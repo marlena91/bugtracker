@@ -4,6 +4,7 @@ import com.marlena.bugtracker.exceptions.ResourceNotFoundException;
 import com.marlena.bugtracker.models.Authority;
 import com.marlena.bugtracker.models.Person;
 import com.marlena.bugtracker.models.Project;
+import com.marlena.bugtracker.repositories.AuthorityRepository;
 import com.marlena.bugtracker.services.AuthorityService;
 import com.marlena.bugtracker.services.PersonService;
 import jakarta.validation.Valid;
@@ -15,9 +16,7 @@ import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 
 @Controller
 @RequestMapping("users")
@@ -26,6 +25,7 @@ public class PersonController {
     
     private final PersonService userService;
     private final AuthorityService authorityService;
+    private final AuthorityRepository authorityRepository;
 
     @GetMapping
     public ModelAndView getAllUsers(){
@@ -81,18 +81,25 @@ public class PersonController {
         return "redirect:/users/"+user.getId();
     }
 
-    @GetMapping("/authorities")
-    public ModelAndView getAuthorities(@RequestParam String login) {
+    @GetMapping("/authorities/{login}")
+    public ModelAndView getAuthorities(@PathVariable(value = "login") String login) {
         Iterable<Authority> authorities = authorityService.findAllByPersonLogin(login);
-        List<String> namesOfAuthorities = new ArrayList<>();
-        for (Authority authority:
-             authorities) {
-            namesOfAuthorities.add(authority.getName());
-        }
         ModelAndView modelAndView = new ModelAndView("users/authorities");
-        modelAndView.addObject("authorities", namesOfAuthorities);
+        modelAndView.addObject("authority", authorities.iterator().next());
+        modelAndView.addObject("login", login);
 
         return modelAndView;
     }
+
+    @PostMapping("/authorities/{login}")
+    public String updateAuthority(@PathVariable(value="login") String login, @ModelAttribute Authority authority, Errors errors) throws ResourceNotFoundException {
+        if (errors.hasErrors()) {
+            return "users/authorities/"+login;
+        }
+        Authority authorityToAdd = authorityService.findByAuthority(authority.getName()).getBody();
+        ResponseEntity<Person> updateUser = userService.updateUserAuthorities(authorityToAdd, login);
+        return "redirect:/users/"+ Objects.requireNonNull(updateUser.getBody()).getId();
+    }
+
 }
 

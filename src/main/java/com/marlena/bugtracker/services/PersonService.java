@@ -29,6 +29,12 @@ public class PersonService {
         return ResponseEntity.ok().body(user);
     }
 
+    public ResponseEntity<Person> findUserByLogin(String login) throws ResourceNotFoundException {
+        Person user = personRepository.findByLogin(login)
+                .orElseThrow(() -> new ResourceNotFoundException("User not found for this id :: " + login));
+        return ResponseEntity.ok().body(user);
+    }
+
     public boolean saveUserDetails(Person user) {
         boolean isSaved = false;
         Person savedUser = personRepository.save(user);
@@ -45,8 +51,24 @@ public class PersonService {
         userToUpdate.setUserRealName(user.getUserRealName());
         userToUpdate.setLogin(user.getLogin());
         userToUpdate.setEmail(user.getEmail());
-        final Person updatedProject = personRepository.save(userToUpdate);
-        return ResponseEntity.ok(updatedProject);
+        final Person updatedUser = personRepository.save(userToUpdate);
+        return ResponseEntity.ok(updatedUser);
+    }
+
+    public ResponseEntity<Person> updateUserAuthorities(Authority authority, String login) throws ResourceNotFoundException {
+        Person userToUpdate = personRepository.findByLogin(login)
+                .orElseThrow(() -> new ResourceNotFoundException("User not found for this id :: " + login));
+        Iterable<Authority> userAuthorities = authorityRepository.findAllByPersonLogin(login);
+        Set<Authority> userSetAuthorities = new HashSet<>();
+        for (Authority auth:
+             userAuthorities) {
+            if(auth.getId() >= authority.getId()){
+                userSetAuthorities.add(auth);
+            }
+        }
+        userToUpdate.setAuthorities(userSetAuthorities);
+        final Person updatedUser = personRepository.save(userToUpdate);
+        return ResponseEntity.ok(updatedUser);
     }
 
 
