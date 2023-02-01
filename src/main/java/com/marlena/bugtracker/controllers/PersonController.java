@@ -81,6 +81,12 @@ public class PersonController {
         return "redirect:/users/"+user.getId();
     }
 
+    @GetMapping("/delete/{id}")
+    public String deleteUser(@PathVariable(value="id") Long userId) throws ResourceNotFoundException {
+        userService.deleteUser(userId);
+        return "redirect:/users";
+    }
+
     @GetMapping("/authorities/{login}")
     public ModelAndView getAuthorities(@PathVariable(value = "login") String login) {
         Iterable<Authority> authorities = authorityService.findAllByPersonLogin(login);
@@ -100,6 +106,8 @@ public class PersonController {
         ResponseEntity<Person> updateUser = userService.updateUserAuthorities(authorityToAdd, login);
         return "redirect:/users/"+ Objects.requireNonNull(updateUser.getBody()).getId();
     }
+
+
 
 }
 

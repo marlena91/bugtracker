@@ -2,8 +2,6 @@ package com.marlena.bugtracker.services;
 
 import com.marlena.bugtracker.exceptions.ResourceNotFoundException;
 import com.marlena.bugtracker.models.Authority;
-import com.marlena.bugtracker.models.Project;
-import com.marlena.bugtracker.repositories.AuthorityRepository;
 import com.marlena.bugtracker.models.Person;
 import com.marlena.bugtracker.repositories.PersonRepository;
 import lombok.RequiredArgsConstructor;
@@ -17,7 +15,7 @@ import java.util.*;
 public class PersonService {
 
     private final PersonRepository personRepository;
-    private final AuthorityRepository authorityRepository;
+    private final AuthorityService authorityService;
 
     public List<Person> findAll(){
         return personRepository.findAll();
@@ -58,10 +56,10 @@ public class PersonService {
     public ResponseEntity<Person> updateUserAuthorities(Authority authority, String login) throws ResourceNotFoundException {
         Person userToUpdate = personRepository.findByLogin(login)
                 .orElseThrow(() -> new ResourceNotFoundException("User not found for this id :: " + login));
-        Iterable<Authority> userAuthorities = authorityRepository.findAllByPersonLogin(login);
+        Set<Authority> enabledAuthorities = authorityService.findAllAuthorities();
         Set<Authority> userSetAuthorities = new HashSet<>();
         for (Authority auth:
-             userAuthorities) {
+             enabledAuthorities) {
             if(auth.getId() >= authority.getId()){
                 userSetAuthorities.add(auth);
             }
@@ -71,5 +69,12 @@ public class PersonService {
         return ResponseEntity.ok(updatedUser);
     }
 
-
+    public Map<String, Boolean> deleteUser(Long id) throws ResourceNotFoundException {
+        Person user = personRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Pot found for this id :: " + id));
+        personRepository.delete(user);
+        Map<String, Boolean> response = new HashMap<>();
+        response.put("deleted", Boolean.TRUE);
+        return response;
+    }
 }
