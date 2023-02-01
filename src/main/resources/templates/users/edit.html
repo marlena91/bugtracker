@@ -20,6 +20,13 @@
                     <span th:text="#{user.edit.title}"></span>
                     <span th:text="${user.getUserRealName()}"></span>
                 </h1>
+                <div class="row mt-3">
+                    <p class="font-navyblue col text-end" th:text="#{user.new.permissions} + ' ' + ${authority}"></p>
+                    <a th:href="@{/users/edit/{id}(id=${user.getId()})}" class="link hover-bluegrotto col">
+                        <i class="bi bi-person-gear"></i>
+                        <span th:text="#{user.edit.permissions.button}"></span>
+                    </a>
+                </div>
             </div>
             <div class="row justify-content-center">
                 <div class="col">
@@ -44,22 +51,14 @@
                             <label for="userEmail" th:text="#{user.new.email}" class="font-navyblue"></label>
                             <input type="text" class="form-control" id="userEmail" th:field="*{email}">
                         </div>
-                        <div class="form-group  mt-2">
-                            <label for="userPassword" th:text="#{user.new.password}"
-                                   class="font-navyblue"></label>
-                            <input type="password" class="form-control" id="userPassword"
-                                   th:field="*{password}">
-                        </div>
-                        <div class="col">
-                            <p class="mt-3 text-center font-navyblue">
-                                <span th:text="#{user.new.permissions}"></span>
-                                <span th:each="authority : ${user.getAuthorities()}">
-                            <span th:text="${authority.getName()}"></span>
-                        </span>
-                            </p>
-                        </div>
-
-
+                        <!--                        <div class="form-group  mt-2">-->
+                        <!--                            <select class="form-select" aria-label="userPermissions">-->
+                        <!--                                <option th:text="" selected></option>-->
+                        <!--                                <option value="1">Admin</option>-->
+                        <!--                                <option value="3">Leader</option>-->
+                        <!--                                <option value="4">User</option>-->
+                        <!--                            </select>-->
+                        <!--                        </div>-->
                         <div class="row mt-4">
                             <div class="col d-flex justify-content-end align-items-end">
                                 <button type="submit" class="btn btn-lg bg-btn-dark mb-5"

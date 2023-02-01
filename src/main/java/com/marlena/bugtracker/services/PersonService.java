@@ -2,6 +2,7 @@ package com.marlena.bugtracker.services;
 
 import com.marlena.bugtracker.exceptions.ResourceNotFoundException;
 import com.marlena.bugtracker.models.Authority;
+import com.marlena.bugtracker.models.Project;
 import com.marlena.bugtracker.repositories.AuthorityRepository;
 import com.marlena.bugtracker.models.Person;
 import com.marlena.bugtracker.repositories.PersonRepository;
@@ -35,6 +36,17 @@ public class PersonService {
             isSaved = true;
         }
         return isSaved;
+    }
+
+    public ResponseEntity<Person> updateUser(Person user) throws ResourceNotFoundException {
+        Long id = user.getId();
+        Person userToUpdate = personRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("User not found for this id :: " + id));
+        userToUpdate.setUserRealName(user.getUserRealName());
+        userToUpdate.setLogin(user.getLogin());
+        userToUpdate.setEmail(user.getEmail());
+        final Person updatedProject = personRepository.save(userToUpdate);
+        return ResponseEntity.ok(updatedProject);
     }
 
 

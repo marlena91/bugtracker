@@ -38,9 +38,7 @@
               <p>
                 <small>
                   <span class="text-muted" th:text="#{user.single.roles}"> </span>
-                  <span th:each="authority : ${user.getAuthorities()}">
-                    <span th:text="' - ' + ${authority.getName()} + ' - '"></span>
-                  </span>
+                    <span th:text="' - ' + ${authority} + ' - '"></span>
                 </small>
               </p>
             </div>
