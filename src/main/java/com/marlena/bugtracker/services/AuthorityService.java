@@ -24,6 +24,11 @@ public class AuthorityService {
         return authorityRepository.findAllByPersonLogin(login);
     }
 
+    public Authority findFirstByPersonLogin(String login) {
+        Iterable<Authority> authorities = authorityRepository.findAllByPersonLogin(login);
+        return authorities.iterator().next();
+    }
+
     public ResponseEntity<Authority> findByAuthority(String name) throws ResourceNotFoundException {
         Authority authority = authorityRepository.findByName(name)
                 .orElseThrow(() -> new ResourceNotFoundException("Authority not found for this name :: "+ name));

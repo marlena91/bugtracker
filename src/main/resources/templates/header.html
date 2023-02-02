@@ -34,7 +34,7 @@
                         <ul class="dropdown-menu ">
                             <li><a th:href="@{/users}" th:text="#{home.list}" class="dropdown-item color-dark-nav"></a></li>
                             <li><a th:href="@{/users/new}" th:text="#{home.addUser}" class="dropdown-item color-dark-nav"></a></li>
-                            <li><a th:href="@{/users}" th:text="#{home.grantPermissions}" class="dropdown-item color-dark-nav"></a></li>
+                            <li><a th:href="@{/users/authorities}" th:text="#{home.grantPermissions}" class="dropdown-item color-dark-nav"></a></li>
                         </ul>
                     </li>
                     <li sec:authorize="isAnonymous()" class="nav-item">

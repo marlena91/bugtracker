@@ -40,8 +40,8 @@ public class Person {
     @Column(nullable = false)
     @ManyToMany(cascade = CascadeType.MERGE)
     @JoinTable(name = "person_authorities",
-    joinColumns = @JoinColumn(name="person_id"),
-    inverseJoinColumns = @JoinColumn(name="authority_id"))
+        joinColumns = @JoinColumn(name="person_id"),
+        inverseJoinColumns = @JoinColumn(name="authority_id"))
     private Set<Authority> authorities;
 
 
