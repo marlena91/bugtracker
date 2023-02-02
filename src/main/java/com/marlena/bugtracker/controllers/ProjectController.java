@@ -7,6 +7,7 @@ import com.marlena.bugtracker.services.ProjectService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.Errors;
@@ -49,11 +50,11 @@ public class ProjectController {
     }
 
     @PostMapping
-    public String saveProject(@Valid @ModelAttribute("project") Project project, Errors errors) {
+    public String saveProject(@Valid @ModelAttribute("project") Project project, Errors errors, Authentication authentication) {
         if (errors.hasErrors()) {
             return "projects/new.html";
         }
-        projectService.saveProjectDetails(project);
+        projectService.saveProjectDetails(project, authentication);
         return "redirect:/projects/"+project.getId();
     }
 

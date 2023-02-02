@@ -8,6 +8,7 @@ import com.marlena.bugtracker.repositories.PersonRepository;
 import com.marlena.bugtracker.repositories.ProjectRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
@@ -41,10 +42,10 @@ public class ProjectService {
         return ResponseEntity.ok().body(project);
     }
 
-    public boolean saveProjectDetails(Project project) {
+    public boolean saveProjectDetails(Project project, Authentication authentication) {
         boolean isSaved = false;
         project.setDateCreated(new Date());
-        Optional<Person> person = personRepository.findById(1L);
+        Optional<Person> person = personRepository.findByLogin(authentication.getName());
         project.setCreator(person.get());
         Project savedProject = projectRepository.save(project);
         System.out.println(savedProject);
