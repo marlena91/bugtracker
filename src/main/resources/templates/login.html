@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="pl" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Bugtracker</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
+    <link rel="stylesheet" href="/assets/css/styles.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.3/font/bootstrap-icons.css">
+    <link rel="shortcut icon" href="/assets/images/favicon.ico" />
+
+</head>
+<body>
+<div th:replace="~{header :: header}"></div>
+<div class="container text-center mt-5">
+    <div class="row align-items-start bug-parent">
+
+        <div class="col-8 bg-content rounded-start">
+            <div class="row">
+                <h2 th:text="#{login.title1}" class="mt-5 mb-3 font-navyblue"></h2>
+            </div>
+            <div class="row">
+                <form th:action="@{/login}" method="post">
+                    <div class="row m-3 justify-content-center">
+                        <div class="col-6 text-center">
+                            <div th:if="${param.error}" class="alert alert-danger">
+                                <span th:text="#{login.error}"></span>
+                            </div>
+                            <div th:if="${param.logout}" class="alert alert-info">
+                                <span th:text="#{login.logout}"></span>
+                            </div>
+                            <div class="row mt-3 ">
+                                <input class="form-control" type="text" name="username" id="username" th:placeholder="#{login.username}"/>
+                            </div>
+                            <div class="row mt-3">
+                                <input class="form-control" type="password" name="password" id="password" th:placeholder="#{login.password}"/>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row m-3 justify-content-center">
+                        <div class="col-4 text-center">
+                            <button th:text="#{login.button}" class="btn bg-btn-dark"></button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <div class="col-4 bg-dark ">
+            <div class="row">
+                <i class="bi bi-bug bug-child rounded-end"
+                   th:classappend="${param.error} or ${param.logout} ? bug-size-login-info : bug-size-login">
+                </i>
+            </div>
+        </div>
+    </div>
+</div>
+<div th:replace="~{footer :: footer}"></div>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-OERcA2EqjJCMA+/3y+gxIOqMEjwtxJY7qPCqsdltbNJuaOe923+mo//f6V8Qbsw3"
+        crossorigin="anonymous"></script>
+</body>
+</html>

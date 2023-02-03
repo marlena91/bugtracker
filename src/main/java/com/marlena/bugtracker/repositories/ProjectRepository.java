@@ -1,5 +1,6 @@
 package com.marlena.bugtracker.repositories;
 
+import com.marlena.bugtracker.models.Person;
 import com.marlena.bugtracker.models.Project;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
@@ -16,4 +17,5 @@ public interface ProjectRepository extends JpaRepository<Project, Long>, JpaSpec
     List<Project> findByEnabledNative(@Param("enabled") Boolean enabled);
 
     List<Project> findAllByEnabled(Boolean enabled);
+    List<Project> findAllByCreator(Person creator);
 }
