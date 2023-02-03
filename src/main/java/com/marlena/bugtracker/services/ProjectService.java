@@ -29,6 +29,10 @@ public class ProjectService {
         return projectRepository.findAllByEnabled(true);
     }
 
+    public List<Project> findAllByCreator(Person creator) {
+        return projectRepository.findAllByCreator(creator);
+    }
+
     public Set<Person> findAllCreators(){
         return findAllEnabled()
                 .stream()
@@ -74,6 +78,7 @@ public class ProjectService {
         response.put("deleted", Boolean.TRUE);
         return response;
     }
+
 
 
 }

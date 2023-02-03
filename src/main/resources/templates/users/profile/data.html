@@ -13,18 +13,26 @@
 <div th:replace="~{header :: header}"></div>
 <div class="container text-center mt-5">
     <div class="row align-items-start bug-parent">
-
         <div class="col-8 bg-content rounded-start">
+            <div th:replace="~{users/profile/navbar.html :: nav}"></div>
             <div class="row">
-                <h1 th:text="${'Welcome - ' + username}" class="mt-5 mb-3"></h1>
+                <h4 th:text="#{user.profile.data.title}" class="mt-5 mb-3"></h4>
             </div>
-            <div class="row">
-                <p class="coral text-center" th:text="${'You logged in as - ' + roles}"></p>
+            <div class="row ms-4">
+                <p class="text-start ms-2" th:text="#{user.single.email} + ': ' + ${user.getEmail()}"></p>
+                <p class="text-start ms-2" th:text="#{user.single.name} + ': ' + ${user.getUserRealName()}"></p>
+                <p class="text-start ms-2" th:text="#{user.single.login} + ': ' + ${user.getLogin()}"></p>
+            </div>
+            <div class="row justify-content-end">
+                <div class="col-4">
+                    <a th:href="@{/users/edit/{id}(id=${user.getId()})}" class="btn bg-btn-dark  mb-2"
+                       th:text="#{user.single.edit.button}"></a>
+                </div>
             </div>
         </div>
         <div class="col-4 bg-dark ">
             <div class="row">
-                <i class="bi bi-bug rounded-end bug-size-home"></i>
+                <i class="bi bi-bug bug-child rounded-end bug-size-login"></i>
             </div>
         </div>
     </div>
