@@ -12,7 +12,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
@@ -25,7 +24,6 @@ import java.util.List;
 public class IssueController {
 
     private final IssueService  issueService;
-    private final ProjectService projectService;
 
     @GetMapping
     public ModelAndView getAllIssues(){
@@ -45,10 +43,9 @@ public class IssueController {
 
 
     @GetMapping("/new/{projectId}")
-    public ModelAndView displayNewIssueForm(@PathVariable Long projectId) throws ResourceNotFoundException {
+    public ModelAndView displayNewIssueForm(@PathVariable Long projectId) {
         ModelAndView modelAndView = new ModelAndView("issues/new");
         modelAndView.addObject("issue", new Issue());
-        modelAndView.addObject("project", projectId);
         return modelAndView;
     }
 

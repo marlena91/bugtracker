@@ -19,26 +19,31 @@
       <div class="row">
         <h1 class="mt-3 text-center font-honeysuckle bold" th:text="#{home.issues}"></h1>
       </div>
-      <div th:each="issue : ${issues}">
-        <div class="row justify-content-center">
-          <div class="col-10">
-            <div class="card mt-4">
-              <a th:href="@{/issues/{id}(id=${issue.getId()})}"
-                 class="card-header link bold font-larger" th:text="${issue.getName()}"></a>
-              <div class="card-body">
-                <p class="card-text font-navyblue" th:text="${issue.getDescription()}"></p>
-              </div>
-              <div class="card-footer">
-                <small class="font-navyblue">
-                  <span th:text="#{issue.code}"></span>
-                  <span class="text-muted" th:text="${issue.getCode()}"></span>
-                </small>
-
-              </div>
-            </div>
-          </div>
-
-        </div>
+      <div class="row justify-content-center mt-3">
+        <table class="table table-light font-navyblue">
+          <thead>
+          <tr>
+            <th scope="col" th:text="#{issue.single.name}"></th>
+            <th scope="col" th:text="#{issue.single.author}"></th>
+            <th scope="col" th:text="#{issue.single.project}"></th>
+            <th scope="col" th:text="#{issue.single.code}"></th>
+            <th scope="col" th:text="#{issue.single.date.created}"></th>
+            <th scope="col" th:text="#{issue.single.priority}"></th>
+          </tr>
+          </thead>
+          <tbody class="table-group-divider">
+          <tr th:each="issue: ${issues} ">
+            <th scope="row">
+              <a th:href="@{issues/{id}(id=${issue.getId})}" th:text="${issue.getName()}" class="link font-navyblue"></a>
+            </th>
+            <td th:text="${issue.getCreator().getUserRealName()}"></td>
+            <td th:text="${issue.getProject().getName()}"></td>
+            <td th:text="${issue.getCode()}"></td>
+            <td th:text="${issue.getDateCreated()}"></td>
+            <td th:text="${issue.getPriority()}"></td>
+          </tr>
+          </tbody>
+        </table>
       </div>
     </div>
   </div>
