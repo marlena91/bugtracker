@@ -41,7 +41,6 @@ public class IssueController {
         return modelAndView;
     }
 
-
     @GetMapping("/new/{projectId}")
     public ModelAndView displayNewIssueForm(@PathVariable Long projectId) {
         ModelAndView modelAndView = new ModelAndView("issues/new");
@@ -49,7 +48,7 @@ public class IssueController {
         return modelAndView;
     }
 
-    @PostMapping("/{projectId}")
+    @PostMapping("/new/{projectId}")
     public String saveIssue(@Valid @ModelAttribute("issue") Issue issue, @PathVariable Long projectId, Errors errors, Authentication authentication) {
         if (errors.hasErrors()) {
             return "projects/new.html";
@@ -58,9 +57,22 @@ public class IssueController {
         return "redirect:/issues/"+issue.getId();
     }
 
+    @GetMapping("edit/{id}")
+    public ModelAndView editIssueById(@PathVariable Long id) throws ResourceNotFoundException {
+        ResponseEntity<Issue> issue = issueService.findById(id);
+        ModelAndView modelAndView = new ModelAndView("issues/edit");
+        modelAndView.addObject("issue", issue.getBody());
+        return modelAndView;
+    }
 
-
-    //update
+    @PostMapping("/{id}")
+    public String updateIssue(@Valid @ModelAttribute("issue") Issue issue, Errors errors) throws ResourceNotFoundException {
+        if (errors.hasErrors()) {
+            return "issues/edit.html";
+        }
+        issueService.updateIssue(issue);
+        return "redirect:/issues/"+issue.getId();
+    }
 
 
 

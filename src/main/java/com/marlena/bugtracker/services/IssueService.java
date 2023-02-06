@@ -48,4 +48,19 @@ public class IssueService {
         }
         return isSaved;
     }
+
+    public ResponseEntity<Issue> updateIssue(Issue issue) throws ResourceNotFoundException {
+        Long id = issue.getId();
+        Issue issueToUpdate = issueRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Issue not found for this id :: " + id));
+        issueToUpdate.setName(issue.getName());
+        issueToUpdate.setDescription(issue.getDescription());
+        issueToUpdate.setPriority(issue.getPriority());
+        issueToUpdate.setStatus(issue.getStatus());
+        issueToUpdate.setTags(issue.getTags());
+        issueToUpdate.setType(issue.getType());
+        issueToUpdate.setLastUpdated(new Date());
+        final Issue updatedIssue = issueRepository.save(issueToUpdate);
+        return ResponseEntity.ok(updatedIssue);
+    }
 }

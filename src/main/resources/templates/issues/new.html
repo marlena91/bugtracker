@@ -27,7 +27,7 @@
             </div>
             <div class="row justify-content-center">
                 <div class="col-10">
-                    <form th:action="@{/issues/{projectId}(projectId=${projectId})}" method="post" th:object="${issue}">
+                    <form th:action="@{/issues/new/{projectId}(projectId=${projectId})}" method="post" th:object="${issue}">
                         <div class="form-group  mt-2">
                             <label for="issueName" th:text="#{issue.new.name}" class="font-navyblue"></label>
                             <input type="text" class="form-control" id="issueName" th:field="*{name}">
@@ -43,128 +43,33 @@
                                       </textarea>
                         </div>
                         <div class="form-group d-flex align-items-center mt-2">
-                            <div class="form-check m-2">
-                                <input th:field="*{priority}" value="MINOR" class="form-check-input"
-                                       type="radio" name="minorOption" id="minorOption">
-                                <label class="form-check-label font-navyblue" for="minorOption">
-                                    MINOR
-                                </label>
-                            </div>
-                            <div class="form-check m-2">
-                                <input th:field="*{priority}" value="NORMAL" class="form-check-input"
-                                       type="radio" name="normalOption" id="normalOption">
-                                <label class="form-check-label font-navyblue" for="normalOption">
-                                    NORMAL
-                                </label>
-                            </div>
-                            <div class="form-check m-2">
-                                <input th:field="*{priority}" value="MAJOR" class="form-check-input"
-                                       type="radio" name="majorOption" id="majorOption" >
-                                <label class="form-check-label font-navyblue" for="majorOption">
-                                    MAJOR
-                                </label>
-                            </div>
-                            <div class="form-check m-2">
-                                <input th:field="*{priority}" value="CRITICAL" class="form-check-input"
-                                       type="radio" name="criticalOption" id="criticalOption" >
-                                <label class="form-check-label font-navyblue" for="criticalOption">
-                                    CRITICAL
+                            <div th:each="priority: ${T(com.marlena.bugtracker.models.Priority).values()}" class="form-check m-2">
+                                <input th:field="*{priority}" th:value="${priority}" class="form-check-input"
+                                       type="radio" name="priorityOption" id="priorityOption">
+                                <label th:text="${priority}" class="form-check-label font-navyblue" for="priorityOption">
                                 </label>
                             </div>
                         </div>
                         <div class="form-group d-flex align-items-center mt-2">
-                            <div class="form-check m-2">
-                                <input th:field="*{status}" value="TODO" class="form-check-input"
-                                       type="radio" name="todoOption" id="todoOption">
-                                <label class="form-check-label font-navyblue" for="todoOption">
-                                    TO DO
-                                </label>
-                            </div>
-                            <div class="form-check m-2">
-                                <input th:field="*{status}" value="IN_PROGRESS" class="form-check-input"
-                                       type="radio" name="inProgressOption" id="inProgressOption">
-                                <label class="form-check-label font-navyblue" for="inProgressOption">
-                                    IN PROGRESS
-                                </label>
-                            </div>
-                            <div class="form-check m-2">
-                                <input th:field="*{status}" value="DONE" class="form-check-input"
-                                       type="radio" name="doneOption" id="doneOption" >
-                                <label class="form-check-label font-navyblue" for="doneOption">
-                                    DONE
-                                </label>
-                            </div>
-                            <div class="form-check m-2">
-                                <input th:field="*{status}" value="BLOCKED" class="form-check-input"
-                                       type="radio" name="blockedOption" id="blockedOption" >
-                                <label class="form-check-label font-navyblue" for="blockedOption">
-                                    BLOCKED
+                            <div th:each="status: ${T(com.marlena.bugtracker.models.Status).values()}" class="form-check m-2">
+                                <input th:field="*{status}" th:value="${status}" class="form-check-input"
+                                       type="radio" name="statusOption" id="statusOption">
+                                <label th:text="${status}" class="form-check-label font-navyblue" for="statusOption">
                                 </label>
                             </div>
                         </div>
                         <div class="input-group mb-3">
-                            <div class="input-group-text ms-1 rounded col-3">
-                                <input class="form-check-input mt-0" type="checkbox" name="tags" id="bugCheckbox"
-                                        value="BUG" th:field="*{tags}">
-                                <label class="form-check-label ms-1" for="bugCheckbox"
-                                       th:text="#{issue.tag.bug}">
-                                </label>
-                            </div>
-                            <div class="input-group-text ms-1 rounded col-3">
-                                <input class="form-check-input mt-0" type="checkbox" name="tags"
-                                       id="documentationCheckbox" value="DOCUMENTATION" th:field="*{tags}">
-                                <label class="form-check-label ms-1" for="documentationCheckbox"
-                                       th:text="#{issue.tag.documentation}">
-                                </label>
-                            </div>
-                            <div class="input-group-text ms-1 rounded col-3">
-                                <input class="form-check-input mt-0" type="checkbox" name="tags"
-                                       id="duplicateCheckbox" value="DUPLICATE" th:field="*{tags}">
-                                <label class="form-check-label ms-1" for="duplicateCheckbox"
-                                       th:text="#{issue.tag.duplicate}">
-                                </label>
-                            </div>
-                            <div class="input-group-text ms-1 rounded col-3">
-                                <input class="form-check-input mt-0" type="checkbox" name="tags"
-                                       id="enhancementCheckbox" value="ENHANCEMENT" th:field="*{tags}">
-                                <label class="form-check-label ms-1" for="enhancementCheckbox"
-                                       th:text="#{issue.tag.enhancement}">
-                                </label>
-                            </div>
-                            <div class="input-group-text ms-1 rounded col-3">
-                                <input class="form-check-input mt-0" type="checkbox" name="tags"
-                                       id="helpWantedCheckbox" value="HELP_WANTED" th:field="*{tags}">
-                                <label class="form-check-label ms-1" for="helpWantedCheckbox"
-                                       th:text="#{issue.tag.helpWanted}">
-                                </label>
-                            </div>
-                            <div class="input-group-text ms-1 rounded col-3">
-                                <input class="form-check-input mt-0" type="checkbox" name="tags"
-                                       id="invalidCheckbox" value="INVALID" th:field="*{tags}">
-                                <label class="form-check-label ms-1" for="invalidCheckbox"
-                                       th:text="#{issue.tag.invalid}">
-                                </label>
-                            </div>
-                            <div class="input-group-text ms-1 rounded col-3">
-                                <input class="form-check-input mt-0" type="checkbox" name="tags"
-                                       id="questionCheckbox" value="QUESTION" th:field="*{tags}">
-                                <label class="form-check-label ms-1" for="questionCheckbox"
-                                       th:text="#{issue.tag.question}">
-                                </label>
-                            </div>
-                            <div class="input-group-text ms-1 rounded col-3">
-                                <input class="form-check-input mt-0" type="checkbox" name="tags"
-                                       id="wontfixCheckbox" value="WONTFIX" th:field="*{tags}">
-                                <label class="form-check-label ms-1" for="wontfixCheckbox"
-                                       th:text="#{issue.tag.wontfix}">
+                            <div th:each="tag: ${T(com.marlena.bugtracker.models.Tag).values()}" class="input-group-text ms-1 rounded col-3">
+                                <input class="form-check-input mt-0" type="checkbox" name="tags" id="tagCheckbox"
+                                        th:value="${tag}" th:field="*{tags}">
+                                <label class="form-check-label ms-1" for="tagCheckbox"
+                                       th:text="${tag}">
                                 </label>
                             </div>
                         </div>
                         <select th:field="*{type}" class="form-select" aria-label="issueType">
-                            <option value="TASK" selected>Task</option>
-                            <option value="BUG">Bug</option>
-                            <option value="PERFORMANCE_ISSUE">Performance issue</option>
-                            <option value="FEATURE">Feature</option>
+                            <option th:each="type: ${T(com.marlena.bugtracker.models.Type).values()}"
+                                    th:value="${type}" th:text="${type}"></option>
                         </select>
                         <div class="row mt-4">
                             <div class="col d-flex justify-content-end align-items-end">
