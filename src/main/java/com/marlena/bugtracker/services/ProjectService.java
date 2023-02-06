@@ -72,7 +72,7 @@ public class ProjectService {
 
     public Map<String, Boolean> deleteProject(Long id) throws ResourceNotFoundException {
         Project project = projectRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Pot found for this id :: " + id));
+                .orElseThrow(() -> new ResourceNotFoundException("Project not found for this id :: " + id));
         projectRepository.delete(project);
         Map<String, Boolean> response = new HashMap<>();
         response.put("deleted", Boolean.TRUE);

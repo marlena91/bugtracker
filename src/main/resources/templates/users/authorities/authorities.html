@@ -35,10 +35,10 @@
                     <tr th:each="user: ${users} ">
                         <th th:text="${user.getId()}" scope="row"></th>
                         <td th:text="${user.getUserRealName()}"></td>
-                        <td th:text="${user.getLogin()}">Otto</td>
-                        <td th:text="${user.getEmail()}">@mdo</td>
+                        <td th:text="${user.getLogin()}"></td>
+                        <td th:text="${user.getEmail()}"></td>
                         <div th:each="authority: ${user.getAuthorities()}">
-                            <td th:text="${authority.getName()}">@mdo</td>
+                            <td th:text="${authority.getName()}"></td>
                         </div>
                         <td>
                             <a th:href="@{/users/authorities/{login}(login=${user.getLogin()})}" class="link hover-bluegrotto col">
