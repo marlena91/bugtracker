@@ -10,6 +10,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
@@ -30,6 +31,10 @@ public class ProjectService {
         return projectRepository.findAllByEnabled(true);
     }
 
+    public List<Project> findAllByCreator(Person creator) {
+        return projectRepository.findAllByCreator(creator);
+    }
+
     public Set<Person> findAllCreators(){
         return findAllEnabled()
                 .stream()
@@ -43,10 +48,10 @@ public class ProjectService {
         return ResponseEntity.ok().body(project);
     }
 
-    public boolean saveProjectDetails(Project project) {
+    public boolean saveProjectDetails(Project project, Authentication authentication) {
         boolean isSaved = false;
         project.setDateCreated(new Date());
-        Optional<Person> person = personRepository.findById(1L);
+        Optional<Person> person = personRepository.findByLogin(authentication.getName());
         project.setCreator(person.get());
         Project savedProject = projectRepository.save(project);
         System.out.println(savedProject);
@@ -69,12 +74,13 @@ public class ProjectService {
 
     public Map<String, Boolean> deleteProject(Long id) throws ResourceNotFoundException {
         Project project = projectRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Pot found for this id :: " + id));
+                .orElseThrow(() -> new ResourceNotFoundException("Project not found for this id :: " + id));
         projectRepository.delete(project);
         Map<String, Boolean> response = new HashMap<>();
         response.put("deleted", Boolean.TRUE);
         return response;
     }
+
 
 
 }

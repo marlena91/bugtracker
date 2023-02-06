@@ -70,8 +70,22 @@ footer:hover {
     font-size: 10rem;
 }
 
+.bug-size-login {
+    font-size: 12rem;
+}
+
+.bug-size-login-info {
+    font-size: 14rem;
+}
+
 .bi-bug {
     color: var(--honeysuckle-color);
+}
+
+.bi-person-check-edit {
+    color: var(--navyblue-color);
+    font-size: 2rem;
+    font-weight: bold;
 }
 
 .link {
@@ -86,6 +100,18 @@ footer:hover {
 
 .font-navyblue {
     color: var(--navyblue-color);
+}
+
+.font-bluegrotto {
+    color: var(--bluegrotto-color);
+}
+
+.hover-bluegrotto:hover {
+    color: var(--bluegrotto-color);
+}
+
+.hover-honeysuckle:hover {
+    color: var(--honeysuckle-color);
 }
 
 .bg-btn-dark {
@@ -123,4 +149,3 @@ footer:hover {
 .style-none {
     list-style-type:none;
 }
-

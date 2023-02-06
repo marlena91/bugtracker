@@ -17,4 +17,5 @@ public class Authority {
     @Column(nullable = false, unique = true)
     private String name;
 
+
 }
