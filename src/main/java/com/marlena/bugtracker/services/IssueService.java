@@ -4,6 +4,7 @@ import com.marlena.bugtracker.exceptions.ResourceNotFoundException;
 import com.marlena.bugtracker.models.Issue;
 import com.marlena.bugtracker.models.Person;
 import com.marlena.bugtracker.models.Project;
+import com.marlena.bugtracker.filters.IssueFilter;
 import com.marlena.bugtracker.repositories.IssueRepository;
 import com.marlena.bugtracker.repositories.PersonRepository;
 import com.marlena.bugtracker.repositories.ProjectRepository;
@@ -13,6 +14,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -22,8 +24,19 @@ public class IssueService {
     private final PersonRepository personRepository;
     private final ProjectRepository projectRepository;
 
-    public List<Issue> findAll(){
-        return issueRepository.findAll();
+    public List<Issue> findAll(IssueFilter filter){
+        return issueRepository.findAll(filter.buildQuery());
+    }
+    public List<Issue> findAllEnabled() {
+        return issueRepository.findAllByEnabled(true);
+    }
+
+
+    public Set<Person> findAllCreators(){
+        return findAllEnabled()
+                .stream()
+                .map(Issue::getCreator)
+                .collect(Collectors.toSet());
     }
 
     public ResponseEntity<Issue> findById(Long id) throws ResourceNotFoundException {

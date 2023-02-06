@@ -1,13 +1,10 @@
 package com.marlena.bugtracker.controllers;
 
 import com.marlena.bugtracker.exceptions.ResourceNotFoundException;
+import com.marlena.bugtracker.filters.IssueFilter;
 import com.marlena.bugtracker.models.Issue;
-import com.marlena.bugtracker.models.Project;
-import com.marlena.bugtracker.repositories.IssueRepository;
 import com.marlena.bugtracker.services.IssueService;
-import com.marlena.bugtracker.services.ProjectService;
 import jakarta.validation.Valid;
-import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
@@ -26,10 +23,13 @@ public class IssueController {
     private final IssueService  issueService;
 
     @GetMapping
-    public ModelAndView getAllIssues(){
-        List<Issue> issues = issueService.findAll();
+    public ModelAndView getAllIssues(@ModelAttribute IssueFilter filter){
+        List<Issue> issues = issueService.findAll(filter);
         ModelAndView modelAndView = new ModelAndView("issues/issues");
         modelAndView.addObject("issues", issues);
+        modelAndView.addObject("filter", filter);
+        modelAndView.addObject("creators", issueService.findAllCreators());
+
         return modelAndView;
     }
 
