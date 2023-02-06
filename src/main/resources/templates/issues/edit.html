@@ -37,6 +37,10 @@
                  class="font-navyblue"></label>
           <textarea class="form-control" id="issueDescription" rows="3" th:field="*{description}"></textarea>
         </div>
+        <div class="form-group  mt-2">
+          <label for="issueCode" th:text="#{issue.new.code}" class="font-navyblue"></label>
+          <input type="text" class="form-control" id="issueCode" th:field="*{code}">
+        </div>
         <div class="form-group d-flex align-items-center mt-2">
           <div th:each="priority: ${T(com.marlena.bugtracker.models.Priority).values()}" class="form-check m-2">
             <input th:field="*{priority}" th:value="${priority}" class="form-check-input"

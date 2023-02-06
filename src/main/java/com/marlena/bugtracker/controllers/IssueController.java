@@ -49,9 +49,9 @@ public class IssueController {
     }
 
     @PostMapping("/new/{projectId}")
-    public String saveIssue(@Valid @ModelAttribute("issue") Issue issue, @PathVariable Long projectId, Errors errors, Authentication authentication) {
+    public String saveIssue(@Valid @ModelAttribute("issue") Issue issue, Errors errors, @PathVariable Long projectId, Authentication authentication) {
         if (errors.hasErrors()) {
-            return "projects/new.html";
+            return "issues/new.html";
         }
         issueService.saveIssueDetails(issue, authentication, projectId);
         return "redirect:/issues/"+issue.getId();
