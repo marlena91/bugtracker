@@ -12,9 +12,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 
-import java.util.Date;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 @RequiredArgsConstructor
@@ -48,7 +46,6 @@ public class IssueService {
         }
         return isSaved;
     }
-
     public ResponseEntity<Issue> updateIssue(Issue issue) throws ResourceNotFoundException {
         Long id = issue.getId();
         Issue issueToUpdate = issueRepository.findById(id)
@@ -62,5 +59,14 @@ public class IssueService {
         issueToUpdate.setLastUpdated(new Date());
         final Issue updatedIssue = issueRepository.save(issueToUpdate);
         return ResponseEntity.ok(updatedIssue);
+    }
+
+    public Map<String, Boolean> deleteIssue(Long id) throws ResourceNotFoundException {
+        Issue issue = issueRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Issue not found for this id :: " + id));
+        issueRepository.delete(issue);
+        Map<String, Boolean> response = new HashMap<>();
+        response.put("deleted", Boolean.TRUE);
+        return response;
     }
 }

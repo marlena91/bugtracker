@@ -74,10 +74,11 @@ public class IssueController {
         return "redirect:/issues/"+issue.getId();
     }
 
+    @GetMapping("/delete/{id}")
+    public String deleteIssue(@PathVariable Long id) throws ResourceNotFoundException {
+        issueService.deleteIssue(id);
+        return "redirect:/issues";
 
-
-    //delete
-
-
+    }
 
 }
