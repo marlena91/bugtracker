@@ -28,7 +28,6 @@ public class ProjectController {
 
     @GetMapping
     public ModelAndView getAllProjects(@ModelAttribute ProjectFilter filter, Pageable pageable) {
-
         Page<Project> projects = projectService.findAll(filter, pageable);
         ModelAndView modelAndView = new ModelAndView("projects/index");
         modelAndView.addObject("projects", projects);

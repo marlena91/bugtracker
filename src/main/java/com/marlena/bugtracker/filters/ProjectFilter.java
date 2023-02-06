@@ -45,4 +45,11 @@ public class ProjectFilter {
         }
         return (root, query, builder) -> builder.like(builder.lower(root.get(property)), "%" + value.toLowerCase() + "%");
     }
+
+    public String toQueryString(Integer page) {
+        return "page=" + page +
+                (name != null ? "&name=" + name : "") +
+                (creator != null ? "&creator=" + creator.getId() : "") +
+                (globalSearch != null ? "&globalSearch=" + globalSearch : "");
+    }
 }
