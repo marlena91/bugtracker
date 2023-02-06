@@ -6,6 +6,9 @@ import com.marlena.bugtracker.filters.ProjectFilter;
 import com.marlena.bugtracker.services.ProjectService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
@@ -24,8 +27,8 @@ public class ProjectController {
     private final ProjectService projectService;
 
     @GetMapping
-    public ModelAndView getAllProjects(@ModelAttribute ProjectFilter filter) {
-        List<Project> projects = projectService.findAll(filter);
+    public ModelAndView getAllProjects(@ModelAttribute ProjectFilter filter, Pageable pageable) {
+        Page<Project> projects = projectService.findAll(filter, pageable);
         ModelAndView modelAndView = new ModelAndView("projects/index");
         modelAndView.addObject("projects", projects);
         modelAndView.addObject("filter", filter);

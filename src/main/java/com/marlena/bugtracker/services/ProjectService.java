@@ -7,6 +7,8 @@ import com.marlena.bugtracker.models.Project;
 import com.marlena.bugtracker.repositories.PersonRepository;
 import com.marlena.bugtracker.repositories.ProjectRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
@@ -21,8 +23,8 @@ public class ProjectService {
     private final ProjectRepository projectRepository;
     private final PersonRepository personRepository;
 
-    public List<Project> findAll(ProjectFilter filter) {
-        return projectRepository.findAll(filter.buildQuery());
+    public Page<Project> findAll(ProjectFilter filter, Pageable pageable) {
+        return projectRepository.findAll(filter.buildQuery(), pageable);
     }
 
     public List<Project> findAllEnabled() {
