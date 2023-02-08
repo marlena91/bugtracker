@@ -22,7 +22,8 @@
                 </h1>
                 <div class="row mt-3">
                     <p class="font-navyblue col text-end" th:text="#{user.new.permissions} + ' ' + ${authority}"></p>
-                    <a th:href="@{/users/authorities/{login}(login=${user.getLogin()})}" class="link hover-bluegrotto col">
+                    <a th:href="@{/users/authorities/{login}(login=${user.getLogin()})}"
+                       class="link hover-bluegrotto col">
                         <i class="bi bi-person-gear"></i>
                         <span th:text="#{user.edit.permissions.button}"></span>
                     </a>
@@ -53,6 +54,7 @@
                         </div>
                         <div class="form-group mt-2">
                             <input hidden type="text" class="form-control" id="userPassword" th:field="*{password}">
+                            <input hidden type="text" class="form-control" id="confirmPwd" th:field="*{confirmPwd}">
                         </div>
                         <div class="row mt-4">
                             <div class="col d-flex justify-content-end align-items-end">

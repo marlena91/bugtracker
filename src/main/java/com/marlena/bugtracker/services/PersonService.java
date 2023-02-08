@@ -7,6 +7,7 @@ import com.marlena.bugtracker.repositories.PersonRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.*;
 
@@ -35,6 +36,8 @@ public class PersonService {
 
     public boolean saveUserDetails(Person user) {
         boolean isSaved = false;
+        Set<Authority> userSetAuthorities = getFullAuthorities(user.getAuthorities().iterator().next());
+        user.setAuthorities(userSetAuthorities);
         Person savedUser = personRepository.save(user);
         if (null != savedUser && savedUser.getId() > 0) {
             isSaved = true;
@@ -49,6 +52,7 @@ public class PersonService {
         userToUpdate.setUserRealName(user.getUserRealName());
         userToUpdate.setLogin(user.getLogin());
         userToUpdate.setEmail(user.getEmail());
+        userToUpdate.setConfirmPwd(user.getConfirmPwd());
         final Person updatedUser = personRepository.save(userToUpdate);
         return ResponseEntity.ok(updatedUser);
     }
@@ -56,15 +60,10 @@ public class PersonService {
     public ResponseEntity<Person> updateUserAuthorities(Authority authority, String login) throws ResourceNotFoundException {
         Person userToUpdate = personRepository.findByLogin(login)
                 .orElseThrow(() -> new ResourceNotFoundException("User not found for this id :: " + login));
-        Set<Authority> enabledAuthorities = authorityService.findAllAuthorities();
-        Set<Authority> userSetAuthorities = new HashSet<>();
-        for (Authority auth:
-             enabledAuthorities) {
-            if(auth.getId() >= authority.getId()){
-                userSetAuthorities.add(auth);
-            }
-        }
+
+        Set<Authority> userSetAuthorities = getFullAuthorities(authority);
         userToUpdate.setAuthorities(userSetAuthorities);
+        userToUpdate.setConfirmPwd(userToUpdate.getPassword());
         final Person updatedUser = personRepository.save(userToUpdate);
         return ResponseEntity.ok(updatedUser);
     }
@@ -76,5 +75,17 @@ public class PersonService {
         Map<String, Boolean> response = new HashMap<>();
         response.put("deleted", Boolean.TRUE);
         return response;
+    }
+
+    private Set<Authority> getFullAuthorities(Authority authority) {
+        Set<Authority> enabledAuthorities = authorityService.findAllAuthorities();
+        Set<Authority> userSetAuthorities = new HashSet<>();
+        for (Authority auth:
+                enabledAuthorities) {
+            if(auth.getId() >= authority.getId()){
+                userSetAuthorities.add(auth);
+            }
+        }
+        return userSetAuthorities;
     }
 }

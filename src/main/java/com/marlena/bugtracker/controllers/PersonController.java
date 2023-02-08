@@ -45,26 +45,33 @@ public class PersonController {
     }
 
     @GetMapping("/new")
-    public String displayNewUserForm(Model model) {
-        model.addAttribute("user", new Person());
-        return "users/new";
+    public ModelAndView displayNewUserForm() {
+        ModelAndView modelAndView = new ModelAndView("users/new");
+        modelAndView.addObject("user", new Person());
+        modelAndView.addObject("authorities", authorityService.findAll());
+        return modelAndView;
     }
 
     @PostMapping
-    public String saveUser(@Valid @ModelAttribute("user") Person user, Errors errors) {
+    public ModelAndView saveUser(@Valid @ModelAttribute("user") Person user, Errors errors) throws ResourceNotFoundException {
         if (errors.hasErrors()) {
-            return "users/new.html";
+            ModelAndView modelAndView = new ModelAndView("users/new");
+            modelAndView.addObject("user", user);
+            modelAndView.addObject("authorities", authorityService.findAll());
+            return modelAndView;
         }
         userService.saveUserDetails(user);
-        return "redirect:/users/"+user.getId();
+        return getUserById(user.getId());
     }
 
     @GetMapping("/edit/{id}")
     public ModelAndView editUserById(@PathVariable(value = "id") Long userId) throws ResourceNotFoundException {
-        ResponseEntity<Person> user = userService.findUserById(userId);
-        Iterable<Authority> authorities = authorityService.findAllByPersonLogin(Objects.requireNonNull(user.getBody()).getLogin());
+        Person user = userService.findUserById(userId).getBody();
+        assert user != null;
+        Iterable<Authority> authorities = authorityService.findAllByPersonLogin(user.getLogin());
+        user.setConfirmPwd(user.getPassword());
         ModelAndView modelAndView = new ModelAndView("users/edit");
-        modelAndView.addObject("user", user.getBody());
+        modelAndView.addObject("user", user);
         modelAndView.addObject("authority", authorities.iterator().next().getName());
         return modelAndView;
     }
