@@ -29,26 +29,26 @@
                 <div class="col-8">
                     <form th:action="@{/users}" method="post" th:object="${user}">
                         <div class="row">
-                                <div class="form-group  mt-2">
-                                    <label for="userLogin" th:text="#{user.new.login}" class="font-navyblue"></label>
-                                    <input type="text" class="form-control" id="userLogin" th:field="*{login}">
-                                </div>
-                                <div class="form-group mt-2">
-                                    <label for="userEmail" th:text="#{user.new.email}" class="font-navyblue"></label>
-                                    <input type="text" class="form-control" id="userEmail" th:field="*{email}">
-                                </div>
-                                <div class="form-group  mt-2">
-                                    <label for="userRealName" th:text="#{user.new.name}"
-                                           class="font-navyblue"></label>
-                                    <input type="text" class="form-control" id="userRealName"
-                                           th:field="*{userRealName}">
-                                </div>
-                                <div class="form-group  mt-2">
-                                    <label for="userPassword" th:text="#{user.new.password}"
-                                           class="font-navyblue"></label>
-                                    <input type="password" class="form-control" id="userPassword"
-                                           th:field="*{password}">
-                                </div>
+                            <div class="form-group  mt-2">
+                                <label for="userLogin" th:text="#{user.new.login}" class="font-navyblue"></label>
+                                <input type="text" class="form-control" id="userLogin" th:field="*{login}">
+                            </div>
+                            <div class="form-group mt-2">
+                                <label for="userEmail" th:text="#{user.new.email}" class="font-navyblue"></label>
+                                <input type="text" class="form-control" id="userEmail" th:field="*{email}">
+                            </div>
+                            <div class="form-group  mt-2">
+                                <label for="userRealName" th:text="#{user.new.name}"
+                                       class="font-navyblue"></label>
+                                <input type="text" class="form-control" id="userRealName"
+                                       th:field="*{userRealName}">
+                            </div>
+                            <div class="form-group  mt-2">
+                                <label for="userPassword" th:text="#{user.new.password}"
+                                       class="font-navyblue"></label>
+                                <input type="password" class="form-control" id="userPassword"
+                                       th:field="*{password}">
+                            </div>
                             <div class="form-group  mt-2">
                                 <label for="userConfirmPwd" th:text="#{user.new.confirmPwd}"
                                        class="font-navyblue"></label>
@@ -64,7 +64,7 @@
                                     </label>
                                 </div>
                             </div>
-                            </div>
+                        </div>
                         <div class="row mt-4">
                             <div class="col d-flex justify-content-end align-items-end">
                                 <button type="submit" class="btn btn-lg bg-btn-dark mb-5"

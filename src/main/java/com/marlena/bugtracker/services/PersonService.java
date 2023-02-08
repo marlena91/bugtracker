@@ -7,7 +7,6 @@ import com.marlena.bugtracker.repositories.PersonRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.*;
 
@@ -45,16 +44,24 @@ public class PersonService {
         return isSaved;
     }
 
-    public ResponseEntity<Person> updateUser(Person user) throws ResourceNotFoundException {
-        Long id = user.getId();
-        Person userToUpdate = personRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("User not found for this id :: " + id));
+    public void updateUser(Person user) throws ResourceNotFoundException {
+        Person userToUpdate = personRepository.findById(user.getId())
+                .orElseThrow(() -> new ResourceNotFoundException("User not found for this id :: " + user.getId()));
         userToUpdate.setUserRealName(user.getUserRealName());
         userToUpdate.setLogin(user.getLogin());
         userToUpdate.setEmail(user.getEmail());
         userToUpdate.setConfirmPwd(user.getConfirmPwd());
         final Person updatedUser = personRepository.save(userToUpdate);
-        return ResponseEntity.ok(updatedUser);
+        ResponseEntity.ok(updatedUser);
+    }
+
+    public void updateUserPwd(Person user) throws ResourceNotFoundException {
+        Person userToUpdate = personRepository.findById(user.getId())
+                .orElseThrow(() -> new ResourceNotFoundException("User not found for this id :: " + user.getId()));
+        userToUpdate.setPassword(user.getPassword());
+        userToUpdate.setConfirmPwd(user.getConfirmPwd());
+        final Person updatedUser = personRepository.save(userToUpdate);
+        ResponseEntity.ok(updatedUser);
     }
 
     public ResponseEntity<Person> updateUserAuthorities(Authority authority, String login) throws ResourceNotFoundException {

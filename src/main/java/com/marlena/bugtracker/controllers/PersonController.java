@@ -9,7 +9,6 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
@@ -104,6 +103,24 @@ public class PersonController {
             user.setAuthorities(newAuthorities);
         }
         return modelAndView;
+    }
+
+    @GetMapping("edit/password/{id}")
+    public ModelAndView editPasswordByUserId(@PathVariable(value="id") Long userId) throws ResourceNotFoundException {
+        Person user = userService.findUserById(userId).getBody();
+        ModelAndView modelAndView = new ModelAndView("users/profile/password");
+        modelAndView.addObject("user", user);
+        return modelAndView;
+    }
+
+    @PostMapping("edit/password/{id}")
+    public String updatePassword(@Valid @ModelAttribute("user") Person user, Errors errors) throws ResourceNotFoundException {
+        if (errors.hasErrors()) {
+            return "users/profile/password.html";
+        }
+        userService.updateUserPwd(user);
+        return "redirect:/my-profile";
+
     }
 }
 
