@@ -12,6 +12,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
@@ -24,15 +25,17 @@ public class BugtrackerUsernamePwdAuthenticationProvider implements Authenticati
     @Autowired
     private PersonRepository personRepository;
 
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+
     @Override
     @Transactional
     public Authentication authenticate(Authentication authentication) throws AuthenticationException {
         String login = authentication.getName();
         String pwd = authentication.getCredentials().toString();
         Person person = personRepository.getByLogin(login);
-        System.out.println(person);
-        if(null != person && person.getId()>0 && pwd.equals(person.getPassword())) {
-            return new UsernamePasswordAuthenticationToken(person.getLogin(), pwd, getGrantedAuthorities(person.getAuthorities()));
+        if(null != person && person.getId()>0 && passwordEncoder.matches(pwd,person.getPassword())) {
+            return new UsernamePasswordAuthenticationToken(person.getLogin(), null, getGrantedAuthorities(person.getAuthorities()));
         } else {
             throw new BadCredentialsException("Invalid credentials");
         }

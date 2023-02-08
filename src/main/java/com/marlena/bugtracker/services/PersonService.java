@@ -5,7 +5,9 @@ import com.marlena.bugtracker.models.Authority;
 import com.marlena.bugtracker.models.Person;
 import com.marlena.bugtracker.repositories.PersonRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
@@ -16,6 +18,9 @@ public class PersonService {
 
     private final PersonRepository personRepository;
     private final AuthorityService authorityService;
+
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
     public List<Person> findAll(){
         return personRepository.findAll();
@@ -37,6 +42,7 @@ public class PersonService {
         boolean isSaved = false;
         Set<Authority> userSetAuthorities = getFullAuthorities(user.getAuthorities().iterator().next());
         user.setAuthorities(userSetAuthorities);
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
         Person savedUser = personRepository.save(user);
         if (null != savedUser && savedUser.getId() > 0) {
             isSaved = true;
@@ -50,7 +56,6 @@ public class PersonService {
         userToUpdate.setUserRealName(user.getUserRealName());
         userToUpdate.setLogin(user.getLogin());
         userToUpdate.setEmail(user.getEmail());
-        userToUpdate.setConfirmPwd(user.getConfirmPwd());
         final Person updatedUser = personRepository.save(userToUpdate);
         ResponseEntity.ok(updatedUser);
     }
@@ -58,8 +63,7 @@ public class PersonService {
     public void updateUserPwd(Person user) throws ResourceNotFoundException {
         Person userToUpdate = personRepository.findById(user.getId())
                 .orElseThrow(() -> new ResourceNotFoundException("User not found for this id :: " + user.getId()));
-        userToUpdate.setPassword(user.getPassword());
-        userToUpdate.setConfirmPwd(user.getConfirmPwd());
+        userToUpdate.setPassword(passwordEncoder.encode(user.getPassword()));
         final Person updatedUser = personRepository.save(userToUpdate);
         ResponseEntity.ok(updatedUser);
     }
@@ -70,7 +74,6 @@ public class PersonService {
 
         Set<Authority> userSetAuthorities = getFullAuthorities(authority);
         userToUpdate.setAuthorities(userSetAuthorities);
-        userToUpdate.setConfirmPwd(userToUpdate.getPassword());
         final Person updatedUser = personRepository.save(userToUpdate);
         return ResponseEntity.ok(updatedUser);
     }
