@@ -5,7 +5,9 @@ import com.marlena.bugtracker.models.Authority;
 import com.marlena.bugtracker.models.Person;
 import com.marlena.bugtracker.repositories.PersonRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
@@ -16,6 +18,9 @@ public class PersonService {
 
     private final PersonRepository personRepository;
     private final AuthorityService authorityService;
+
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
     public List<Person> findAll(){
         return personRepository.findAll();
@@ -35,6 +40,9 @@ public class PersonService {
 
     public boolean saveUserDetails(Person user) {
         boolean isSaved = false;
+        Set<Authority> userSetAuthorities = getFullAuthorities(user.getAuthorities().iterator().next());
+        user.setAuthorities(userSetAuthorities);
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
         Person savedUser = personRepository.save(user);
         if (null != savedUser && savedUser.getId() > 0) {
             isSaved = true;
@@ -42,28 +50,29 @@ public class PersonService {
         return isSaved;
     }
 
-    public ResponseEntity<Person> updateUser(Person user) throws ResourceNotFoundException {
-        Long id = user.getId();
-        Person userToUpdate = personRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("User not found for this id :: " + id));
+    public void updateUser(Person user) throws ResourceNotFoundException {
+        Person userToUpdate = personRepository.findById(user.getId())
+                .orElseThrow(() -> new ResourceNotFoundException("User not found for this id :: " + user.getId()));
         userToUpdate.setUserRealName(user.getUserRealName());
         userToUpdate.setLogin(user.getLogin());
         userToUpdate.setEmail(user.getEmail());
         final Person updatedUser = personRepository.save(userToUpdate);
-        return ResponseEntity.ok(updatedUser);
+        ResponseEntity.ok(updatedUser);
+    }
+
+    public void updateUserPwd(Person user) throws ResourceNotFoundException {
+        Person userToUpdate = personRepository.findById(user.getId())
+                .orElseThrow(() -> new ResourceNotFoundException("User not found for this id :: " + user.getId()));
+        userToUpdate.setPassword(passwordEncoder.encode(user.getPassword()));
+        final Person updatedUser = personRepository.save(userToUpdate);
+        ResponseEntity.ok(updatedUser);
     }
 
     public ResponseEntity<Person> updateUserAuthorities(Authority authority, String login) throws ResourceNotFoundException {
         Person userToUpdate = personRepository.findByLogin(login)
                 .orElseThrow(() -> new ResourceNotFoundException("User not found for this id :: " + login));
-        Set<Authority> enabledAuthorities = authorityService.findAllAuthorities();
-        Set<Authority> userSetAuthorities = new HashSet<>();
-        for (Authority auth:
-             enabledAuthorities) {
-            if(auth.getId() >= authority.getId()){
-                userSetAuthorities.add(auth);
-            }
-        }
+
+        Set<Authority> userSetAuthorities = getFullAuthorities(authority);
         userToUpdate.setAuthorities(userSetAuthorities);
         final Person updatedUser = personRepository.save(userToUpdate);
         return ResponseEntity.ok(updatedUser);
@@ -76,5 +85,17 @@ public class PersonService {
         Map<String, Boolean> response = new HashMap<>();
         response.put("deleted", Boolean.TRUE);
         return response;
+    }
+
+    private Set<Authority> getFullAuthorities(Authority authority) {
+        Set<Authority> enabledAuthorities = authorityService.findAllAuthorities();
+        Set<Authority> userSetAuthorities = new HashSet<>();
+        for (Authority auth:
+                enabledAuthorities) {
+            if(auth.getId() >= authority.getId()){
+                userSetAuthorities.add(auth);
+            }
+        }
+        return userSetAuthorities;
     }
 }

@@ -27,6 +27,8 @@
                 <div class="col-4">
                     <a th:href="@{/users/edit/{id}(id=${user.getId()})}" class="btn bg-btn-dark  mb-2"
                        th:text="#{user.single.edit.button}"></a>
+                    <a th:href="@{/users/edit/password/{id}(id=${user.getId()})}" class="btn bg-btn-dark  mb-2"
+                       th:text="#{user.single.edit.password}"></a>
                 </div>
             </div>
         </div>
