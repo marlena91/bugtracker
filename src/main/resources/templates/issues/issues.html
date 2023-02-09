@@ -26,17 +26,21 @@
               <input class="form-control" th:field="*{name}" th:placeholder="#{projects.name}">
             </div>
             <div class="col">
-              <input th:field="*{globalSearch}"
-                     class="form-control"
-                     th:placeholder="#{common.search.global}">
-            </div>
-            <div class="col">
               <select th:field="*{creator}"
                       class="form-control">
                 <option th:value="${null}" th:text="#{projects.creator}"></option>
                 <option th:each="c : ${creators}"
                         th:value="${c.getId()}"
                         th:text="${c.getUserRealName()}"></option>
+              </select>
+            </div>
+            <div class="col">
+              <select th:field="*{status}"
+                      class="form-control">
+                <option th:value="${null}" th:text="#{issues.status}"></option>
+                <option th:each="status: ${T(com.marlena.bugtracker.models.Status).values()}"
+                        th:value="${status}"
+                        th:text="${status}"></option>
               </select>
             </div>
             <div class="col">
