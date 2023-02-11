@@ -32,6 +32,10 @@ public class IssueService {
         return issueRepository.findAllByEnabled(true);
     }
 
+    public List<Issue> findAllForProject(Project project) {
+        return issueRepository.findAllByProject(project);
+    }
+
 
     public Set<Person> findAllCreators(){
         return findAllEnabled()
