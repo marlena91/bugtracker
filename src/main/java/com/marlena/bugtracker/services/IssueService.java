@@ -1,9 +1,7 @@
 package com.marlena.bugtracker.services;
 
 import com.marlena.bugtracker.exceptions.ResourceNotFoundException;
-import com.marlena.bugtracker.models.Issue;
-import com.marlena.bugtracker.models.Person;
-import com.marlena.bugtracker.models.Project;
+import com.marlena.bugtracker.models.*;
 import com.marlena.bugtracker.filters.IssueFilter;
 import com.marlena.bugtracker.repositories.IssueRepository;
 import com.marlena.bugtracker.repositories.PersonRepository;
@@ -24,6 +22,7 @@ public class IssueService {
     private final IssueRepository issueRepository;
     private final PersonRepository personRepository;
     private final ProjectRepository projectRepository;
+    private final MailService mailService;
 
     public List<Issue> findAll(IssueFilter filter){
         return issueRepository.findAll(filter.buildQuery());
@@ -35,7 +34,6 @@ public class IssueService {
     public List<Issue> findAllForProject(Project project) {
         return issueRepository.findAllByProject(project);
     }
-
 
     public Set<Person> findAllCreators(){
         return findAllEnabled()
@@ -91,6 +89,12 @@ public class IssueService {
         issueToUpdate.setType(issue.getType());
         if(issue.getAssignee()!=null){
             issueToUpdate.setAssignee(issue.getAssignee());
+        }
+        if((issueToUpdate.getStatus() == Status.DONE) && (issueToUpdate.getAssignee()!=null)){
+            Mail mail = new Mail();
+            mail.setRecipient(issueToUpdate.getAssignee().getEmail());
+            mail.setSubject(issueToUpdate.getName());
+            mailService.sendMail(mail);
         }
         issueToUpdate.setLastUpdated(new Date());
         final Issue updatedIssue = issueRepository.save(issueToUpdate);
