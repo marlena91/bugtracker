@@ -4,6 +4,7 @@ import com.marlena.bugtracker.exceptions.ResourceNotFoundException;
 import com.marlena.bugtracker.filters.IssueFilter;
 import com.marlena.bugtracker.models.Issue;
 import com.marlena.bugtracker.services.IssueService;
+import com.marlena.bugtracker.services.PersonService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -20,21 +21,23 @@ import java.util.List;
 @RequiredArgsConstructor
 public class IssueController {
 
-    private final IssueService  issueService;
+    private final IssueService issueService;
+    private final PersonService userService;
 
     @GetMapping
-    public ModelAndView getAllIssues(@ModelAttribute IssueFilter filter){
+    public ModelAndView getAllIssues(@ModelAttribute IssueFilter filter) {
         List<Issue> issues = issueService.findAll(filter);
         ModelAndView modelAndView = new ModelAndView("issues/issues");
         modelAndView.addObject("issues", issues);
         modelAndView.addObject("filter", filter);
-        modelAndView.addObject("creators", issueService.findAllCreators());
+        modelAndView.addObject("assignee", issueService.findAllAssigned());
+        modelAndView.addObject("projects", issueService.findAllProjects());
 
         return modelAndView;
     }
 
     @GetMapping("/{id}")
-    public ModelAndView getIssueById(@PathVariable(value="id") Long id) throws ResourceNotFoundException {
+    public ModelAndView getIssueById(@PathVariable(value = "id") Long id) throws ResourceNotFoundException {
         ResponseEntity<Issue> issue = issueService.findById(id);
         ModelAndView modelAndView = new ModelAndView("issues/single");
         modelAndView.addObject("issue", issue.getBody());
@@ -54,7 +57,7 @@ public class IssueController {
             return "issues/new.html";
         }
         issueService.saveIssueDetails(issue, authentication, projectId);
-        return "redirect:/issues/"+issue.getId();
+        return "redirect:/issues/" + issue.getId();
     }
 
     @GetMapping("edit/{id}")
@@ -71,14 +74,28 @@ public class IssueController {
             return "issues/edit.html";
         }
         issueService.updateIssue(issue);
-        return "redirect:/issues/"+issue.getId();
+        return "redirect:/issues/" + issue.getId();
     }
 
     @GetMapping("/delete/{id}")
     public String deleteIssue(@PathVariable Long id) throws ResourceNotFoundException {
         issueService.deleteIssue(id);
         return "redirect:/issues";
-
     }
 
+    @GetMapping("newAssignee/{id}")
+    public ModelAndView updateAssignee(@PathVariable Long id) throws ResourceNotFoundException {
+        ResponseEntity<Issue> issue = issueService.findById(id);
+        ModelAndView modelAndView = new ModelAndView("issues/assignee");
+        modelAndView.addObject("issue", issue.getBody());
+        modelAndView.addObject("users", userService.findAll());
+        return modelAndView;
+    }
+
+    @GetMapping("/deleteAssignee/{id}")
+    public String deleteAssignee(@PathVariable Long id) throws ResourceNotFoundException {
+        issueService.deleteAssignee(id);
+        return "redirect:/issues/" + id;
+
+    }
 }

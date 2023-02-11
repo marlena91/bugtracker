@@ -1,6 +1,7 @@
 package com.marlena.bugtracker.repositories;
 
 import com.marlena.bugtracker.models.Issue;
+import com.marlena.bugtracker.models.Project;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.stereotype.Repository;
@@ -11,5 +12,7 @@ import java.util.List;
 public interface IssueRepository extends JpaRepository<Issue, Long>, JpaSpecificationExecutor<Issue> {
 
     List<Issue> findAllByEnabled(Boolean enabled);
+
+    List<Issue> findAllByProject(Project project);
 
 }

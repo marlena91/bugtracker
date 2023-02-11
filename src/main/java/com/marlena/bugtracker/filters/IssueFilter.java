@@ -2,6 +2,8 @@ package com.marlena.bugtracker.filters;
 
 import com.marlena.bugtracker.models.Issue;
 import com.marlena.bugtracker.models.Person;
+import com.marlena.bugtracker.models.Project;
+import com.marlena.bugtracker.models.Status;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -14,21 +16,20 @@ public class IssueFilter {
 
     private String name;
 
-    private Person creator;
+    private Person assignee;
 
-    private String globalSearch;
+    private Status status;
+
+    private Project project;
 
     public Specification<Issue> buildQuery() {
-        return Specification.anyOf(
-                ilike("name", globalSearch),
-                ilike("description", globalSearch),
-                ilike("code", globalSearch)
-        ).and(
-                Specification.allOf(
-                        ilike("name", name),
-                        equalTo("enabled", true),
-                        equalTo("creator", creator)
-                )
+        return Specification.allOf(
+                ilike("name", name),
+                equalTo("enabled", true),
+                equalTo("assignee", assignee),
+                equalTo("status", status),
+                equalTo("project", project)
+
         );
     }
 

@@ -14,6 +14,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 @Service
@@ -31,11 +32,30 @@ public class IssueService {
         return issueRepository.findAllByEnabled(true);
     }
 
+    public List<Issue> findAllForProject(Project project) {
+        return issueRepository.findAllByProject(project);
+    }
+
 
     public Set<Person> findAllCreators(){
         return findAllEnabled()
                 .stream()
                 .map(Issue::getCreator)
+                .collect(Collectors.toSet());
+    }
+
+    public Set<Person> findAllAssigned(){
+        return findAllEnabled()
+                .stream()
+                .map(Issue::getAssignee)
+                .filter(Objects::nonNull)
+                .collect(Collectors.toSet());
+    }
+
+    public Set<Project> findAllProjects() {
+        return findAllEnabled()
+                .stream()
+                .map(Issue::getProject)
                 .collect(Collectors.toSet());
     }
 
@@ -69,6 +89,9 @@ public class IssueService {
         issueToUpdate.setStatus(issue.getStatus());
         issueToUpdate.setTags(issue.getTags());
         issueToUpdate.setType(issue.getType());
+        if(issue.getAssignee()!=null){
+            issueToUpdate.setAssignee(issue.getAssignee());
+        }
         issueToUpdate.setLastUpdated(new Date());
         final Issue updatedIssue = issueRepository.save(issueToUpdate);
         return ResponseEntity.ok(updatedIssue);
@@ -80,6 +103,28 @@ public class IssueService {
         issueRepository.delete(issue);
         Map<String, Boolean> response = new HashMap<>();
         response.put("deleted", Boolean.TRUE);
+        return response;
+    }
+
+    public Map<String, Boolean> updateAssignee(Long issueId, Long userId) throws ResourceNotFoundException {
+        Issue issue = issueRepository.findById(issueId)
+                .orElseThrow(() -> new ResourceNotFoundException("Issue not found for this id :: " + issueId));
+        Person assignee = personRepository.findById(userId)
+                .orElseThrow(() -> new ResourceNotFoundException("Person not found for this id :: " + userId));
+        issue.setAssignee(assignee);
+        issueRepository.save(issue);
+        Map<String, Boolean> response = new HashMap<>();
+        response.put("updated", Boolean.TRUE);
+        return response;
+    }
+
+    public Map<String, Boolean> deleteAssignee(Long id) throws ResourceNotFoundException {
+        Issue issue = issueRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Issue not found for this id :: " + id));
+        issue.setAssignee(null);
+        issueRepository.save(issue);
+        Map<String, Boolean> response = new HashMap<>();
+        response.put("deletedAssignee", Boolean.TRUE);
         return response;
     }
 }

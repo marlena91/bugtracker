@@ -1,8 +1,10 @@
 package com.marlena.bugtracker.controllers;
 
 import com.marlena.bugtracker.exceptions.ResourceNotFoundException;
+import com.marlena.bugtracker.models.Issue;
 import com.marlena.bugtracker.models.Project;
 import com.marlena.bugtracker.filters.ProjectFilter;
+import com.marlena.bugtracker.services.IssueService;
 import com.marlena.bugtracker.services.ProjectService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -25,6 +27,7 @@ import java.util.List;
 public class ProjectController {
 
     private final ProjectService projectService;
+    private final IssueService issueService;
 
     @GetMapping
     public ModelAndView getAllProjects(@ModelAttribute ProjectFilter filter, Pageable pageable) {
@@ -46,9 +49,10 @@ public class ProjectController {
     @GetMapping("/{id}")
     public ModelAndView getProjectById(@PathVariable(value = "id") Long projectId) throws ResourceNotFoundException {
         ResponseEntity<Project> project = projectService.findProjectById(projectId);
+        List<Issue> issues = issueService.findAllForProject(project.getBody());
         ModelAndView modelAndView = new ModelAndView("projects/single");
         modelAndView.addObject("project", project.getBody());
-
+        modelAndView.addObject("issues", issues);
         return modelAndView;
     }
 
