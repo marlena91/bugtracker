@@ -91,4 +91,11 @@ public class IssueController {
         modelAndView.addObject("users", userService.findAll());
         return modelAndView;
     }
+
+    @GetMapping("/deleteAssignee/{id}")
+    public String deleteAssignee(@PathVariable Long id) throws ResourceNotFoundException {
+        issueService.deleteAssignee(id);
+        return "redirect:/issues/" + id;
+
+    }
 }

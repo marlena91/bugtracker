@@ -113,4 +113,14 @@ public class IssueService {
         response.put("updated", Boolean.TRUE);
         return response;
     }
+
+    public Map<String, Boolean> deleteAssignee(Long id) throws ResourceNotFoundException {
+        Issue issue = issueRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Issue not found for this id :: " + id));
+        issue.setAssignee(null);
+        issueRepository.save(issue);
+        Map<String, Boolean> response = new HashMap<>();
+        response.put("deletedAssignee", Boolean.TRUE);
+        return response;
+    }
 }

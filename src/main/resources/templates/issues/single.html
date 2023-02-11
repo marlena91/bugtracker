@@ -51,15 +51,25 @@
                                 <small class="me-2">
                                     <span th:text="#{issue.single.assignee} + ': '" class="col text-muted"></span>
                                 </small>
-                                        <div th:if="${issue.getAssignee()} == null" class="link hover-bluegrotto">
-                                            <a th:href="@{/issues/newAssignee/{id}(id=${issue.getId()})}" th:text="#{issue.single.add.assignee}" class="col"></a>
-                                            <i class="bi bi-person-add"></i>
-                                        </div>
+                                <div th:if="${issue.getAssignee()} == null" class="link hover-bluegrotto">
+                                    <a th:href="@{/issues/newAssignee/{id}(id=${issue.getId()})}"
+                                       class="col link hover-bluegrotto">
+                                        <span th:text="#{issue.single.add.assignee}" ></span>
+                                        <i class="bi bi-person-add"></i>
+                                    </a>
+                                </div>
 
-                                        <span th:if="${issue.getAssignee()} == null" class="col"></span>
+                                <span th:if="${issue.getAssignee()} == null" class="col"></span>
+                                <div class="col">
+                                     <span th:unless="${issue.getAssignee()} == null"
+                                           th:text="${issue.getAssignee().getUserRealName()}"></span>
+                                    <a th:unless="${issue.getAssignee()} == null"
+                                       th:href="@{/issues/deleteAssignee/{id}(id=${issue.getId()})}"
+                                       class="link hover-honeysuckle">
+                                        <i class="bi bi-person-dash"></i>
+                                    </a>
+                                </div>
 
-                                        <span th:unless="${issue.getAssignee()} == null"
-                                              th:text="${issue.getAssignee().getUserRealName()}" class="col"></span>
                             </div>
 
                         </div>
