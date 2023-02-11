@@ -19,8 +19,8 @@ public class MailService {
             MimeMessageHelper mimeMessageHelper = new MimeMessageHelper(mimeMessage);
 
             mimeMessageHelper.setTo(mail.getRecipient());
-            mimeMessageHelper.setSubject(mail.getSubject());
-            mimeMessageHelper.setText(mail.getContent());
+            mimeMessageHelper.setSubject("DONE "+mail.getSubject());
+            mimeMessageHelper.setText("Your issue has changed its status to DONE");
 
             javaMailSender.send(mimeMessage);
         } catch (Exception e) {
