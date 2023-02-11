@@ -48,6 +48,13 @@ public class IssueService {
                 .collect(Collectors.toSet());
     }
 
+    public Set<Project> findAllProjects() {
+        return findAllEnabled()
+                .stream()
+                .map(Issue::getProject)
+                .collect(Collectors.toSet());
+    }
+
     public ResponseEntity<Issue> findById(Long id) throws ResourceNotFoundException {
         Issue issue = issueRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Issue not found for this id :: " + id));

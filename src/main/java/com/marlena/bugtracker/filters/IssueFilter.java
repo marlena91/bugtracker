@@ -16,16 +16,19 @@ public class IssueFilter {
 
     private String name;
 
-    private Person creator;
+    private Person assignee;
 
     private Status status;
+
+    private Project project;
 
     public Specification<Issue> buildQuery() {
         return Specification.allOf(
                 ilike("name", name),
                 equalTo("enabled", true),
-                equalTo("creator", creator),
-                equalTo("status", status)
+                equalTo("assignee", assignee),
+                equalTo("status", status),
+                equalTo("project", project)
 
         );
     }

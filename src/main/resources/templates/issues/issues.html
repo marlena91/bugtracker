@@ -20,18 +20,27 @@
         <h1 class="mt-3 text-center font-honeysuckle bold" th:text="#{home.issues}"></h1>
       </div>
       <div class="row justify-content-center">
-        <form th:action="@{/issues}" th:object="${filter}" class="col-10 mt-3">
+        <form th:action="@{/issues}" th:object="${filter}" class="col-12 mt-3">
           <div class="row">
             <div class="col">
               <input class="form-control" th:field="*{name}" th:placeholder="#{projects.name}">
             </div>
             <div class="col">
-              <select th:field="*{creator}"
+              <select th:field="*{assignee}"
                       class="form-control">
-                <option th:value="${null}" th:text="#{projects.creator}"></option>
-                <option th:each="c : ${creators}"
-                        th:value="${c.getId()}"
-                        th:text="${c.getUserRealName()}"></option>
+                <option th:value="${null}" th:text="#{issue.single.assignee}"></option>
+                <option  th:each="a : ${assignee}"
+                         th:value="${a.getId()}"
+                        th:text="${a.getUserRealName()}"></option>
+              </select>
+            </div>
+            <div class="col">
+              <select th:field="*{project}"
+                      class="form-control">
+                <option th:value="${null}" th:text="#{issue.single.project}"></option>
+                <option th:each="p : ${projects}"
+                        th:value="${p.getId()}"
+                        th:text="${p.getName()} "></option>
               </select>
             </div>
             <div class="col">
@@ -56,11 +65,12 @@
           <thead>
           <tr>
             <th scope="col" th:text="#{issue.single.name}"></th>
-            <th scope="col" th:text="#{issue.single.author}"></th>
+            <th scope="col" th:text="#{issue.single.assignee}"></th>
             <th scope="col" th:text="#{issue.single.project}"></th>
             <th scope="col" th:text="#{issue.single.code}"></th>
             <th scope="col" th:text="#{issue.single.date.created}"></th>
             <th scope="col" th:text="#{issue.single.priority}"></th>
+            <th scope="col" th:text="#{issue.single.status}"></th>
           </tr>
           </thead>
           <tbody class="table-group-divider">
@@ -68,11 +78,13 @@
             <th scope="row">
               <a th:href="@{issues/{id}(id=${issue.getId})}" th:text="${issue.getName()}" class="link font-navyblue"></a>
             </th>
-            <td th:text="${issue.getCreator().getUserRealName()}"></td>
+            <td th:if="${issue.getAssignee()} != null" th:text="${issue.getAssignee().getUserRealName()}"></td>
+            <td th:unless="${issue.getAssignee()} != null" th:text="#{issue.single.without.assignee}"></td>
             <td th:text="${issue.getProject().getName()}"></td>
             <td th:text="${issue.getCode()}"></td>
             <td th:text="${issue.getDateCreated()}"></td>
             <td th:text="${issue.getPriority()}"></td>
+            <td th:text="${issue.getStatus()}"></td>
           </tr>
           </tbody>
         </table>

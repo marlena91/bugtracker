@@ -30,7 +30,8 @@ public class IssueController {
         ModelAndView modelAndView = new ModelAndView("issues/issues");
         modelAndView.addObject("issues", issues);
         modelAndView.addObject("filter", filter);
-        modelAndView.addObject("creators", issueService.findAllCreators());
+        modelAndView.addObject("assignee", issueService.findAllAssigned());
+        modelAndView.addObject("projects", issueService.findAllProjects());
 
         return modelAndView;
     }
