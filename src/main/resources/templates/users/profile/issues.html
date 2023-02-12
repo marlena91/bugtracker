@@ -16,12 +16,12 @@
     <div class="col-8 bg-content rounded-start">
       <div th:replace="~{users/profile/navbar.html :: nav}"></div>
       <div class="row">
-        <h4 th:text="#{user.profile.data.title}" class="mt-5 mb-3"></h4>
+        <h4 th:text="#{user.profile.issues}" class="mt-5 mb-3"></h4>
       </div>
       <div class="row">
-        <p class="text-start ms-2" th:text="#{user.single.email} + ': ' + ${user.getEmail()}"></p>
-        <p class="text-start ms-2" th:text="#{user.single.name} + ': ' + ${user.getUserRealName()}"></p>
-        <p class="text-start ms-2" th:text="#{user.single.login} + ': ' + ${user.getLogin()}"></p>
+        <ul th:each="issue: ${issues}">
+          <li class="text-start ms-5 mb-5" th:text="${issue.getName()}"></li>
+        </ul>
       </div>
     </div>
     <div class="col-4 bg-dark ">

@@ -19,15 +19,14 @@
                 <h4 th:text="#{user.profile.data.title}" class="mt-5 mb-3"></h4>
             </div>
             <div class="row ms-4">
-                <p class="text-start ms-2" th:text="#{user.single.email} + ': ' + ${user.getEmail()}"></p>
-                <p class="text-start ms-2" th:text="#{user.single.name} + ': ' + ${user.getUserRealName()}"></p>
-                <p class="text-start ms-2" th:text="#{user.single.login} + ': ' + ${user.getLogin()}"></p>
+                <p class="text-start ms-2" th:text="#{user.single.email} + ': ' + ${userData.getEmail()}"></p>
+                <p class="text-start ms-2" th:text="#{user.single.name} + ': ' + ${userData.getUserRealName()}"></p>
             </div>
             <div class="row justify-content-end">
                 <div class="col-4">
-                    <a th:href="@{/users/edit/{id}(id=${user.getId()})}" class="btn bg-btn-dark  mb-2"
+                    <a th:href="@{/my-profile/edit/data}" class="btn bg-btn-dark  mb-2"
                        th:text="#{user.single.edit.button}"></a>
-                    <a th:href="@{/users/edit/password/{id}(id=${user.getId()})}" class="btn bg-btn-dark  mb-2"
+                    <a th:href="@{/my-profile/edit/password}" class="btn bg-btn-dark  mb-2"
                        th:text="#{user.single.edit.password}"></a>
                 </div>
             </div>
