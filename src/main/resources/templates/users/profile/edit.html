@@ -19,11 +19,11 @@
                 <div class="col">
                     <ul class="style-none">
                         <li class="alert alert-danger" role="alert"
-                            th:each="error : ${#fields.errors('userData.*')}" th:text="${error}"/>
+                            th:each="error : ${#fields.errors('profileData.*')}" th:text="${error}"/>
                     </ul>
                 </div>
             </div>
-            <form th:action="@{/my-profile/updateData}" method="post" th:object="${userData}" class="mt-2">
+            <form th:action="@{/my-profile/updateData}" method="post" th:object="${profileData}" class="mt-2">
                 <div class="form-group  mt-2">
                     <label for="userName" th:text="#{user.new.name}" class="font-navyblue"></label>
                     <input type="text" class="form-control" id="userName" th:field="*{userRealName}">

@@ -17,32 +17,17 @@
     <div class="col-10 mb-5 pb-5">
       <h1 class="mt-3 text-center font-honeysuckle">
         <span th:text="#{issue.edit.title}"></span>
-        <span th:text="${issue.getName()}"></span>
+        <span th:text="${issueName}"></span>
       </h1>
-      <div class="row justify-content-center">
+      <form th:action="@{/issues/newAssignee/{id}(id=${issueId})}" method="post" th:object="${assignee}">
         <div class="col">
-          <ul class="style-none">
-            <li class="alert alert-danger" role="alert"
-                th:each="error : ${#fields.errors('issue.*')}" th:text="${error}" />
-          </ul>
-        </div>
-      </div>
-      <form th:action="@{/issues/{id}(id=${issue.getId()})}" method="post" th:object="${issue}">
-        <div class="col">
-          <select th:field="*{assignee}" id="assignee" class="form-control">
+          <select th:field="*{id}" id="assignee" class="form-control">
             <option th:value="${null}" th:text="#{issue.single.select.user}"></option>
             <option th:each="user : ${users}"
                     th:value="${user.getId()}"
                     th:text="${user.getUserRealName()}"></option>
           </select>
         </div>
-          <input hidden type="text" class="form-control" id="issueName" th:field="*{name}">
-          <input hidden class="form-control" id="issueDescription" rows="3" th:field="*{description}">
-        <input hidden type="text" class="form-control" id="issueCode" th:field="*{code}">
-        <input hidden type="text" class="form-control" id="issuePriority" th:field="*{priority}">
-        <input hidden type="text" class="form-control" id="issueStatus" th:field="*{status}">
-        <input hidden type="text" class="form-control" id="issueTags" th:field="*{tags}">
-        <input hidden type="text" class="form-control" id="issueType" th:field="*{type}">
         <div class="row mt-4">
           <div class="col d-flex justify-content-end align-items-end">
             <button type="submit" class="btn btn-lg bg-btn-dark mb-5"

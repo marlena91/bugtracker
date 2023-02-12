@@ -4,7 +4,6 @@ import com.marlena.bugtracker.exceptions.ResourceNotFoundException;
 import com.marlena.bugtracker.models.*;
 import com.marlena.bugtracker.repositories.IssueRepository;
 import com.marlena.bugtracker.repositories.PersonRepository;
-import com.marlena.bugtracker.repositories.ProjectRepository;
 import com.marlena.bugtracker.services.AuthorityService;
 import com.marlena.bugtracker.services.PersonService;
 import com.marlena.bugtracker.services.ProjectService;
@@ -52,36 +51,36 @@ public class ProfileController {
     }
 
     @GetMapping("/data")
-    public ModelAndView displayUserData(HttpSession httpSession) {
-        UserData userData = getLoggedInPersonData((Person) httpSession.getAttribute("loggedInPerson"));
+    public ModelAndView displayProfileData(HttpSession httpSession) {
+        ProfileData profileData = getLoggedInPersonData((Person) httpSession.getAttribute("loggedInPerson"));
         ModelAndView modelAndView = new ModelAndView("users/profile/data");
-        modelAndView.addObject("userData", userData);
+        modelAndView.addObject("profileData", profileData);
         return modelAndView;
     }
 
     @GetMapping("/edit/data")
-    public ModelAndView editUserData(HttpSession httpSession) {
-        UserData userData = getLoggedInPersonData((Person) httpSession.getAttribute("loggedInPerson"));
+    public ModelAndView editProfileData(HttpSession httpSession) {
+        ProfileData profileData = getLoggedInPersonData((Person) httpSession.getAttribute("loggedInPerson"));
         ModelAndView modelAndView = new ModelAndView("users/profile/edit");
-        modelAndView.addObject("userData", userData);
+        modelAndView.addObject("profileData", profileData);
         return modelAndView;
     }
 
-    private UserData getLoggedInPersonData(Person user){
-        UserData userData = new UserData();
-        userData.setUserRealName(user.getUserRealName());
-        userData.setEmail(user.getEmail());
-        return userData;
+    private ProfileData getLoggedInPersonData(Person user){
+        ProfileData profileData = new ProfileData();
+        profileData.setUserRealName(user.getUserRealName());
+        profileData.setEmail(user.getEmail());
+        return profileData;
     }
 
     @PostMapping(value="/updateData")
-    public String updateData(@Valid @ModelAttribute("userData") UserData userData, Errors errors, HttpSession httpSession) {
+    public String updateData(@Valid @ModelAttribute("profileData") ProfileData profileData, Errors errors, HttpSession httpSession) {
         if(errors.hasErrors()){
             return "users/profile/edit";
         }
         Person user = (Person) httpSession.getAttribute("loggedInPerson");
-        user.setUserRealName(userData.getUserRealName());
-        user.setEmail(userData.getEmail());
+        user.setUserRealName(profileData.getUserRealName());
+        user.setEmail(profileData.getEmail());
         personRepository.save(user);
         httpSession.setAttribute("loggedInPerson", user);
         return "redirect:/my-profile";

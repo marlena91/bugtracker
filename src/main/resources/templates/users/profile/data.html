@@ -19,8 +19,8 @@
                 <h4 th:text="#{user.profile.data.title}" class="mt-5 mb-3"></h4>
             </div>
             <div class="row ms-4">
-                <p class="text-start ms-2" th:text="#{user.single.email} + ': ' + ${userData.getEmail()}"></p>
-                <p class="text-start ms-2" th:text="#{user.single.name} + ': ' + ${userData.getUserRealName()}"></p>
+                <p class="text-start ms-2" th:text="#{user.single.email} + ': ' + ${profileData.getEmail()}"></p>
+                <p class="text-start ms-2" th:text="#{user.single.name} + ': ' + ${profileData.getUserRealName()}"></p>
             </div>
             <div class="row justify-content-end">
                 <div class="col-4">

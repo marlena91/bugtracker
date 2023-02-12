@@ -3,6 +3,7 @@ package com.marlena.bugtracker.controllers;
 import com.marlena.bugtracker.exceptions.ResourceNotFoundException;
 import com.marlena.bugtracker.models.Authority;
 import com.marlena.bugtracker.models.Person;
+import com.marlena.bugtracker.models.UserData;
 import com.marlena.bugtracker.services.AuthorityService;
 import com.marlena.bugtracker.services.PersonService;
 import jakarta.validation.Valid;
@@ -68,19 +69,25 @@ public class PersonController {
         Person user = userService.findUserById(userId).getBody();
         assert user != null;
         Iterable<Authority> authorities = authorityService.findAllByPersonLogin(user.getLogin());
-        user.setConfirmPwd(user.getPassword());
+        UserData userData = new UserData();
+        userData.setUserRealName(user.getUserRealName());
+        userData.setLogin(user.getLogin());
+        userData.setEmail(user.getEmail());
         ModelAndView modelAndView = new ModelAndView("users/edit");
-        modelAndView.addObject("user", user);
+        modelAndView.addObject("userData", userData);
         modelAndView.addObject("authority", authorities.iterator().next().getName());
+        modelAndView.addObject("userId", user.getId());
         return modelAndView;
     }
 
     @PostMapping("/{id}")
-    public String updateUser(@Valid @ModelAttribute("user") Person user, Errors errors) throws ResourceNotFoundException {
+    public String updateUser(@Valid @ModelAttribute("userData") UserData userData, Errors errors, @PathVariable Long id) throws ResourceNotFoundException {
         if (errors.hasErrors()) {
             return "users/edit.html";
         }
-        userService.updateUser(user);
+        Person user = userService.findUserById(id).getBody();
+        userService.updateUser(userData, id);
+        assert user != null;
         return "redirect:/users/"+user.getId();
     }
 
