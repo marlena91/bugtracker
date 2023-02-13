@@ -3,6 +3,7 @@ package com.marlena.bugtracker.services;
 import com.marlena.bugtracker.exceptions.ResourceNotFoundException;
 import com.marlena.bugtracker.models.Authority;
 import com.marlena.bugtracker.models.Person;
+import com.marlena.bugtracker.models.UserData;
 import com.marlena.bugtracker.repositories.PersonRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -50,12 +51,12 @@ public class PersonService {
         return isSaved;
     }
 
-    public void updateUser(Person user) throws ResourceNotFoundException {
-        Person userToUpdate = personRepository.findById(user.getId())
-                .orElseThrow(() -> new ResourceNotFoundException("User not found for this id :: " + user.getId()));
-        userToUpdate.setUserRealName(user.getUserRealName());
-        userToUpdate.setLogin(user.getLogin());
-        userToUpdate.setEmail(user.getEmail());
+    public void updateUser(UserData userData, Long id) throws ResourceNotFoundException {
+        Person userToUpdate = personRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("User not found for this login :: " + id));
+        userToUpdate.setUserRealName(userData.getUserRealName());
+        userToUpdate.setLogin(userData.getLogin());
+        userToUpdate.setEmail(userData.getEmail());
         final Person updatedUser = personRepository.save(userToUpdate);
         ResponseEntity.ok(updatedUser);
     }

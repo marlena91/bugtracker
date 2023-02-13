@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 
-<html lang="pl" xmlns:th="http://www.thymeleaf.org">
+<html lang="pl" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity65">
 <head>
     <meta charset="UTF-8">
     <title>Bugtracker</title>
@@ -17,7 +17,6 @@
     <div class="row justify-content-center mt-5">
         <div class="col-10 mb-5 pb-5">
             <h2 class="mt-3 text-center font-honeysuckle bold" th:text="${issue.getName()}"></h2>
-            <input type="hidden" th:value="${issue.getId()}" id="issueId">
             <div class="row justify-content-center">
                 <div class="row font-navyblue justify-content-end mt-5">
                     <div class="col-4">
@@ -63,7 +62,7 @@
                                 <div class="col">
                                      <span th:unless="${issue.getAssignee()} == null"
                                            th:text="${issue.getAssignee().getUserRealName()}"></span>
-                                    <a th:unless="${issue.getAssignee()} == null"
+                                    <a sec:authorize="hasRole('ROLE_LEADER')" th:unless="${issue.getAssignee()} == null"
                                        th:href="@{/issues/deleteAssignee/{id}(id=${issue.getId()})}"
                                        class="link hover-honeysuckle">
                                         <i class="bi bi-person-dash"></i>
@@ -105,7 +104,8 @@
         <div class="col-4 mb-5">
             <a th:href="@{/issues/edit/{id}(id=${issue.getId()})}" class="btn bg-btn-dark btn-width-8 m-2"
                th:text="#{issue.single.edit.button}"></a>
-            <a th:href="@{/issues/delete/{id}(id=${issue.getId()})}" class="btn bg-btn-red btn-width-8 m-2"
+            <a sec:authorize="hasRole('ROLE_LEADER')"
+               th:href="@{/issues/delete/{id}(id=${issue.getId()})}" class="btn bg-btn-red btn-width-8 m-2"
                th:text="#{issue.single.delete.button}"></a>
         </div>
     </div>

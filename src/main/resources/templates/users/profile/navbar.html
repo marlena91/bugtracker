@@ -5,11 +5,11 @@
 <body>
 <nav>
     <div class="row">
-        <a th:href="@{/my-profile/{login}(login=${user.getLogin()})}" th:text="#{user.profile.data}"
+        <a th:href="@{/my-profile/data}" th:text="#{user.profile.data}"
            class="link color-nav col bg-light m-2 rounded"></a>
-        <a th:href="@{/my-profile/projects/{id}(id=${user.getId()})}" th:text="#{user.profile.projects}"
+        <a th:href="@{/my-profile/projects}" th:text="#{user.profile.projects}"
            class="link color-nav col bg-light m-2 rounded"></a>
-        <a th:href="@{/my-profile/issues/{id}(id=${user.getId()})}" th:text="#{user.profile.issues}"
+        <a th:href="@{/my-profile/issues}" th:text="#{user.profile.issues}"
            class="link color-nav col bg-light m-2 me-3 rounded"></a>
     </div>
 </nav>

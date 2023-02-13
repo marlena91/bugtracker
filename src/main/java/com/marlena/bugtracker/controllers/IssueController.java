@@ -3,6 +3,7 @@ package com.marlena.bugtracker.controllers;
 import com.marlena.bugtracker.exceptions.ResourceNotFoundException;
 import com.marlena.bugtracker.filters.IssueFilter;
 import com.marlena.bugtracker.models.Issue;
+import com.marlena.bugtracker.models.Person;
 import com.marlena.bugtracker.services.IssueService;
 import com.marlena.bugtracker.services.PersonService;
 import jakarta.validation.Valid;
@@ -84,12 +85,21 @@ public class IssueController {
     }
 
     @GetMapping("newAssignee/{id}")
-    public ModelAndView updateAssignee(@PathVariable Long id) throws ResourceNotFoundException {
-        ResponseEntity<Issue> issue = issueService.findById(id);
+    public ModelAndView editAssignee(@PathVariable Long id) throws ResourceNotFoundException {
+        Issue issue = issueService.findById(id).getBody();
+        Person assignee = new Person();
         ModelAndView modelAndView = new ModelAndView("issues/assignee");
-        modelAndView.addObject("issue", issue.getBody());
+        modelAndView.addObject("issueId", issue.getId());
+        modelAndView.addObject("issueName", issue.getName());
         modelAndView.addObject("users", userService.findAll());
+        modelAndView.addObject("assignee", assignee);
         return modelAndView;
+    }
+
+    @PostMapping(value="newAssignee/{id}")
+    public String updateAssignee(@ModelAttribute("assignee") Person assignee, @PathVariable Long id) throws ResourceNotFoundException {
+        issueService.updateAssignee(assignee, id);
+        return "redirect:/issues/"+id;
     }
 
     @GetMapping("/deleteAssignee/{id}")

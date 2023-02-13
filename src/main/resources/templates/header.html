@@ -27,14 +27,18 @@
                     <li sec:authorize="isAuthenticated()" class="nav-item">
                         <a th:href="@{/my-profile}" th:text="#{home.myPage}" class="nav-link color-nav"></a>
                     </li>
-                    <li class="nav-item dropdown">
+                    <li sec:authorize="hasRole('ROLE_LEADER')" class="nav-item dropdown">
                         <a th:href="@{/users}" sec:authorize="isAuthenticated()" th:text="#{home.users}" class="nav-link dropdown-toggle color-nav"
                            role="button" data-bs-toggle="dropdown" aria-expanded="false">
                         </a>
-                        <ul class="dropdown-menu ">
+                        <ul  class="dropdown-menu ">
                             <li><a th:href="@{/users}" th:text="#{home.list}" class="dropdown-item color-dark-nav"></a></li>
-                            <li><a th:href="@{/users/new}" th:text="#{home.addUser}" class="dropdown-item color-dark-nav"></a></li>
-                            <li><a th:href="@{/users/authorities}" th:text="#{home.grantPermissions}" class="dropdown-item color-dark-nav"></a></li>
+                            <li sec:authorize="hasRole('ROLE_ADMIN')" >
+                                <a th:href="@{/users/new}" th:text="#{home.addUser}" class="dropdown-item color-dark-nav"></a>
+                            </li>
+                            <li sec:authorize="hasRole('ROLE_ADMIN')">
+                                <a th:href="@{/users/authorities}" th:text="#{home.grantPermissions}" class="dropdown-item color-dark-nav"></a>
+                            </li>
                         </ul>
                     </li>
                     <li sec:authorize="isAnonymous()" class="nav-item">

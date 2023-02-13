@@ -18,9 +18,17 @@ public class SecurityConfig {
                 .authorizeHttpRequests((requests) -> requests
                         .requestMatchers("/", "/home").permitAll()
                         .requestMatchers("/assets/**").permitAll()
+                        .requestMatchers("/my-profile/**").authenticated()
                         .requestMatchers("/users/new").hasRole("ADMIN")
+                        .requestMatchers("/users/authorities").hasRole("ADMIN")
+                        .requestMatchers("/users/edit/**").hasRole("ADMIN")
+                        .requestMatchers("/users/delete/**").hasRole("ADMIN")
                         .requestMatchers("/users").hasRole("LEADER")
                         .requestMatchers("/projects/new").hasRole("LEADER")
+                        .requestMatchers("/projects/edit/**").hasRole("LEADER")
+                        .requestMatchers("/projects/delete/**").hasRole("LEADER")
+                        .requestMatchers("/issues/delete/**").hasRole("LEADER")
+                        .requestMatchers("/issues/deleteAssignee").hasRole("LEADER")
                         .anyRequest().authenticated()
                 )
                 .formLogin((form) -> form

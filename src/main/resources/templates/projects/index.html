@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 
-<html lang="pl" xmlns:th="http://www.thymeleaf.org">
+<html lang="pl" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity65">
 <head>
     <meta charset="UTF-8">
     <title>Bugtracker</title>
@@ -16,7 +16,7 @@
 <div class="container">
 
     <div class="row justify-content-end mt-5">
-        <div class="col-2">
+        <div sec:authorize="hasRole('ROLE_LEADER')" class="col-2">
             <a th:href="@{/projects/new}" class="btn btn-lg bg-btn-dark" th:text="#{projects.button}"></a>
         </div>
     </div>

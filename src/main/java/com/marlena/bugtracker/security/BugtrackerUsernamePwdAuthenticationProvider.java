@@ -35,7 +35,7 @@ public class BugtrackerUsernamePwdAuthenticationProvider implements Authenticati
         String pwd = authentication.getCredentials().toString();
         Person person = personRepository.getByLogin(login);
         if(null != person && person.getId()>0 && passwordEncoder.matches(pwd,person.getPassword())) {
-            return new UsernamePasswordAuthenticationToken(person.getLogin(), null, getGrantedAuthorities(person.getAuthorities()));
+            return new UsernamePasswordAuthenticationToken(login, null, getGrantedAuthorities(person.getAuthorities()));
         } else {
             throw new BadCredentialsException("Invalid credentials");
         }
