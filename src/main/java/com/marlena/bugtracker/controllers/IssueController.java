@@ -2,19 +2,24 @@ package com.marlena.bugtracker.controllers;
 
 import com.marlena.bugtracker.exceptions.ResourceNotFoundException;
 import com.marlena.bugtracker.filters.IssueFilter;
+import com.marlena.bugtracker.models.Comment;
 import com.marlena.bugtracker.models.Issue;
 import com.marlena.bugtracker.models.Person;
+import com.marlena.bugtracker.services.CommentService;
 import com.marlena.bugtracker.services.IssueService;
 import com.marlena.bugtracker.services.PersonService;
+import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
+import java.util.Collections;
 import java.util.List;
 
 @Controller
@@ -24,6 +29,8 @@ public class IssueController {
 
     private final IssueService issueService;
     private final PersonService userService;
+
+    private final CommentService commentService;
 
     @GetMapping
     public ModelAndView getAllIssues(@ModelAttribute IssueFilter filter) {
@@ -38,10 +45,15 @@ public class IssueController {
     }
 
     @GetMapping("/{id}")
-    public ModelAndView getIssueById(@PathVariable(value = "id") Long id) throws ResourceNotFoundException {
+    public ModelAndView getIssueById(@PathVariable(value = "id") Long id, HttpSession httpSession) throws ResourceNotFoundException {
         ResponseEntity<Issue> issue = issueService.findById(id);
+        List<Comment> comments = commentService.findAll();
+        Collections.reverse(comments);
         ModelAndView modelAndView = new ModelAndView("issues/single");
         modelAndView.addObject("issue", issue.getBody());
+        modelAndView.addObject("comment", new Comment());
+        modelAndView.addObject("comments", comments);
+        httpSession.setAttribute("issue", issue.getBody());
         return modelAndView;
     }
 
@@ -106,6 +118,13 @@ public class IssueController {
     public String deleteAssignee(@PathVariable Long id) throws ResourceNotFoundException {
         issueService.deleteAssignee(id);
         return "redirect:/issues/" + id;
+    }
 
+    @PostMapping("/addNewComment")
+    public ModelAndView addNewComment(Model model, @ModelAttribute("comment") Comment comment,Authentication authentication, HttpSession httpSession){
+        Issue issue = (Issue) httpSession.getAttribute("issue");
+        commentService.saveCommentDetails(comment, authentication, httpSession);
+        ModelAndView modelAndView = new ModelAndView("redirect:/issues/"+ issue.getId());
+        return modelAndView;
     }
 }

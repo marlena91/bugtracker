@@ -1,6 +1,5 @@
 package com.marlena.bugtracker.models;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.marlena.bugtracker.annotations.PasswordValidator;
 import com.marlena.bugtracker.annotations.FieldsValueMatch;
 import jakarta.persistence.*;
@@ -57,5 +56,7 @@ public class Person {
         inverseJoinColumns = @JoinColumn(name="authority_id"))
     private Set<Authority> authorities;
 
-
+    @OneToMany(mappedBy="author", fetch = FetchType.LAZY,
+    cascade = CascadeType.PERSIST, targetEntity = Comment.class)
+    private Set<Comment> comments;
 }

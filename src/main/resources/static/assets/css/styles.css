@@ -138,6 +138,10 @@ footer:hover {
     width: 8rem;
 }
 
+.btn-width-10 {
+    width: 10rem;
+}
+
 .bold {
     font-weight: bold;
 }
