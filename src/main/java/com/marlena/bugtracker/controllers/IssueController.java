@@ -21,6 +21,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 
 @Controller
 @RequestMapping("issues")
@@ -47,7 +48,7 @@ public class IssueController {
     @GetMapping("/{id}")
     public ModelAndView getIssueById(@PathVariable(value = "id") Long id, HttpSession httpSession) throws ResourceNotFoundException {
         ResponseEntity<Issue> issue = issueService.findById(id);
-        List<Comment> comments = commentService.findAll();
+        List<Comment> comments = commentService.findAllByIssueId(issue.getBody());
         Collections.reverse(comments);
         ModelAndView modelAndView = new ModelAndView("issues/single");
         modelAndView.addObject("issue", issue.getBody());
@@ -125,6 +126,14 @@ public class IssueController {
         Issue issue = (Issue) httpSession.getAttribute("issue");
         commentService.saveCommentDetails(comment, authentication, httpSession);
         ModelAndView modelAndView = new ModelAndView("redirect:/issues/"+ issue.getId());
+        return modelAndView;
+    }
+
+    @RequestMapping("/deleteComment")
+    public ModelAndView deleteComment(Model model, @RequestParam Long id, HttpSession httpSession) {
+        Issue issue = (Issue) httpSession.getAttribute("issue");
+        commentService.deleteById(id);
+        ModelAndView modelAndView = new ModelAndView("redirect:/issues/"+issue.getId());
         return modelAndView;
     }
 }

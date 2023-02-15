@@ -26,6 +26,17 @@ public class CommentService {
     public List<Comment> findAll(){
         return commentRepository.findAll();
     }
+    public List<Comment> findAllByIssueId(Issue issue){
+        return commentRepository.findAllByIssue(issue);
+    }
+
+    public Optional<Comment> findById(Long id) {
+        return commentRepository.findById(id);
+    }
+
+    public void deleteById(Long id) {
+        commentRepository.deleteById(id);
+    }
 
     public boolean saveCommentDetails(Comment comment, Authentication authentication, HttpSession httpSession) {
         boolean isSaved = false;
