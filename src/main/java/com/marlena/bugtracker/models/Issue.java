@@ -8,6 +8,7 @@ import lombok.Data;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 @Data
@@ -59,6 +60,10 @@ public class Issue {
     @ManyToOne
     @JoinColumn(name = "project_id", nullable = false)
     private Project project;
+
+    @OneToMany(mappedBy="issue", fetch = FetchType.LAZY,
+            cascade = CascadeType.PERSIST, targetEntity = Comment.class)
+    private Set<Comment> comments;
 
     @Column(nullable = false)
     private Date dateCreated;
