@@ -18,10 +18,31 @@
       <div class="row">
         <h4 th:text="#{user.profile.issues}" class="mt-5 mb-3"></h4>
       </div>
-      <div class="row">
-        <ul th:each="issue: ${issues}">
-          <li class="text-start ms-5 mb-5" th:text="${issue.getName()}"></li>
-        </ul>
+      <div class="row justify-content-center mt-3">
+        <table class="table table-light font-navyblue">
+          <thead>
+          <tr>
+            <th scope="col" th:text="#{issue.single.name}"></th>
+            <th scope="col" th:text="#{issue.single.project}"></th>
+            <th scope="col" th:text="#{issue.single.priority}"></th>
+            <th scope="col" th:text="#{issue.single.status}"></th>
+          </tr>
+          </thead>
+          <tbody class="table-group-divider">
+          <tr th:if="${issues.isEmpty()}" class="col">
+            <td colspan="4" th:text="#{user.profile.issue.clear}"></td>
+          </tr>
+
+          <tr th:each="issue: ${issues} ">
+            <th scope="row">
+              <a th:href="@{issues/{id}(id=${issue.getId})}" th:text="${issue.getName()}" class="link font-navyblue"></a>
+            </th>
+            <td th:text="${issue.getProject().getName()}"></td>
+            <td th:text="${issue.getPriority()}"></td>
+            <td th:text="${issue.getStatus()}"></td>
+          </tr>
+          </tbody>
+        </table>
       </div>
     </div>
     <div class="col-4 bg-dark ">

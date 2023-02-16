@@ -47,7 +47,7 @@
                                     <span th:text="#{issue.single.assignee} + ': '" class="col text-muted"></span>
                                 </small>
                                 <div th:if="${issue.getAssignee()} == null" class="link hover-bluegrotto">
-                                    <a th:href="@{/issues/newAssignee/{id}(id=${issue.getId()})}"
+                                    <a data-bs-toggle="modal" data-bs-target="#newAssignee"
                                        class="col link hover-bluegrotto">
                                         <span th:text="#{issue.single.add.assignee}"></span>
                                         <i class="bi bi-person-add"></i>
@@ -59,10 +59,47 @@
                                      <span th:unless="${issue.getAssignee()} == null"
                                            th:text="${issue.getAssignee().getUserRealName()}"></span>
                                     <a sec:authorize="hasRole('ROLE_LEADER')" th:unless="${issue.getAssignee()} == null"
-                                       th:href="@{/issues/deleteAssignee/{id}(id=${issue.getId()})}"
+                                       th:href="@{deleteAssignee(issueId=${issue.getId()})}"
                                        class="link hover-honeysuckle">
                                         <i class="bi bi-person-dash"></i>
                                     </a>
+                                </div>
+                                <div class="modal fade" id="newAssignee" tabindex="-1" role="dialog"
+                                     aria-labelledby="newAssignee">
+                                    <div class="modal-dialog">
+                                        <div class="modal-content font-navyblue">
+                                            <div class="modal-header">
+                                                <h5 class="modal-title" id="newAssigneeLabel"
+                                                    th:text="#{assignee.label}"></h5>
+                                                <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                                        aria-label="Close">
+                                                    <span aria-hidden="true"></span>
+                                                </button>
+                                            </div>
+                                            <form th:action="@{newAssignee(issueId=${issue.getId()})}" method="post"
+                                                  th:object="${assignee}">
+                                                <div class="modal-body">
+                                                    <div class="col">
+                                                        <select th:field="*{id}" id="assignee" class="form-control">
+                                                            <option th:value="${null}"
+                                                                    th:text="#{issue.single.select.user}"></option>
+                                                            <option th:each="user : ${users}"
+                                                                    th:value="${user.getId()}"
+                                                                    th:text="${user.getUserRealName()}"></option>
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <div class="row mt-4">
+                                                        <div class="col d-flex justify-content-end align-items-end">
+                                                            <button type="submit" class="btn bg-btn-dark mb-5"
+                                                                    th:text="#{issue.edit.button}"></button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </form>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -96,7 +133,7 @@
                     <div th:if="${comments.isEmpty()}" class="card mt-2 font-navyblue">
                         <div class="card-header" th:text="#{comment.blank}"></div>
                     </div>
-                    <div th:each="comment: ${comments}" >
+                    <div th:each="comment: ${comments}">
                         <div class="row">
                             <div class="col-11 card mt-2 font-navyblue">
                                 <div class="card-header d-flex justify-content-between">
@@ -120,12 +157,11 @@
                             </div>
                             <div th:if="${#authentication.getPrincipal()} == ${comment.getAuthor().getLogin()}"
                                  class="col mt-3 ">
-                                <a th:href="@{deleteComment(id=${comment.getId()})}" class="link font-honeysuckle hover-bluegrotto"><i class="bi bi-x-circle"></i></a>
+                                <a th:href="@{deleteComment(id=${comment.getId()})}"
+                                   class="link font-honeysuckle hover-bluegrotto"><i class="bi bi-x-circle"></i></a>
                             </div>
                         </div>
-
                     </div>
-
                 </div>
                 <div class="text-center">
                     <button type="button" class="btn bg-btn-dark btn-width-10 m-2"
@@ -137,7 +173,7 @@
                             <div class="modal-header">
                                 <h5 class="modal-title" id="createCommentLabel" th:text="#{comment.label}"></h5>
                                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
-                                    <span aria-hidden="true">x</span>
+                                    <span aria-hidden="true"></span>
                                 </button>
                             </div>
                             <form th:action="@{addNewComment}" method="post" th:object="${comment}">
