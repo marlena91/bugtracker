@@ -22,7 +22,6 @@ import org.springframework.web.servlet.ModelAndView;
 
 import java.util.Collections;
 import java.util.List;
-import java.util.Optional;
 
 @Controller
 @RequestMapping("issues")
@@ -55,7 +54,9 @@ public class IssueController {
         ModelAndView modelAndView = new ModelAndView("issues/single");
         modelAndView.addObject("issue", issue.getBody());
         modelAndView.addObject("comment", new Comment());
+        modelAndView.addObject("assignee", new Person());
         modelAndView.addObject("comments", comments);
+        modelAndView.addObject("users", userService.findAll());
         httpSession.setAttribute("issue", issue.getBody());
         return modelAndView;
     }
@@ -104,28 +105,16 @@ public class IssueController {
         return "redirect:/issues";
     }
 
-    @GetMapping("newAssignee/{id}")
-    public ModelAndView editAssignee(@PathVariable Long id) throws ResourceNotFoundException {
-        Issue issue = issueService.findById(id).getBody();
-        Person assignee = new Person();
-        ModelAndView modelAndView = new ModelAndView("issues/assignee");
-        modelAndView.addObject("issueId", issue.getId());
-        modelAndView.addObject("issueName", issue.getName());
-        modelAndView.addObject("users", userService.findAll());
-        modelAndView.addObject("assignee", assignee);
-        return modelAndView;
+    @PostMapping(value="newAssignee")
+    public String updateAssignee(@ModelAttribute("assignee") Person assignee, @RequestParam Long issueId) throws ResourceNotFoundException {
+        issueService.updateAssignee(assignee, issueId);
+        return "redirect:/issues/"+issueId;
     }
 
-    @PostMapping(value="newAssignee/{id}")
-    public String updateAssignee(@ModelAttribute("assignee") Person assignee, @PathVariable Long id) throws ResourceNotFoundException {
-        issueService.updateAssignee(assignee, id);
-        return "redirect:/issues/"+id;
-    }
-
-    @GetMapping("/deleteAssignee/{id}")
-    public String deleteAssignee(@PathVariable Long id) throws ResourceNotFoundException {
-        issueService.deleteAssignee(id);
-        return "redirect:/issues/" + id;
+    @GetMapping("/deleteAssignee")
+    public String deleteAssignee(@RequestParam Long issueId) throws ResourceNotFoundException {
+        issueService.deleteAssignee(issueId);
+        return "redirect:/issues/" + issueId;
     }
 
     @PostMapping("/addNewComment")
