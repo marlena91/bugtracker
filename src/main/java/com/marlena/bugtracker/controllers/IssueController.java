@@ -5,6 +5,7 @@ import com.marlena.bugtracker.filters.IssueFilter;
 import com.marlena.bugtracker.models.Comment;
 import com.marlena.bugtracker.models.Issue;
 import com.marlena.bugtracker.models.Person;
+import com.marlena.bugtracker.repositories.CommentRepository;
 import com.marlena.bugtracker.services.CommentService;
 import com.marlena.bugtracker.services.IssueService;
 import com.marlena.bugtracker.services.PersonService;
@@ -32,6 +33,7 @@ public class IssueController {
     private final PersonService userService;
 
     private final CommentService commentService;
+    private final CommentRepository commentRepository;
 
     @GetMapping
     public ModelAndView getAllIssues(@ModelAttribute IssueFilter filter) {
@@ -93,6 +95,11 @@ public class IssueController {
 
     @GetMapping("/delete/{id}")
     public String deleteIssue(@PathVariable Long id) throws ResourceNotFoundException {
+        ResponseEntity<Issue> issue = issueService.findById(id);
+        List<Comment> comments = commentService.findAllByIssueId(issue.getBody());
+        for(Comment comment : comments) {
+            commentService.deleteById(comment.getId());
+        }
         issueService.deleteIssue(id);
         return "redirect:/issues";
     }
