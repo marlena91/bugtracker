@@ -2,6 +2,7 @@ package com.marlena.bugtracker.services;
 
 import com.marlena.bugtracker.exceptions.ResourceNotFoundException;
 import com.marlena.bugtracker.models.Authority;
+import com.marlena.bugtracker.models.AuthorityName;
 import com.marlena.bugtracker.repositories.AuthorityRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -29,7 +30,7 @@ public class AuthorityService {
         return authorities.iterator().next();
     }
 
-    public ResponseEntity<Authority> findByAuthority(String name) throws ResourceNotFoundException {
+    public ResponseEntity<Authority> findByAuthority(AuthorityName name) throws ResourceNotFoundException {
         Authority authority = authorityRepository.findByName(name)
                 .orElseThrow(() -> new ResourceNotFoundException("Authority not found for this name :: "+ name));
         return ResponseEntity.ok().body(authority);
