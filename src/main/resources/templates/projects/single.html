@@ -22,10 +22,10 @@
                     <a th:href="@{/issues/new/{projectId}(projectId=${project.getId()})}"
                        class="btn bg-btn-dark btn-width-8 m-2"
                        th:text="#{issue.button}"></a>
-                    <a sec:authorize="hasRole('ROLE_LEADER')"
+                    <a sec:authorize="hasRole('ROLE_MANAGE_PROJECT')"
                        th:href="@{/projects/edit/{id}(id=${project.getId()})}" class="btn bg-btn-dark btn-width-8 m-2"
                        th:text="#{project.single.edit.button}"></a>
-                    <a sec:authorize="hasRole('ROLE_LEADER')"
+                    <a sec:authorize="hasRole('ROLE_MANAGE_PROJECT')"
                        th:href="@{/projects/delete/{id}(id=${project.getId()})}" class="btn bg-btn-red btn-width-8 m-2"
                        th:text="#{project.single.delete.button}"></a>
                 </div>

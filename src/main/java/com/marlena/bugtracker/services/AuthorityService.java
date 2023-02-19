@@ -24,21 +24,23 @@ public class AuthorityService {
     public Iterable<Authority> findAllByPersonLogin(String login) {
         return authorityRepository.findAllByPersonLogin(login);
     }
-
-    public Authority findFirstByPersonLogin(String login) {
-        Iterable<Authority> authorities = authorityRepository.findAllByPersonLogin(login);
-        return authorities.iterator().next();
-    }
-
-    public ResponseEntity<Authority> findByAuthority(AuthorityName name) throws ResourceNotFoundException {
-        Authority authority = authorityRepository.findByName(name)
-                .orElseThrow(() -> new ResourceNotFoundException("Authority not found for this name :: "+ name));
-        return ResponseEntity.ok().body(authority);
-    }
+//
+//    public Authority findFirstByPersonLogin(String login) {
+//        Iterable<Authority> authorities = authorityRepository.findAllByPersonLogin(login);
+//        return authorities.iterator().next();
+//    }
+//
+//    public ResponseEntity<Authority> findByAuthority(AuthorityName name) throws ResourceNotFoundException {
+//        Authority authority = authorityRepository.findByName(name)
+//                .orElseThrow(() -> new ResourceNotFoundException("Authority not found for this name :: "+ name));
+//        return ResponseEntity.ok().body(authority);
+//    }
 
     public Set<Authority> findAllAuthorities(){
         return findAll()
                 .stream()
                 .collect(Collectors.toSet());
     }
+
+
 }

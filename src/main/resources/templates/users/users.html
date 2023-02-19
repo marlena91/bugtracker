@@ -17,7 +17,7 @@
 
     <div class="row justify-content-end mt-5">
         <div class="col-2">
-            <a sec:authorize="hasRole('ROLE_ADMIN')" th:href="@{/users/new}" class="btn bg-btn-dark" th:text="#{users.button}"></a>
+            <a sec:authorize="hasRole('ROLE_MANAGE_USER')" th:href="@{/users/new}" class="btn bg-btn-dark" th:text="#{users.button}"></a>
         </div>
     </div>
 
@@ -39,7 +39,7 @@
                             <span class="text-muted" th:text="${user.getEmail()}"></span>
                         </small>
                     </div>
-                    <div sec:authorize="hasRole('ROLE_ADMIN')" class="card-footer">
+                    <div sec:authorize="hasRole('ROLE_MANAGE_USER')" class="card-footer">
                         <p class="d-flex justify-content-evenly">
                             <a th:href="@{/users/edit/{id}(id=${user.getId()})}"  class="link hover-bluegrotto">
                                 <i class="bi bi-person-gear"></i>

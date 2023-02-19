@@ -8,12 +8,12 @@ import com.marlena.bugtracker.services.PersonService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 
 @Controller
 @RequestMapping("/users/authorities")
@@ -21,26 +21,32 @@ import java.util.Objects;
 public class AuthorityController {
 
     private final PersonService userService;
-
     private final AuthorityService authorityService;
 
-    @GetMapping("/{login}")
-    public ModelAndView getAuthorities(@PathVariable(value = "login") String login) {
-        Iterable<Authority> authorities = authorityService.findAllByPersonLogin(login);
-        ModelAndView modelAndView = new ModelAndView("users/authorities/single");
-        modelAndView.addObject("authority", authorities.iterator().next());
-        modelAndView.addObject("login", login);
+    @GetMapping()
+    public ModelAndView getAllUsersWithAuthorities() {
+        List<Person> users = userService.findAll();
+        ModelAndView modelAndView = new ModelAndView("users/authorities/authorities");
+        modelAndView.addObject("users", users);
         return modelAndView;
     }
 
-    @PostMapping("/{login}")
-    public String updateAuthority(@PathVariable(value="login") String login, @ModelAttribute Authority authority, Errors errors) throws ResourceNotFoundException {
+    @GetMapping("/{login}")
+    public ModelAndView getAuthorities(Model model, @PathVariable(value = "login") String login) throws ResourceNotFoundException {
+        ResponseEntity<Person> user = userService.findUserByLogin(login);
+        ModelAndView modelAndView = new ModelAndView("users/authorities/single");
+        modelAndView.addObject("user", user.getBody());
+        modelAndView.addObject("authorities", authorityService.findAll());
+        return modelAndView;
+    }
+
+    @PostMapping()
+    public String updateAuthority(Model model, @ModelAttribute("user") Person user, @ModelAttribute Authority authority, Errors errors) throws ResourceNotFoundException {
         if (errors.hasErrors()) {
-            return "users/authorities/single/"+login;
+            return "users/authorities/single/"+user.getLogin();
         }
-        Authority authorityToAdd = authorityService.findByAuthority(authority.getName()).getBody();
-        ResponseEntity<Person> updateUser = userService.updateUserAuthorities(authorityToAdd, login);
-        return "redirect:/users/"+ Objects.requireNonNull(updateUser.getBody()).getId();
+        userService.updateUserAuthorities(user);
+        return "redirect:/users";
     }
 
 }

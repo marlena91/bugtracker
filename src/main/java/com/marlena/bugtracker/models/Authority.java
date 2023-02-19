@@ -1,9 +1,6 @@
 package com.marlena.bugtracker.models;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.Data;
 
 @Entity
@@ -14,6 +11,7 @@ public class Authority {
     @GeneratedValue
     private Long id;
 
-    @Column(nullable = false, unique = true)
+    @Column(nullable = false)
+    @Enumerated(EnumType.STRING)
     private AuthorityName name;
 }
