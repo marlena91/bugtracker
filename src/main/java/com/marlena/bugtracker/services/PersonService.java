@@ -41,8 +41,8 @@ public class PersonService {
 
     public boolean saveUserDetails(Person user) {
         boolean isSaved = false;
-        Set<Authority> userSetAuthorities = getFullAuthorities(user.getAuthorities().iterator().next());
-        user.setAuthorities(userSetAuthorities);
+//        Set<Authority> userSetAuthorities = getFullAuthorities(user.getAuthorities().iterator().next());
+//        user.setAuthorities(userSetAuthorities);
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         Person savedUser = personRepository.save(user);
         if (null != savedUser && savedUser.getId() > 0) {
@@ -98,5 +98,18 @@ public class PersonService {
             }
         }
         return userSetAuthorities;
+    }
+
+    public void prepareAdminUser() {
+        if(personRepository.findByLogin("admin").isEmpty()){
+            Person admin = new Person();
+            admin.setLogin("admin");
+            admin.setPassword("password");
+            admin.setUserRealName("Admin");
+            admin.setEmail("admin@test.com");
+            List<Authority> authorities = authorityService.findAll();
+            admin.setAuthorities(new HashSet<>(authorities));
+            saveUserDetails(admin);
+        }
     }
 }
