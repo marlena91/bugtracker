@@ -35,7 +35,7 @@
 
           <tr th:each="issue: ${issues} ">
             <th scope="row">
-              <a th:href="@{issues/{id}(id=${issue.getId})}" th:text="${issue.getName()}" class="link font-navyblue"></a>
+              <a th:href="@{../issues/{id}(id=${issue.getId})}" th:text="${issue.getName()}" class="link font-navyblue"></a>
             </th>
             <td th:text="${issue.getProject().getName()}"></td>
             <td th:text="${issue.getPriority()}"></td>

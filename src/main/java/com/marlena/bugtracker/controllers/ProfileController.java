@@ -44,9 +44,7 @@ public class ProfileController {
     @GetMapping
     public String displayUserProfile(Model model, Authentication authentication, HttpSession httpSession) throws ResourceNotFoundException {
         ResponseEntity<Person> user = userService.findUserByLogin(authentication.getName());
-//        Authority generalAuthority = authorityService.findFirstByPersonLogin(authentication.getName());
         model.addAttribute("user", user.getBody());
-//        model.addAttribute("role", Objects.requireNonNull(user.getBody()).getAuthorities());
         httpSession.setAttribute("loggedInPerson", user.getBody());
         return "users/profile/profile.html";
     }

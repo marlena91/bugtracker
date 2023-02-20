@@ -155,8 +155,8 @@
                                     <div class="ms-4" th:text="${comment.getContent()}"></div>
                                 </div>
                             </div>
-                            <div th:if="${#authentication.getPrincipal()} == ${comment.getAuthor().getLogin()}"
-                                 class="col mt-3 ">
+                            <div th:if="${#authentication.getPrincipal()} == ${comment.getAuthor().getLogin()}
+                                        or ${#authorization.expression('hasRole(''MANAGE_COMMENTS'')')}" class="col mt-3 ">
                                 <a th:href="@{deleteComment(id=${comment.getId()})}"
                                    class="link font-honeysuckle hover-bluegrotto"><i class="bi bi-x-circle"></i></a>
                             </div>
