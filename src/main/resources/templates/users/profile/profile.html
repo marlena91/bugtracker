@@ -16,11 +16,19 @@
         <div class="col-8 bg-content rounded-start">
             <div th:replace="~{users/profile/navbar.html :: nav}"></div>
             <div class="row">
-                <h1 th:text="#{user.profile.title}" class="mt-5 mb-3"></h1>
-                <h4 th:text="${user.getUserRealName()}" class="mt-5 mb-3"></h4>
+                <h2 th:text="#{user.profile.title}" class="mt-3 mb-2"></h2>
+                <h4 th:text="${user.getUserRealName()}" class="mt-2 mb-2"></h4>
             </div>
             <div class="row">
-                <p class="text-center" th:text="#{user.profile.text} + ${role.getName()}"></p>
+                <p class="text-center" th:text="#{user.profile.text}">
+                <ul th:each="authority: ${user.getAuthorities()}" class="style-none list-group">
+                    <li class="font-smaller">
+                        <i class="bi bi-check"></i>
+                        <span th:text="${authority.getName()}">
+                        </span>
+                    </li>
+                </ul>
+                </p>
             </div>
         </div>
         <div class="col-4 bg-dark ">

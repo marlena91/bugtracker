@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.util.List;
+import java.util.Objects;
 
 @Controller
 @RequestMapping("my-profile")
@@ -43,9 +44,7 @@ public class ProfileController {
     @GetMapping
     public String displayUserProfile(Model model, Authentication authentication, HttpSession httpSession) throws ResourceNotFoundException {
         ResponseEntity<Person> user = userService.findUserByLogin(authentication.getName());
-        Authority generalAuthority = authorityService.findFirstByPersonLogin(authentication.getName());
         model.addAttribute("user", user.getBody());
-        model.addAttribute("role", generalAuthority);
         httpSession.setAttribute("loggedInPerson", user.getBody());
         return "users/profile/profile.html";
     }

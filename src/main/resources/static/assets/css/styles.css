@@ -150,6 +150,11 @@ footer:hover {
     font-size: 1.5rem;
 }
 
+.font-smaller {
+    font-size: 0.9rem;
+}
+
 .style-none {
     list-style-type:none;
 }
+

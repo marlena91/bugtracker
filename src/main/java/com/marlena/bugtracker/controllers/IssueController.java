@@ -5,7 +5,6 @@ import com.marlena.bugtracker.filters.IssueFilter;
 import com.marlena.bugtracker.models.Comment;
 import com.marlena.bugtracker.models.Issue;
 import com.marlena.bugtracker.models.Person;
-import com.marlena.bugtracker.repositories.CommentRepository;
 import com.marlena.bugtracker.services.CommentService;
 import com.marlena.bugtracker.services.IssueService;
 import com.marlena.bugtracker.services.PersonService;
@@ -30,9 +29,7 @@ public class IssueController {
 
     private final IssueService issueService;
     private final PersonService userService;
-
     private final CommentService commentService;
-    private final CommentRepository commentRepository;
 
     @GetMapping
     public ModelAndView getAllIssues(@ModelAttribute IssueFilter filter) {
@@ -105,7 +102,7 @@ public class IssueController {
         return "redirect:/issues";
     }
 
-    @PostMapping(value="newAssignee")
+    @PostMapping("newAssignee")
     public String updateAssignee(@ModelAttribute("assignee") Person assignee, @RequestParam Long issueId) throws ResourceNotFoundException {
         issueService.updateAssignee(assignee, issueId);
         return "redirect:/issues/"+issueId;
@@ -118,18 +115,16 @@ public class IssueController {
     }
 
     @PostMapping("/addNewComment")
-    public ModelAndView addNewComment(Model model, @ModelAttribute("comment") Comment comment,Authentication authentication, HttpSession httpSession){
+    public String addNewComment(Model model, @ModelAttribute("comment") Comment comment,Authentication authentication, HttpSession httpSession){
         Issue issue = (Issue) httpSession.getAttribute("issue");
         commentService.saveCommentDetails(comment, authentication, httpSession);
-        ModelAndView modelAndView = new ModelAndView("redirect:/issues/"+ issue.getId());
-        return modelAndView;
+        return "redirect:/issues/"+ issue.getId();
     }
 
     @RequestMapping("/deleteComment")
-    public ModelAndView deleteComment(Model model, @RequestParam Long id, HttpSession httpSession) {
+    public String deleteComment(Model model, @RequestParam Long id, HttpSession httpSession) {
         Issue issue = (Issue) httpSession.getAttribute("issue");
         commentService.deleteById(id);
-        ModelAndView modelAndView = new ModelAndView("redirect:/issues/"+issue.getId());
-        return modelAndView;
+        return "redirect:/issues/"+issue.getId();
     }
 }

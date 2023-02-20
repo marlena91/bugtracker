@@ -58,7 +58,7 @@
                                 <div class="col">
                                      <span th:unless="${issue.getAssignee()} == null"
                                            th:text="${issue.getAssignee().getUserRealName()}"></span>
-                                    <a sec:authorize="hasRole('ROLE_LEADER')" th:unless="${issue.getAssignee()} == null"
+                                    <a th:unless="${issue.getAssignee()} == null"
                                        th:href="@{deleteAssignee(issueId=${issue.getId()})}"
                                        class="link hover-honeysuckle">
                                         <i class="bi bi-person-dash"></i>
@@ -155,8 +155,8 @@
                                     <div class="ms-4" th:text="${comment.getContent()}"></div>
                                 </div>
                             </div>
-                            <div th:if="${#authentication.getPrincipal()} == ${comment.getAuthor().getLogin()}"
-                                 class="col mt-3 ">
+                            <div th:if="${#authentication.getPrincipal()} == ${comment.getAuthor().getLogin()}
+                                        or ${#authorization.expression('hasRole(''MANAGE_COMMENTS'')')}" class="col mt-3 ">
                                 <a th:href="@{deleteComment(id=${comment.getId()})}"
                                    class="link font-honeysuckle hover-bluegrotto"><i class="bi bi-x-circle"></i></a>
                             </div>
@@ -201,8 +201,7 @@
         <div class="col-4 mb-5">
             <a th:href="@{/issues/edit/{id}(id=${issue.getId()})}" class="btn bg-btn-dark btn-width-8 m-2"
                th:text="#{issue.single.edit.button}"></a>
-            <a sec:authorize="hasRole('ROLE_LEADER')"
-               th:href="@{/issues/delete/{id}(id=${issue.getId()})}" class="btn bg-btn-red btn-width-8 m-2"
+            <a th:href="@{/issues/delete/{id}(id=${issue.getId()})}" class="btn bg-btn-red btn-width-8 m-2"
                th:text="#{issue.single.delete.button}"></a>
         </div>
     </div>

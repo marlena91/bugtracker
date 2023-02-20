@@ -21,14 +21,29 @@
                     <span th:text="${userData.getUserRealName()}"></span>
                 </h1>
                 <div class="row mt-3">
-                    <p class="font-navyblue col text-end" th:text="#{user.new.permissions} + ' ' + ${authority}"></p>
-                    <a th:href="@{/users/authorities/{login}(login=${userData
-                    .getLogin()})}"
-                       class="link hover-bluegrotto col">
-                        <i class="bi bi-person-gear"></i>
-                        <span th:text="#{user.edit.permissions.button}"></span>
-                    </a>
+                    <p class="font-navyblue col text-center">
+                        <small>
+                            <span th:text="#{user.new.permissions}"></span>
+                            <span th:if="${authorities.isEmpty()}" th:text="#{users.authorities.noAuthorities}"></span>
+                            <span th:each="authority: ${authorities}">
+                                <span><i class="bi bi-check"></i></span>
+                                <span th:text="${authority.getName()}"></span>
+                            </span>
+                        </small>
+                    </p>
                 </div>
+                <div class="row">
+                    <p class="font-navyblue col text-center">
+
+                        <a th:href="@{/users/authorities/{login}(login=${userData.getLogin()})}"
+                           class="link hover-bluegrotto col">
+                            <i class="bi bi-person-gear"></i>
+                            <span th:text="#{user.edit.permissions.button}"></span>
+                        </a>
+                    </p>
+                </div>
+
+
             </div>
             <div class="row justify-content-center">
                 <div class="col">
@@ -40,7 +55,7 @@
             </div>
             <div class="row justify-content-center">
                 <div class="col-6">
-                    <form th:action="@{/users/{id}(id=${userId})}" method="post" th:object="${userData}">
+                    <form th:action="@{/users/{id}(id=${userData.getUserId()})}" method="post" th:object="${userData}">
                         <div class="form-group  mt-2">
                             <label for="userName" th:text="#{user.new.name}" class="font-navyblue"></label>
                             <input type="text" class="form-control" id="userName" th:field="*{userRealName}">

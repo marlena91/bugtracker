@@ -41,8 +41,6 @@ public class PersonService {
 
     public boolean saveUserDetails(Person user) {
         boolean isSaved = false;
-        Set<Authority> userSetAuthorities = getFullAuthorities(user.getAuthorities().iterator().next());
-        user.setAuthorities(userSetAuthorities);
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         Person savedUser = personRepository.save(user);
         if (null != savedUser && savedUser.getId() > 0) {
@@ -69,14 +67,11 @@ public class PersonService {
         ResponseEntity.ok(updatedUser);
     }
 
-    public ResponseEntity<Person> updateUserAuthorities(Authority authority, String login) throws ResourceNotFoundException {
-        Person userToUpdate = personRepository.findByLogin(login)
-                .orElseThrow(() -> new ResourceNotFoundException("User not found for this id :: " + login));
-
-        Set<Authority> userSetAuthorities = getFullAuthorities(authority);
-        userToUpdate.setAuthorities(userSetAuthorities);
+    public ResponseEntity<Person> updateUserAuthorities(Person user) throws ResourceNotFoundException {
+        Person userToUpdate = findUserById(user.getId()).getBody();
+        userToUpdate.setAuthorities(user.getAuthorities());
         final Person updatedUser = personRepository.save(userToUpdate);
-        return ResponseEntity.ok(updatedUser);
+        return ResponseEntity.ok().body(updatedUser);
     }
 
     public Map<String, Boolean> deleteUser(Long id) throws ResourceNotFoundException {
@@ -99,4 +94,19 @@ public class PersonService {
         }
         return userSetAuthorities;
     }
+
+    public void prepareAdminUser() {
+        if(personRepository.findByLogin("admin").isEmpty()){
+            Person admin = new Person();
+            admin.setLogin("admin");
+            admin.setPassword("password");
+            admin.setUserRealName("Admin");
+            admin.setEmail("admin@test.com");
+            List<Authority> authorities = authorityService.findAll();
+            admin.setAuthorities(new HashSet<>(authorities));
+            saveUserDetails(admin);
+        }
+    }
+
+
 }
