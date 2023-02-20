@@ -39,6 +39,7 @@
                             <p>
                                 <small>
                                     <span class="text-muted" th:text="#{user.single.roles}"> </span>
+                                    <span th:if="${user.getAuthorities().isEmpty()}" th:text="#{users.authorities.noAuthorities}"></span>
                                 </small>
 
                             <ul th:each="authority: ${user.getAuthorities()}" class="style-none list-group font-smaller">

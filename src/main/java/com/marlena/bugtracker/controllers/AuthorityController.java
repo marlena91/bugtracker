@@ -46,7 +46,7 @@ public class AuthorityController {
             return "users/authorities/single/"+user.getLogin();
         }
         userService.updateUserAuthorities(user);
-        return "redirect:/users";
+        return "redirect:/users/authorities";
     }
 
 }

@@ -19,4 +19,6 @@ public class UserData {
     @Column(nullable = false, unique = true)
     @Size(min=6, message="Login must be at least 6 characters long")
     private String login;
+
+    private Long userId;
 }

@@ -6,6 +6,7 @@ import com.marlena.bugtracker.models.Person;
 import com.marlena.bugtracker.models.UserData;
 import com.marlena.bugtracker.services.AuthorityService;
 import com.marlena.bugtracker.services.PersonService;
+import com.marlena.bugtracker.services.UserDataService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -23,6 +24,7 @@ public class PersonController {
     
     private final PersonService userService;
     private final AuthorityService authorityService;
+    private final UserDataService userDataService;
 
     @GetMapping
     public ModelAndView getAllUsers(){
@@ -68,16 +70,10 @@ public class PersonController {
     @GetMapping("/edit/{id}")
     public ModelAndView editUserById(@PathVariable(value = "id") Long userId) throws ResourceNotFoundException {
         Person user = userService.findUserById(userId).getBody();
-        assert user != null;
-        Iterable<Authority> authorities = authorityService.findAllByPersonLogin(user.getLogin());
-        UserData userData = new UserData();
-        userData.setUserRealName(user.getUserRealName());
-        userData.setLogin(user.getLogin());
-        userData.setEmail(user.getEmail());
+        UserData userData = userDataService.getUserDataForEditUser(user);
         ModelAndView modelAndView = new ModelAndView("users/edit");
         modelAndView.addObject("userData", userData);
-        modelAndView.addObject("authority", authorities.iterator().next().getName());
-        modelAndView.addObject("userId", user.getId());
+        modelAndView.addObject("authorities", user.getAuthorities());
 
         return modelAndView;
     }
