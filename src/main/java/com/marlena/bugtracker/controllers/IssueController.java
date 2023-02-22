@@ -52,6 +52,7 @@ public class IssueController {
         modelAndView.addObject("assignee", new Person());
         modelAndView.addObject("comments", comments);
         modelAndView.addObject("users", userService.findAll());
+
         httpSession.setAttribute("issue", issue.getBody());
         return modelAndView;
     }

@@ -22,6 +22,7 @@ public class SecurityConfig {
                 .authorizeHttpRequests((requests) -> requests
                         .requestMatchers("/", "/home").permitAll()
                         .requestMatchers("/assets/**").permitAll()
+                        .requestMatchers("/images/**").permitAll()
                         .requestMatchers("/my-profile/**").authenticated()
                         .requestMatchers("/users/new").hasRole("MANAGE_USER")
                         .requestMatchers("/users/authorities").hasRole("MANAGE_USER")

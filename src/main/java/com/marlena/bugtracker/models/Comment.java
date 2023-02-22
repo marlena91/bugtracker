@@ -31,4 +31,5 @@ public class Comment {
     @Size(min = 10, message = "Comment must be at least 10 characters long")
     private String content;
 
+    private String imagePath;
 }
