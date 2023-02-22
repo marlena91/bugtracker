@@ -125,4 +125,22 @@ public class IssueService {
         response.put("deletedAssignee", Boolean.TRUE);
         return response;
     }
+
+    public void saveStatus(Long id, Status status) {
+        Issue issue = issueRepository.getReferenceById(id);
+        issue.setStatus(status);
+        issueRepository.save(issue);
+    }
+
+    public void savePriority(Long id, Priority priority) {
+        Issue issue = issueRepository.getReferenceById(id);
+        issue.setPriority(priority);
+        issueRepository.save(issue);
+    }
+
+    public void saveType(Long id, Type type) {
+        Issue issue = issueRepository.getReferenceById(id);
+        issue.setType(type);
+        issueRepository.save(issue);
+    }
 }

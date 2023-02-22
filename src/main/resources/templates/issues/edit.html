@@ -9,6 +9,11 @@
   <link rel="stylesheet" href="/assets/css/styles.css">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.3/font/bootstrap-icons.css">
   <link rel="shortcut icon" href="/assets/images/favicon.ico" />
+  <script src="/assets/js/issue.js"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.21.1/axios.min.js"
+          integrity="sha512-bZS47S7sPOxkjU/4Bt0zrhEtWx0y0CRkhEp8IckzK+ltifIIE9EMIMTuT/mEzoIMewUINruDBIR/jJnbguonqQ=="
+          crossorigin="anonymous"></script>
 </head>
 <body>
 <div th:replace="~{header :: header}"></div>
@@ -28,6 +33,7 @@
         </div>
       </div>
       <form th:action="@{/issues/{id}(id=${issue.getId()})}" method="post" th:object="${issue}">
+        <input type="hidden" th:field="*{id}" id="issue-id"/>
         <div class="form-group  mt-2">
           <label for="issueName" th:text="#{issue.new.name}" class="font-navyblue"></label>
           <input type="text" class="form-control" id="issueName" th:field="*{name}">
@@ -50,14 +56,13 @@
           </div>
         </div>
         <div class="form-group d-flex align-items-center mt-2">
-          <div th:each="status: ${T(com.marlena.bugtracker.models.Status).values()}" class="form-check m-2">
-            <input th:field="*{status}" th:value="${status}" class="form-check-input"
-                   type="radio" name="statusOption" id="statusOption">
-            <label th:text="${status}" class="form-check-label font-navyblue" for="statusOption">
-            </label>
-          </div>
+          <select class="form-control" th:field="*{status}">
+            <option th:value="${null}"></option>
+            <option th:each="status: ${T(com.marlena.bugtracker.models.Status).values()}"
+                    th:text="${status}" th:value="${status}"></option>
+          </select>
         </div>
-        <div class="input-group mb-3">
+        <div class="input-group mb-3 mt-2">
           <div th:each="tag: ${T(com.marlena.bugtracker.models.Tag).values()}" class="input-group-text ms-1 rounded col-3">
             <input class="form-check-input mt-0" type="checkbox" name="tags" id="tagCheckbox"
                    th:value="${tag}" th:field="*{tags}">

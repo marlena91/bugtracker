@@ -1,0 +1,11 @@
+<div th:fragment="statusSelect">
+  <form th:object="${issue}" >
+
+    <div class="form-group d-flex align-items-center">
+      <select class="form-control font-smaller bg-content btn-width-10" th:field="*{status}" id="status-select" onmouseleave="setStatus()">
+        <option th:each="status: ${T(com.marlena.bugtracker.models.Status).values()}"
+                th:text="${status}" th:value="${status}"></option>
+      </select>
+    </div>
+  </form>
+</div>
