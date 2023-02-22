@@ -1,0 +1,19 @@
+<div th:fragment="home">
+    <div class="container text-center mt-5">
+        <div class="row align-items-start bug-parent">
+            <div class="col-8 bg-content rounded-start">
+                <div class="row">
+                    <h1 th:text="#{home.title}" class="mt-5 mb-3"></h1>
+                </div>
+                <div class="row">
+                    <p th:text="#{home.content}"></p>
+                </div>
+            </div>
+            <div class="col-4 bg-dark ">
+                <div class="row">
+                    <i class="bi bi-bug bug-child rounded-end bug-size-home"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
