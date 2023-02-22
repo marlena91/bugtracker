@@ -5,6 +5,7 @@ import com.marlena.bugtracker.filters.IssueFilter;
 import com.marlena.bugtracker.models.Comment;
 import com.marlena.bugtracker.models.Issue;
 import com.marlena.bugtracker.models.Person;
+import com.marlena.bugtracker.models.Status;
 import com.marlena.bugtracker.services.CommentService;
 import com.marlena.bugtracker.services.IssueService;
 import com.marlena.bugtracker.services.PersonService;
@@ -126,5 +127,11 @@ public class IssueController {
         Issue issue = (Issue) httpSession.getAttribute("issue");
         commentService.deleteById(id);
         return "redirect:/issues/"+issue.getId();
+    }
+
+    @PatchMapping("/status/{id}")
+    ResponseEntity<Void> updateStatus(@PathVariable Long id, @RequestBody Status status) {
+        issueService.saveStatus(id, status);
+        return ResponseEntity.ok().build();
     }
 }
