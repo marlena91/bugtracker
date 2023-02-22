@@ -56,19 +56,13 @@
           </div>
         </div>
         <div class="form-group d-flex align-items-center mt-2">
-          <select class="form-control" th:field="*{status}" id="status-select" onchange="setStatus()">
+          <select class="form-control" th:field="*{status}">
             <option th:value="${null}"></option>
             <option th:each="status: ${T(com.marlena.bugtracker.models.Status).values()}"
                     th:text="${status}" th:value="${status}"></option>
           </select>
-<!--          <div th:each="" class="form-check m-2">-->
-<!--            <input th:field="*{status}" th:value="${status}" class="form-check-input"-->
-<!--                   type="radio" name="statusOption" id="statusOption">-->
-<!--            <label th:text="${status}" class="form-check-label font-navyblue" for="statusOption">-->
-<!--            </label>-->
-<!--          </div>-->
         </div>
-        <div class="input-group mb-3">
+        <div class="input-group mb-3 mt-2">
           <div th:each="tag: ${T(com.marlena.bugtracker.models.Tag).values()}" class="input-group-text ms-1 rounded col-3">
             <input class="form-check-input mt-0" type="checkbox" name="tags" id="tagCheckbox"
                    th:value="${tag}" th:field="*{tags}">

@@ -129,6 +129,18 @@ public class IssueController {
         return "redirect:/issues/"+issue.getId();
     }
 
+    @GetMapping("/status")
+    public String getAllStatus(Model model) {
+        model.addAttribute("status", Status.values());
+        model.addAttribute("issue", new Issue());
+        return "/issues/component/statusSelect :: statusSelect";
+    }
+
+    @GetMapping("/status-updated")
+    public String getHome() {
+        return "/issues/component/statusUpdated :: statusUpdated";
+    }
+
     @PatchMapping("/status/{id}")
     ResponseEntity<Void> updateStatus(@PathVariable Long id, @RequestBody Status status) {
         issueService.saveStatus(id, status);
