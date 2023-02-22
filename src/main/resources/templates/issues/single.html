@@ -10,7 +10,7 @@
     <link rel="stylesheet" href="/assets/css/styles.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.3/font/bootstrap-icons.css">
     <link rel="shortcut icon" href="/assets/images/favicon.ico"/>
-    <script src="/assets/js/issueStatus.js"></script>
+    <script src="/assets/js/issue.js"></script>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.21.1/axios.min.js"
             integrity="sha512-bZS47S7sPOxkjU/4Bt0zrhEtWx0y0CRkhEp8IckzK+ltifIIE9EMIMTuT/mEzoIMewUINruDBIR/jJnbguonqQ=="
@@ -114,17 +114,15 @@
                             <p class="card-text" th:text="${issue.getDescription()}"></p>
                         </div>
                         <div class="card-footer d-flex justify-content-evenly">
-                            <small>
-                                <span class="text-muted" th:text="#{issue.single.priority}"></span>
-                                <span th:text="${issue.getPriority()}"></span>
-                            </small>
+                            <div id="base-priority">
+                                <div th:replace="issues/component/priority.html :: priority"></div>
+                            </div>
                             <div id="base-status">
                                 <div th:replace="issues/component/status.html :: status"></div>
                             </div>
-                            <small>
-                                <span class="text-muted" th:text="#{issue.single.type}"></span>
-                                <span th:text="${issue.getType()}"></span>
-                            </small>
+                            <div id="base-type">
+                                <div th:replace="issues/component/type.html :: type"></div>
+                            </div>
                             <small>
                                 <span class="text-muted" th:text="#{issue.single.tags}"></span>
                                 <span th:text="${issue.getTags()}"></span>

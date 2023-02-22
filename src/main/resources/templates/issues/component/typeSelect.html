@@ -1,0 +1,11 @@
+<div th:fragment="typeSelect">
+  <form th:object="${issue}" >
+
+    <div class="form-group d-flex align-items-center">
+      <select class="form-control font-smaller bg-content btn-width-10" th:field="*{type}" id="type-select" onmouseleave="setType()">
+        <option th:each="type: ${T(com.marlena.bugtracker.models.Type).values()}"
+                th:text="${type}" th:value="${type}"></option>
+      </select>
+    </div>
+  </form>
+</div>

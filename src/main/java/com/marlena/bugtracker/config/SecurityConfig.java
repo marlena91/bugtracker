@@ -14,7 +14,10 @@ public class SecurityConfig {
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        http.csrf().ignoringRequestMatchers("/issues/status/**")
+        http.csrf()
+                .ignoringRequestMatchers("/issues/status/**")
+                .ignoringRequestMatchers("/issues/priority/**")
+                .ignoringRequestMatchers("/issues/type/**")
                 .and()
                 .authorizeHttpRequests((requests) -> requests
                         .requestMatchers("/", "/home").permitAll()

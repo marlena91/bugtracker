@@ -2,10 +2,7 @@ package com.marlena.bugtracker.controllers;
 
 import com.marlena.bugtracker.exceptions.ResourceNotFoundException;
 import com.marlena.bugtracker.filters.IssueFilter;
-import com.marlena.bugtracker.models.Comment;
-import com.marlena.bugtracker.models.Issue;
-import com.marlena.bugtracker.models.Person;
-import com.marlena.bugtracker.models.Status;
+import com.marlena.bugtracker.models.*;
 import com.marlena.bugtracker.services.CommentService;
 import com.marlena.bugtracker.services.IssueService;
 import com.marlena.bugtracker.services.PersonService;
@@ -137,13 +134,48 @@ public class IssueController {
     }
 
     @GetMapping("/status-updated")
-    public String getHome() {
+    public String getStatusUpdated() {
         return "/issues/component/statusUpdated :: statusUpdated";
     }
 
     @PatchMapping("/status/{id}")
     ResponseEntity<Void> updateStatus(@PathVariable Long id, @RequestBody Status status) {
         issueService.saveStatus(id, status);
+        return ResponseEntity.ok().build();
+    }
+
+    @GetMapping("/priority")
+    public String getAllPriority(Model model) {
+        model.addAttribute("priorities", Priority.values());
+        model.addAttribute("issue", new Issue());
+        return "/issues/component/prioritySelect :: prioritySelect";
+    }
+
+    @GetMapping("/priority-updated")
+    public String getPriorityUpdated() {
+        return "/issues/component/priorityUpdated :: priorityUpdated";
+    }
+
+    @PatchMapping("/priority/{id}")
+    ResponseEntity<Void> updatePriority(@PathVariable Long id, @RequestBody Priority priority) {
+        issueService.savePriority(id, priority);
+        return ResponseEntity.ok().build();
+    }
+    @GetMapping("/type")
+    public String getAllType(Model model) {
+        model.addAttribute("types", Type.values());
+        model.addAttribute("issue", new Issue());
+        return "/issues/component/typeSelect :: typeSelect";
+    }
+
+    @GetMapping("/type-updated")
+    public String getTypeUpdated() {
+        return "/issues/component/typeUpdated :: typeUpdated";
+    }
+
+    @PatchMapping("/type/{id}")
+    ResponseEntity<Void> updateType(@PathVariable Long id, @RequestBody Type type) {
+        issueService.saveType(id, type);
         return ResponseEntity.ok().build();
     }
 }

@@ -1,0 +1,11 @@
+<div th:fragment="prioritySelect">
+    <form th:object="${issue}" >
+
+        <div class="form-group d-flex align-items-center">
+            <select class="form-control font-smaller bg-content btn-width-10" th:field="*{priority}" id="priority-select" onmouseleave="setPriority()">
+                <option th:each="priority: ${T(com.marlena.bugtracker.models.Priority).values()}"
+                        th:text="${priority}" th:value="${priority}"></option>
+            </select>
+        </div>
+    </form>
+</div>
