@@ -108,13 +108,13 @@
                         </div>
                         <div class="card-footer d-flex justify-content-evenly">
                             <div id="base-priority">
-                                <div th:replace="issues/component/priority.html :: priority"></div>
+                                <div th:replace="~{issues/component/priority.html :: priority}"></div>
                             </div>
                             <div id="base-status">
-                                <div th:replace="issues/component/status.html :: status"></div>
+                                <div th:replace="~{issues/component/status.html :: status}"></div>
                             </div>
                             <div id="base-type">
-                                <div th:replace="issues/component/type.html :: type"></div>
+                                <div th:replace="~{issues/component/type.html :: type}"></div>
                             </div>
                             <small>
                                 <span class="text-muted" th:text="#{issue.single.tags}"></span>

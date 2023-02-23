@@ -19,6 +19,7 @@ function setStatus() {
         status: newStatus
     };
     axios.patch(`/issues/status/${issueId.value}`, body).then(response => {
+        console.log(response)
         getHtmlStatusUpdated(newStatus);
     }).catch(error => {
         console.log(error);
@@ -54,9 +55,11 @@ function setPriority() {
 
     const newPriority = document.getElementById("priority-select").value;
     const body = {
-        status: newPriority
+        priority: newPriority
     };
     axios.patch(`/issues/priority/${issueId.value}`, body).then(response => {
+        console.log(response.data)
+
         getHtmlPriorityUpdated(newPriority);
     }).catch(error => {
         console.log(error);
@@ -92,7 +95,7 @@ function setType() {
 
     const newType = document.getElementById("type-select").value;
     const body = {
-        status: newType
+        type: newType
     };
     axios.patch(`/issues/type/${issueId.value}`, body).then(response => {
         getHtmlTypeUpdated(newType);
