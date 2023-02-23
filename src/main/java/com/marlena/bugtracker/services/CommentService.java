@@ -11,6 +11,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -22,11 +24,11 @@ public class CommentService {
     private final CommentRepository commentRepository;
     private final PersonRepository personRepository;
 
-
-    public List<Comment> findAll(){
+    public List<Comment> findAll() {
         return commentRepository.findAll();
     }
-    public List<Comment> findAllByIssueId(Issue issue){
+
+    public List<Comment> findAllByIssueId(Issue issue) {
         return commentRepository.findAllByIssue(issue);
     }
 
@@ -50,5 +52,11 @@ public class CommentService {
             isSaved = true;
         }
         return isSaved;
+    }
+
+    public void savePathForImage(Long commentId, Path fileName) {
+        Comment comment = findById(commentId).get();
+        comment.setImagePath(fileName.toString());
+        commentRepository.save(comment);
     }
 }
