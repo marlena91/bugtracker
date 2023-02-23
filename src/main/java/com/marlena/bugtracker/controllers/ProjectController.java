@@ -48,7 +48,7 @@ public class ProjectController {
     @GetMapping("/{id}")
     public ModelAndView getProjectById(@PathVariable(value = "id") Long projectId) throws ResourceNotFoundException {
         ResponseEntity<Project> project = projectService.findProjectById(projectId);
-        List<Issue> issues = issueService.findAllForProject(project.getBody());
+        List<Issue> issues = issueService.findAllEnabledAndProject(project.getBody());
         ModelAndView modelAndView = new ModelAndView("projects/single");
         modelAndView.addObject("project", project.getBody());
         modelAndView.addObject("issues", issues);

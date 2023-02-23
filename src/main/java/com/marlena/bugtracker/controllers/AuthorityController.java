@@ -25,7 +25,7 @@ public class AuthorityController {
 
     @GetMapping()
     public ModelAndView getAllUsersWithAuthorities() {
-        List<Person> users = userService.findAll();
+        List<Person> users = userService.findAllEnabled();
         ModelAndView modelAndView = new ModelAndView("users/authorities/authorities");
         modelAndView.addObject("users", users);
         return modelAndView;

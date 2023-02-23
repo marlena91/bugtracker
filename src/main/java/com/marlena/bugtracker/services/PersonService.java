@@ -26,6 +26,9 @@ public class PersonService {
     public List<Person> findAll(){
         return personRepository.findAll();
     }
+    public List<Person> findAllEnabled(){
+        return personRepository.findAllByEnabled(true);
+    }
 
     public ResponseEntity<Person> findUserById(Long id) throws ResourceNotFoundException {
         Person user = personRepository.findById(id)
@@ -77,7 +80,8 @@ public class PersonService {
     public Map<String, Boolean> deleteUser(Long id) throws ResourceNotFoundException {
         Person user = personRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Pot found for this id :: " + id));
-        personRepository.delete(user);
+        user.setEnabled(false);
+        personRepository.save(user);
         Map<String, Boolean> response = new HashMap<>();
         response.put("deleted", Boolean.TRUE);
         return response;

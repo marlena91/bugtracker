@@ -28,7 +28,6 @@ class ProjectControllerTest {
     @Test
     void getAllProjects() throws Exception {
         Project project = new Project();
-        project.setCode("CODE");
 
         List<Project> projects = List.of(
                 project
