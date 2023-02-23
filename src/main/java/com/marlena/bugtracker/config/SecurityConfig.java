@@ -21,7 +21,9 @@ public class SecurityConfig {
                 .and()
                 .authorizeHttpRequests((requests) -> requests
                         .requestMatchers("/", "/home").permitAll()
-                        .requestMatchers("/assets/**").permitAll()
+                        .requestMatchers("/css/**").permitAll()
+                        .requestMatchers("/js/**").permitAll()
+                        .requestMatchers("/img/**").permitAll()
                         .requestMatchers("/images/**").permitAll()
                         .requestMatchers("/my-profile/**").authenticated()
                         .requestMatchers("/users/new").hasRole("MANAGE_USER")
