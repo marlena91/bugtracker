@@ -20,8 +20,7 @@ public class ProjectFilter {
     public Specification<Project> buildQuery() {
         return Specification.anyOf(
                 ilike("name", globalSearch),
-                ilike("description", globalSearch),
-                ilike("code", globalSearch)
+                ilike("description", globalSearch)
         ).and(
                 Specification.allOf(
                         ilike("name", name),
