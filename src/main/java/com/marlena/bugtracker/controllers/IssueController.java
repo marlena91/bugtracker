@@ -37,7 +37,7 @@ public class IssueController {
     private final PersonService userService;
     private final CommentService commentService;
 
-    final EntityManager entityManager;
+    private final EntityManager entityManager;
 
     @GetMapping
     public ModelAndView getAllIssues(@ModelAttribute IssueFilter filter) {

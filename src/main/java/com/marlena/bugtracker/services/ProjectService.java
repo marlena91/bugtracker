@@ -66,7 +66,6 @@ public class ProjectService {
         Project projectToUpdate = projectRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Project not found for this id :: " + id));
         projectToUpdate.setName(project.getName());
-        projectToUpdate.setCode(project.getCode());
         projectToUpdate.setDescription(project.getDescription());
         final Project updatedProject = projectRepository.save(projectToUpdate);
         return ResponseEntity.ok(updatedProject);

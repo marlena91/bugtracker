@@ -76,7 +76,7 @@
             <td th:if="${issue.getAssignee()} != null" th:text="${issue.getAssignee().getUserRealName()}"></td>
             <td th:unless="${issue.getAssignee()} != null" th:text="#{issue.single.without.assignee}"></td>
             <td th:text="${issue.getProject().getName()}"></td>
-            <td th:text="${issue.getCode()}"></td>
+            <td th:text="${issue.getId()}"></td>
             <td th:text="${issue.getDateCreated()}"></td>
             <td th:text="${issue.getPriority()}"></td>
             <td th:text="${issue.getStatus()}"></td>

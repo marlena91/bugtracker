@@ -58,11 +58,6 @@ public class Issue {
     @Size(min=10, message="Description must be at least 10 characters long")
     private String description;
 
-    @Column(nullable = false, unique = true)
-    @NotBlank(message = "Code must not be blank")
-    @Pattern(regexp="(^$|[0-9]{4})", message="Code must be 4 digits")
-    private String code;
-
     @ManyToOne
     @JoinColumn(name = "creator_id", nullable = false)
     private Person creator;

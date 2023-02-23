@@ -87,6 +87,4 @@ public class ProjectController {
         projectService.deleteProject(projectId);
         return "redirect:/projects";
     }
-
-
 }
