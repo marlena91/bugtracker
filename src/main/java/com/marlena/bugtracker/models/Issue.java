@@ -5,19 +5,32 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 import lombok.Data;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import org.hibernate.envers.Audited;
+import org.springframework.data.annotation.CreatedBy;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedBy;
+import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.util.Date;
 import java.util.List;
 import java.util.Set;
 
 @Entity
-@Data
+@Getter
+@Setter
+@EntityListeners(AuditingEntityListener.class)
+@NoArgsConstructor
 public class Issue {
 
     @Id
     @GeneratedValue
     private Long id;
 
+    @Audited
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
     private Status status = Status.TODO;
@@ -34,6 +47,7 @@ public class Issue {
     @Enumerated(EnumType.STRING)
     private List<Tag> tags;
 
+    @Audited
     @Column(nullable = false)
     @NotBlank(message="Name must not be blank")
     @Size(min=5, message="Name must be at least 5 characters long")
@@ -73,4 +87,18 @@ public class Issue {
 
     @Column(nullable = false)
     private Boolean enabled = true;
+
+    @Column(updatable = false)
+    @CreatedBy
+    String createdBy;
+
+    @Column(updatable = false)
+    @CreatedDate
+    Date createdDate;
+
+    @LastModifiedBy
+    String lastModifiedBy;
+
+    @LastModifiedDate
+    Date lastModifiedDate;
 }

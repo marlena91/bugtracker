@@ -1,14 +1,21 @@
 package com.marlena.bugtracker.controllers;
 
+import com.marlena.bugtracker.audit.AuditDataDTO;
 import com.marlena.bugtracker.exceptions.ResourceNotFoundException;
 import com.marlena.bugtracker.filters.IssueFilter;
 import com.marlena.bugtracker.models.*;
 import com.marlena.bugtracker.services.CommentService;
 import com.marlena.bugtracker.services.IssueService;
 import com.marlena.bugtracker.services.PersonService;
+import jakarta.persistence.EntityListeners;
+import jakarta.persistence.EntityManager;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.hibernate.envers.AuditReader;
+import org.hibernate.envers.AuditReaderFactory;
+import org.hibernate.envers.query.AuditEntity;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
@@ -19,6 +26,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Controller
 @RequestMapping("issues")
@@ -28,6 +36,8 @@ public class IssueController {
     private final IssueService issueService;
     private final PersonService userService;
     private final CommentService commentService;
+
+    final EntityManager entityManager;
 
     @GetMapping
     public ModelAndView getAllIssues(@ModelAttribute IssueFilter filter) {
@@ -178,5 +188,24 @@ public class IssueController {
     ResponseEntity<Void> updateType(@PathVariable Long id, @RequestBody Type type) {
         issueService.saveType(id, type);
         return ResponseEntity.ok().build();
+    }
+
+    @GetMapping("/history/{id}")
+    ModelAndView history(@PathVariable Long id) {
+        ModelAndView modelAndView = new ModelAndView("issues/history");
+
+        AuditReader auditReader = AuditReaderFactory.get(entityManager);
+
+        List<AuditDataDTO> revisions = (List<AuditDataDTO>) auditReader.createQuery()
+                .forRevisionsOfEntity(Issue.class, false, true)
+                .add(AuditEntity.id().eq(id))
+                .getResultList()
+                .stream()
+                .map(r -> new AuditDataDTO((Object[]) r))
+                .collect(Collectors.toList());
+
+        modelAndView.addObject("revisions", revisions);
+
+        return modelAndView;
     }
 }
