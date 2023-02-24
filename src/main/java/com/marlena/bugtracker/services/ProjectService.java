@@ -2,6 +2,7 @@ package com.marlena.bugtracker.services;
 
 import com.marlena.bugtracker.exceptions.ResourceNotFoundException;
 import com.marlena.bugtracker.filters.ProjectFilter;
+import com.marlena.bugtracker.models.Issue;
 import com.marlena.bugtracker.models.Person;
 import com.marlena.bugtracker.models.Project;
 import com.marlena.bugtracker.repositories.PersonRepository;
@@ -22,6 +23,7 @@ public class ProjectService {
 
     private final ProjectRepository projectRepository;
     private final PersonRepository personRepository;
+    private final IssueService issueService;
 
     public Page<Project> findAll(ProjectFilter filter, Pageable pageable) {
         return projectRepository.findAll(filter.buildQuery(), pageable);
@@ -66,7 +68,6 @@ public class ProjectService {
         Project projectToUpdate = projectRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Project not found for this id :: " + id));
         projectToUpdate.setName(project.getName());
-        projectToUpdate.setCode(project.getCode());
         projectToUpdate.setDescription(project.getDescription());
         final Project updatedProject = projectRepository.save(projectToUpdate);
         return ResponseEntity.ok(updatedProject);
@@ -75,7 +76,13 @@ public class ProjectService {
     public Map<String, Boolean> deleteProject(Long id) throws ResourceNotFoundException {
         Project project = projectRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Project not found for this id :: " + id));
-        projectRepository.delete(project);
+        List<Issue> projectIssues = issueService.findAllForProject(project);
+        for(Issue issue : projectIssues) {
+            issue.setEnabled(false);
+            issueService.save(issue);
+        }
+        project.setEnabled(false);
+        projectRepository.save(project);
         Map<String, Boolean> response = new HashMap<>();
         response.put("deleted", Boolean.TRUE);
         return response;

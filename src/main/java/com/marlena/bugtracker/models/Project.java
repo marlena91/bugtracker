@@ -21,11 +21,6 @@ public class Project {
     @Size(min=5, message="Name must be at least 5 characters long")
     private String name;
 
-    @NotBlank(message = "Code must not be blank")
-    @Pattern(regexp="(^$|[0-9]{4})", message="Code must be 4 digits")
-    @Column(nullable = false, unique = true)
-    private String code;
-
     @NotBlank(message = "Description must not be blank")
     @Size(min=10, message="Description must be at least 10 characters long")
     @Column(columnDefinition = "TEXT")
@@ -46,7 +41,6 @@ public class Project {
         return "Project{" +
                 "id=" + id +
                 ", name='" + name + '\'' +
-                ", code='" + code + '\'' +
                 ", description='" + description + '\'' +
                 ", enabled=" + enabled +
                 ", dateCreated=" + dateCreated +

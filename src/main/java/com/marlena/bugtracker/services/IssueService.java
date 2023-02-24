@@ -34,6 +34,11 @@ public class IssueService {
         return issueRepository.findAllByProject(project);
     }
 
+    public List<Issue> findAllEnabledAndProject(Project project) {
+        return issueRepository.findAllByEnabledAndProject(true, project);
+    }
+
+
     public Set<Person> findAllCreators(){
         return findAllEnabled()
                 .stream()
@@ -100,7 +105,8 @@ public class IssueService {
     public Map<String, Boolean> deleteIssue(Long id) throws ResourceNotFoundException {
         Issue issue = issueRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Issue not found for this id :: " + id));
-        issueRepository.delete(issue);
+        issue.setEnabled(false);
+        issueRepository.save(issue);
         Map<String, Boolean> response = new HashMap<>();
         response.put("deleted", Boolean.TRUE);
         return response;
@@ -141,6 +147,10 @@ public class IssueService {
     public void saveType(Long id, Type type) {
         Issue issue = issueRepository.getReferenceById(id);
         issue.setType(type);
+        issueRepository.save(issue);
+    }
+
+    public void save(Issue issue) {
         issueRepository.save(issue);
     }
 }

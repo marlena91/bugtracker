@@ -18,4 +18,6 @@ public interface IssueRepository extends JpaRepository<Issue, Long>, JpaSpecific
 
     List<Issue> findAllByAssignee(Person person);
 
+    List<Issue> findAllByEnabledAndProject(Boolean enabled, Project project);
+
 }

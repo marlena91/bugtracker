@@ -20,8 +20,8 @@
                         <div class="card-header ">
                             <div class="d-flex justify-content-between mt-2">
                                 <small>
-                                    <span class="text-muted" th:text="#{issue.code}">Kod: </span>
-                                    <span th:text="${issue.getCode()}"></span>
+                                    <span class="text-muted" th:text="#{issue.code}"></span>
+                                    <span th:text="${issue.getId()}"></span>
                                 </small>
                                 <small>
                                     <span class="text-muted" th:text="#{issue.single.date.created}"></span>
@@ -104,19 +104,22 @@
                         </div>
                         <div class="card-footer d-flex justify-content-evenly">
                             <div id="base-priority">
-                                <div th:replace="issues/component/priority.html :: priority"></div>
+                                <div th:replace="~{issues/component/priority.html :: priority}"></div>
                             </div>
                             <div id="base-status">
-                                <div th:replace="issues/component/status.html :: status"></div>
+                                <div th:replace="~{issues/component/status.html :: status}"></div>
                             </div>
                             <div id="base-type">
-                                <div th:replace="issues/component/type.html :: type"></div>
+                                <div th:replace="~{issues/component/type.html :: type}"></div>
                             </div>
                             <small>
                                 <span class="text-muted" th:text="#{issue.single.tags}"></span>
                                 <span th:text="${issue.getTags()}"></span>
                             </small>
                         </div>
+                    </div>
+                    <div class="d-flex justify-content-end">
+                        <a class="link font-honeysuckle hover-bluegrotto" th:href="@{'/issues/history/' + ${issue.getId()}}" th:text="#{common.history}"></a>
                     </div>
                 </div>
             </div>

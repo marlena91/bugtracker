@@ -28,7 +28,7 @@ public class PersonController {
 
     @GetMapping
     public ModelAndView getAllUsers(){
-        List<Person> users = userService.findAll();
+        List<Person> users = userService.findAllEnabled();
         ModelAndView modelAndView = new ModelAndView("users/users");
         modelAndView.addObject("users", users);
 
@@ -94,21 +94,6 @@ public class PersonController {
         userService.deleteUser(userId);
         return "redirect:/users";
     }
-
-//    @GetMapping("/authorities")
-//    public ModelAndView getAllUsersWithAuthorities() {
-//        List<Person> users = userService.findAll();
-//        ModelAndView modelAndView = new ModelAndView("users/authorities/authorities");
-//        modelAndView.addObject("users", users);
-//        for (Person user:
-//             users) {
-//            Set<Authority> newAuthorities = new HashSet<>();
-//            Authority generalAuthority = authorityService.findFirstByPersonLogin(user.getLogin());
-//            newAuthorities.add(generalAuthority);
-//            user.setAuthorities(newAuthorities);
-//        }
-//        return modelAndView;
-//    }
 
     @GetMapping("edit/password/{id}")
     public ModelAndView editPasswordByUserId(@PathVariable(value="id") Long userId) throws ResourceNotFoundException {

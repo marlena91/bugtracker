@@ -59,4 +59,7 @@ public class Person {
     @OneToMany(mappedBy="author", fetch = FetchType.LAZY,
     cascade = CascadeType.PERSIST, targetEntity = Comment.class)
     private Set<Comment> comments;
+
+    @Column(nullable = false)
+    private Boolean enabled = true;
 }
