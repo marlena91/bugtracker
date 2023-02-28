@@ -38,27 +38,46 @@
                                     <span th:text="${#dates.format(issue.getLastUpdated(), 'dd.MM.yyyy')}"></span>
                                 </small>
                             </div>
-                            <div class="col d-flex justify-content-start mt-2">
-                                <small class="me-2">
-                                    <span th:text="#{issue.single.assignee} + ': '" class="col text-muted"></span>
-                                </small>
-                                <div th:if="${issue.getAssignee()} == null" class="link hover-bluegrotto">
-                                    <a data-bs-toggle="modal" data-bs-target="#newAssignee"
-                                       class="col link hover-bluegrotto">
-                                        <span th:text="#{issue.single.add.assignee}"></span>
-                                        <i class="bi bi-person-add"></i>
-                                    </a>
+
+
+                            <div class="d-flex justify-content-between mt-2">
+                                <div class="d-flex">
+                                    <small class= "me-2">
+                                        <span th:text="#{issue.single.assignee} + ': '" class="col text-muted"></span>
+                                    </small>
+                                    <div>
+                                        <div th:if="${issue.getAssignee()} == null" class="link hover-bluegrotto">
+                                            <small>
+                                                <a data-bs-toggle="modal" data-bs-target="#newAssignee"
+                                                   class="link hover-bluegrotto font-smaller">
+                                                    <span th:text="#{issue.single.add.assignee}"></span>
+                                                    <i class="bi bi-person-add"></i>
+                                                </a>
+                                            </small>
+                                        </div>
+                                        <div th:unless="${issue.getAssignee()} == null" class="link hover-bluegrotto">
+                                            <small>
+                                                <a th:href="@{deleteAssignee(issueId=${issue.getId()})}"
+                                                   class="link hover-honeysuckle">
+                                                    <span th:text="${issue.getAssignee().getUserRealName()}"></span>
+                                                    <i class="bi bi-person-dash"></i>
+                                                </a>
+                                            </small>
+                                        </div>
+                                    </div>
                                 </div>
-                                <span th:if="${issue.getAssignee()} == null" class="col"></span>
-                                <div class="col">
-                                     <span th:unless="${issue.getAssignee()} == null"
-                                           th:text="${issue.getAssignee().getUserRealName()}"></span>
-                                    <a th:unless="${issue.getAssignee()} == null"
-                                       th:href="@{deleteAssignee(issueId=${issue.getId()})}"
-                                       class="link hover-honeysuckle">
-                                        <i class="bi bi-person-dash"></i>
-                                    </a>
+                                <div>
+                                    <small class= "me-2">
+                                        <span th:text="#{issue.single.project} + ': '" class="col text-muted"></span>
+                                        <a th:href="@{/projects/{id}(id=${issue.getProject().getId()})}"
+                                           class="link hover-honeysuckle">
+                                            <span th:text="${issue.getProject().getName()}"></span>
+                                        </a>
+                                    </small>
                                 </div>
+                            </div>
+
+                            <div>
                                 <div class="modal fade" id="newAssignee" tabindex="-1" role="dialog"
                                      aria-labelledby="newAssignee">
                                     <div class="modal-dialog">
@@ -119,7 +138,8 @@
                         </div>
                     </div>
                     <div class="d-flex justify-content-end">
-                        <a class="link font-honeysuckle hover-bluegrotto" th:href="@{'/issues/history/' + ${issue.getId()}}" th:text="#{common.history}"></a>
+                        <a class="link font-honeysuckle hover-bluegrotto"
+                           th:href="@{'/issues/history/' + ${issue.getId()}}" th:text="#{common.history}"></a>
                     </div>
                 </div>
             </div>
@@ -127,7 +147,7 @@
                 <div class="col">
                     <ul class="style-none">
                         <li class="alert alert-danger" role="alert"
-                            th:each="error : ${#fields.errors('comment.*')}" th:text="${error}" />
+                            th:each="error : ${#fields.errors('comment.*')}" th:text="${error}"/>
                     </ul>
                 </div>
             </div>
@@ -175,9 +195,10 @@
                                             </div>
                                         </form>
                                     </div>
-                                   <div th:if="${comment.getImagePath()!=null}" class="d-flex justify-content-center">
-                                       <img th:src="@{${'/images/' + comment.getImagePath()}}" th:alt="${comment.getImagePath()}" width="200" height="200">
-                                   </div>
+                                    <div th:if="${comment.getImagePath()!=null}" class="d-flex justify-content-center">
+                                        <img th:src="@{${'/images/' + comment.getImagePath()}}"
+                                             th:alt="${comment.getImagePath()}" width="200" height="200">
+                                    </div>
                                 </div>
                             </div>
                             <div th:if="${#authentication.getPrincipal()} == ${comment.getAuthor().getLogin()}
