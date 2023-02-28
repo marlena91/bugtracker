@@ -25,7 +25,7 @@
                                 </small>
                                 <small>
                                     <span class="text-muted" th:text="#{issue.single.date.created}"></span>
-                                    <span th:text="${#dates.format(issue.getDateCreated(), 'dd.MM.yyyy')}"></span>
+                                    <span th:text="${#dates.format(issue.getCreatedDate(), 'dd.MM.yyyy')}"></span>
                                 </small>
                             </div>
                             <div class="d-flex justify-content-between mt-2">
@@ -35,7 +35,8 @@
                                 </small>
                                 <small>
                                     <span class="text-muted" th:text="#{issue.single.date.updated}"></span>
-                                    <span th:text="${#dates.format(issue.getLastUpdated(), 'dd.MM.yyyy')}"></span>
+                                    <span th:if="${issue.getLastModifiedDate()} == null"  th:text="#{issue.single.date.updated.none}"></span>
+                                    <span th:unless="${issue.getLastModifiedDate()} == null"  th:text="${#dates.format(issue.getLastModifiedDate(), 'dd.MM.yyyy')}"></span>
                                 </small>
                             </div>
 

@@ -57,7 +57,8 @@ public class Issue {
     private String description;
 
     @ManyToOne
-    @JoinColumn(name = "creator_id", nullable = false)
+    @JoinColumn(name = "creator_id", nullable = false, updatable = false)
+    @CreatedBy
     private Person creator;
 
     @ManyToOne
@@ -72,18 +73,11 @@ public class Issue {
             cascade = CascadeType.PERSIST, targetEntity = Comment.class)
     private Set<Comment> comments;
 
-    @Column(nullable = false)
-    private Date dateCreated;
-
-    @Column(nullable = false)
-    private Date lastUpdated;
+    @LastModifiedDate
+    private Date lastModifiedDate;
 
     @Column(nullable = false)
     private Boolean enabled = true;
-
-    @Column(updatable = false)
-    @CreatedBy
-    String createdBy;
 
     @Column(updatable = false)
     @CreatedDate
@@ -91,7 +85,4 @@ public class Issue {
 
     @LastModifiedBy
     String lastModifiedBy;
-
-    @LastModifiedDate
-    Date lastModifiedDate;
 }

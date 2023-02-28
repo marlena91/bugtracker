@@ -69,8 +69,7 @@ public class IssueService {
 
     public boolean saveIssueDetails(Issue issue, Authentication authentication, Long projectId) {
         boolean isSaved = false;
-        issue.setDateCreated(new Date());
-        issue.setLastUpdated(new Date());
+        issue.setCreatedDate(new Date());
         Optional<Person> person = personRepository.findByLogin(authentication.getName());
         Optional<Project> project = projectRepository.findById(projectId);
         issue.setProject(project.get());
@@ -97,7 +96,7 @@ public class IssueService {
             mail.setSubject(issueToUpdate.getName());
             mailService.sendMail(mail);
         }
-        issueToUpdate.setLastUpdated(new Date());
+        issueToUpdate.setLastModifiedDate(new Date());
         final Issue updatedIssue = issueRepository.save(issueToUpdate);
         return ResponseEntity.ok(updatedIssue);
     }
@@ -135,18 +134,21 @@ public class IssueService {
     public void saveStatus(Long id, Status status) {
         Issue issue = issueRepository.getReferenceById(id);
         issue.setStatus(status);
+        issue.setLastModifiedDate(new Date());
         issueRepository.save(issue);
     }
 
     public void savePriority(Long id, Priority priority) {
         Issue issue = issueRepository.getReferenceById(id);
         issue.setPriority(priority);
+        issue.setLastModifiedDate(new Date());
         issueRepository.save(issue);
     }
 
     public void saveType(Long id, Type type) {
         Issue issue = issueRepository.getReferenceById(id);
         issue.setType(type);
+        issue.setLastModifiedDate(new Date());
         issueRepository.save(issue);
     }
 
