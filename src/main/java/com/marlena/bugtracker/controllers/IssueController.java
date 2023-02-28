@@ -7,7 +7,6 @@ import com.marlena.bugtracker.models.*;
 import com.marlena.bugtracker.services.CommentService;
 import com.marlena.bugtracker.services.IssueService;
 import com.marlena.bugtracker.services.PersonService;
-import jakarta.persistence.EntityListeners;
 import jakarta.persistence.EntityManager;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
@@ -15,7 +14,6 @@ import lombok.RequiredArgsConstructor;
 import org.hibernate.envers.AuditReader;
 import org.hibernate.envers.AuditReaderFactory;
 import org.hibernate.envers.query.AuditEntity;
-import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
@@ -124,10 +122,20 @@ public class IssueController {
     }
 
     @PostMapping("/addNewComment")
-    public String addNewComment(Model model, @ModelAttribute("comment") Comment comment,Authentication authentication, HttpSession httpSession){
+    public ModelAndView addNewComment(@Valid @ModelAttribute("comment") Comment comment,
+                                      Errors errors,Authentication authentication, HttpSession httpSession)
+            throws ResourceNotFoundException {
         Issue issue = (Issue) httpSession.getAttribute("issue");
+        if (errors.hasErrors()) {
+            ModelAndView modelAndView = new ModelAndView("issues/single");
+            modelAndView.addObject("issue", issue);
+            modelAndView.addObject("errors", errors);
+            modelAndView.addObject("assignee", new Person());
+            modelAndView.addObject("comments", commentService.findAllByIssueId(issue));
+            return modelAndView;
+        }
         commentService.saveCommentDetails(comment, authentication, httpSession);
-        return "redirect:/issues/"+ issue.getId();
+        return getIssueById(issue.getId(), httpSession);
     }
 
     @RequestMapping("/deleteComment")

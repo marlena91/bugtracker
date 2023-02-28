@@ -2,9 +2,7 @@ package com.marlena.bugtracker.models;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
-import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -49,13 +47,13 @@ public class Issue {
 
     @Audited
     @Column(nullable = false)
-    @NotBlank(message="Name must not be blank")
-    @Size(min=5, message="Name must be at least 5 characters long")
+    @NotBlank
+    @Size(min = 5)
     private String name;
 
     @Column(columnDefinition = "TEXT")
-    @NotBlank(message = "Description must not be blank")
-    @Size(min=10, message="Description must be at least 10 characters long")
+    @NotBlank
+    @Size(min= 10)
     private String description;
 
     @ManyToOne

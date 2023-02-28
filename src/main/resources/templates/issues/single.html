@@ -124,6 +124,14 @@
                 </div>
             </div>
             <div class="row justify-content-center">
+                <div class="col">
+                    <ul class="style-none">
+                        <li class="alert alert-danger" role="alert"
+                            th:each="error : ${#fields.errors('comment.*')}" th:text="${error}" />
+                    </ul>
+                </div>
+            </div>
+            <div class="row justify-content-center">
                 <div class="col-8 mt-5">
                     <div th:if="${comments.isEmpty()}" class="card mt-2 font-navyblue">
                         <div class="card-header" th:text="#{comment.blank}"></div>

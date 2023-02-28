@@ -8,20 +8,16 @@ import jakarta.validation.constraints.Size;
 import lombok.Data;
 
 @Data
-@FieldsValueMatch.List({
-        @FieldsValueMatch(
-                field = "password",
-                fieldMatch = "confirmPwd",
-                message = "Passwords do not match"
-        )
-})
+@FieldsValueMatch(
+        field = "password",
+        fieldMatch = "confirmPwd"
+)
 public class UserPassword {
 
-    @NotBlank(message = "Password must not be blank")
-    @Size(min=5, message = "Password must be at least 5 characters long")
+    @NotBlank
+    @Size(min = 5)
     @PasswordValidator
     private String password;
-    @NotBlank(message = "Confirm password must not be blank")
-    @Size(min=5, message = "Confirm password must be at least 5 characters long")
+    @NotBlank
     private String confirmPwd;
 }
