@@ -22,7 +22,7 @@
                             <span th:if="${authorities.isEmpty()}" th:text="#{users.authorities.noAuthorities}"></span>
                             <span th:each="authority: ${authorities}">
                                 <span><i class="bi bi-check"></i></span>
-                                <span th:text="${authority.getName()}"></span>
+                                <span th:text="${#messages.msg('authority.label.' + authority.getName())}"></span>
                             </span>
                         </small>
                     </p>

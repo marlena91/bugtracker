@@ -50,12 +50,12 @@
                                 <input type="password" class="form-control" id="userConfirmPwd"
                                        th:field="*{confirmPwd}">
                             </div>
-                            <div class="form-group d-flex align-items-center mt-2">
-                                <div th:each="authority: ${authorities}" class="input-group-text ms-1 rounded col-3">
+                            <div class="form-group d-flex align-items-center flex-column mt-2">
+                                <div th:each="authority: ${authorities}" class="input-group-text ms-1 rounded col-6">
                                     <input class="form-check-input mt-0" type="checkbox" name="tags" id="tagCheckbox"
                                            th:value="${authority.getId()}" th:field="*{authorities}">
                                     <label class="form-check-label ms-1" for="tagCheckbox"
-                                           th:text="${authority.getName()}">
+                                           th:text="${#messages.msg('authority.label.' + authority.getName())}">
                                     </label>
                                 </div>
                             </div>

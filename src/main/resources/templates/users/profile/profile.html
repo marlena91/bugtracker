@@ -19,7 +19,7 @@
                 <ul th:each="authority: ${user.getAuthorities()}" class="style-none list-group">
                     <li class="font-smaller">
                         <i class="bi bi-check"></i>
-                        <span th:text="${authority.getName()}">
+                        <span th:text="${#messages.msg('authority.label.' + authority.getName())}">
                         </span>
                     </li>
                 </ul>
