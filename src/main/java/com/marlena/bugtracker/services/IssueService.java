@@ -135,6 +135,12 @@ public class IssueService {
         Issue issue = issueRepository.getReferenceById(id);
         issue.setStatus(status);
         issue.setLastModifiedDate(new Date());
+        if((issue.getStatus() == Status.DONE) && (issue.getAssignee()!=null)){
+            Mail mail = new Mail();
+            mail.setRecipient(issue.getAssignee().getEmail());
+            mail.setSubject(issue.getName());
+            mailService.sendMail(mail);
+        }
         issueRepository.save(issue);
     }
 

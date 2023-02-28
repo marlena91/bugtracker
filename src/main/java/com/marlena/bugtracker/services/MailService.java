@@ -24,7 +24,7 @@ public class MailService {
 
             javaMailSender.send(mimeMessage);
         } catch (Exception e) {
-            System.out.println("Wysyłanie mejla nie powiodło się!");
+            System.out.println("The message has not been sent");
         }
     }
 }
