@@ -12,13 +12,11 @@ import java.util.Set;
 
 @Entity
 @Data
-@FieldsValueMatch.List({
-        @FieldsValueMatch(
-                field = "password",
-                fieldMatch = "confirmPwd",
-                message = "Passwords do not match"
-        )
-})
+@FieldsValueMatch(
+        field = "password",
+        fieldMatch = "confirmPwd"
+)
+
 public class Person {
 
     @Id
@@ -26,27 +24,26 @@ public class Person {
     private Long id;
 
     @Column(nullable = false, unique = true)
-    @NotBlank(message="Login must not be blank")
-    @Size(min=6, message="Login must be at least 6 characters long")
+    @NotBlank
+    @Size(min=6)
     private String login;
 
     @Column(nullable = false)
-    @NotBlank(message = "Password must not be blank")
-    @Size(min=5, message = "Password must be at least 5 characters long")
+    @NotBlank
+    @Size(min=5)
     @PasswordValidator
     private String password;
-    @NotBlank(message = "Confirm password must not be blank")
-    @Size(min=5, message = "Confirm password must be at least 5 characters long")
+    @NotBlank
     @Transient
     private String confirmPwd;
 
     @Column(nullable = false)
-    @NotBlank(message="Name must not be blank")
+    @NotBlank
     private String userRealName;
 
     @Column(nullable = false)
-    @NotBlank(message = "Email must not be blank")
-    @Email(message = "Please provide a valid email address")
+    @NotBlank
+    @Email
     private String email;
 
     @Column(nullable = false)
