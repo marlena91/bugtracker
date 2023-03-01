@@ -13,8 +13,6 @@ import java.nio.file.Paths;
 @RequiredArgsConstructor
 public class UploadService {
 
-//    private final CommentService commentService;
-
     public static String UPLOAD_DIRECTORY = System.getProperty("user.dir") + "/uploads";
 
     public Path uploadImage(MultipartFile file,Long commentId) throws IOException {
@@ -23,7 +21,6 @@ public class UploadService {
         fileNames.append(file.getOriginalFilename());
         Files.write(fileNameAndPath, file.getBytes());
 
-//        commentService.savePathForImage(commentId, fileNameAndPath.getFileName());
         return fileNameAndPath;
     }
 }

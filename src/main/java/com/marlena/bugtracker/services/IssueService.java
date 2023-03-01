@@ -23,9 +23,10 @@ public class IssueService {
     private final ProjectRepository projectRepository;
     private final MailService mailService;
 
-    public List<Issue> findAll(IssueFilter filter){
+    public List<Issue> findAll(IssueFilter filter) {
         return issueRepository.findAll(filter.buildQuery());
     }
+
     public List<Issue> findAllEnabled() {
         return issueRepository.findAllByEnabled(true);
     }
@@ -38,15 +39,7 @@ public class IssueService {
         return issueRepository.findAllByEnabledAndProject(true, project);
     }
 
-
-    public Set<Person> findAllCreators(){
-        return findAllEnabled()
-                .stream()
-                .map(Issue::getCreator)
-                .collect(Collectors.toSet());
-    }
-
-    public Set<Person> findAllAssigned(){
+    public Set<Person> findAllAssigned() {
         return findAllEnabled()
                 .stream()
                 .map(Issue::getAssignee)
@@ -67,20 +60,15 @@ public class IssueService {
         return ResponseEntity.ok().body(issue);
     }
 
-    public boolean saveIssueDetails(Issue issue, Authentication authentication, Long projectId) {
-        boolean isSaved = false;
+    public void saveIssueDetails(Issue issue, Authentication authentication, Long projectId) {
         issue.setCreatedDate(new Date());
         Optional<Person> person = personRepository.findByLogin(authentication.getName());
         Optional<Project> project = projectRepository.findById(projectId);
         issue.setProject(project.get());
         issue.setCreator(person.get());
-        Issue savedIssue = issueRepository.save(issue);
-        if (null != savedIssue && savedIssue.getId() > 0) {
-            isSaved = true;
-        }
-        return isSaved;
+        issueRepository.save(issue);
     }
-    public ResponseEntity<Issue> updateIssue(Issue issue) throws ResourceNotFoundException {
+    public void updateIssue(Issue issue) throws ResourceNotFoundException {
         Long id = issue.getId();
         Issue issueToUpdate = issueRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Issue not found for this id :: " + id));
@@ -90,15 +78,14 @@ public class IssueService {
         issueToUpdate.setStatus(issue.getStatus());
         issueToUpdate.setTags(issue.getTags());
         issueToUpdate.setType(issue.getType());
-        if((issueToUpdate.getStatus() == Status.DONE) && (issueToUpdate.getAssignee()!=null)){
+        if ((issueToUpdate.getStatus() == Status.DONE) && (issueToUpdate.getAssignee() != null)) {
             Mail mail = new Mail();
             mail.setRecipient(issueToUpdate.getAssignee().getEmail());
             mail.setSubject(issueToUpdate.getName());
             mailService.sendMail(mail);
         }
         issueToUpdate.setLastModifiedDate(new Date());
-        final Issue updatedIssue = issueRepository.save(issueToUpdate);
-        return ResponseEntity.ok(updatedIssue);
+        issueRepository.save(issueToUpdate);
     }
 
     public Map<String, Boolean> deleteIssue(Long id) throws ResourceNotFoundException {
@@ -111,24 +98,18 @@ public class IssueService {
         return response;
     }
 
-    public Map<String, Boolean> updateAssignee(Person assignee, Long id) throws ResourceNotFoundException {
+    public void updateAssignee(Person assignee, Long id) throws ResourceNotFoundException {
         Issue issue = issueRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Issue not found for this id :: " + id));
         issue.setAssignee(assignee);
         issueRepository.save(issue);
-        Map<String, Boolean> response = new HashMap<>();
-        response.put("updated", Boolean.TRUE);
-        return response;
     }
 
-    public Map<String, Boolean> deleteAssignee(Long id) throws ResourceNotFoundException {
+    public void deleteAssignee(Long id) throws ResourceNotFoundException {
         Issue issue = issueRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Issue not found for this id :: " + id));
         issue.setAssignee(null);
         issueRepository.save(issue);
-        Map<String, Boolean> response = new HashMap<>();
-        response.put("deletedAssignee", Boolean.TRUE);
-        return response;
     }
 
     public void saveStatus(Long id, Status status) {

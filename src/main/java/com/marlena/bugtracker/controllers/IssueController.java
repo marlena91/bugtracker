@@ -27,6 +27,7 @@ import org.springframework.web.servlet.ModelAndView;
 import java.io.IOException;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 import java.nio.file.Path;
 
@@ -43,13 +44,15 @@ public class IssueController {
     private final EntityManager entityManager;
 
     @GetMapping
-    public ModelAndView getAllIssues(@ModelAttribute IssueFilter filter) {
+    public ModelAndView getAllIssues(@ModelAttribute IssueFilter filter,
+                                     @RequestParam(value="deleted", required =false) String deleted) {
         List<Issue> issues = issueService.findAll(filter);
         ModelAndView modelAndView = new ModelAndView("issues/issues");
         modelAndView.addObject("issues", issues);
         modelAndView.addObject("filter", filter);
         modelAndView.addObject("assignee", issueService.findAllAssigned());
         modelAndView.addObject("projects", issueService.findAllProjects());
+        modelAndView.addObject("deleted", deleted);
 
         return modelAndView;
     }
@@ -110,7 +113,10 @@ public class IssueController {
         for(Comment comment : comments) {
             commentService.deleteById(comment.getId());
         }
-        issueService.deleteIssue(id);
+        Map<String, Boolean> response = issueService.deleteIssue(id);
+        if (response.get("deleted")) {
+            return "redirect:/issues?deleted=true";
+        }
         return "redirect:/issues";
     }
 

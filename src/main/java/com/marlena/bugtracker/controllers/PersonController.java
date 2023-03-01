@@ -27,10 +27,11 @@ public class PersonController {
     private final UserDataService userDataService;
 
     @GetMapping
-    public ModelAndView getAllUsers(){
+    public ModelAndView getAllUsers(@RequestParam(value="deleted", required =false) String deleted){
         List<Person> users = userService.findAllEnabled();
         ModelAndView modelAndView = new ModelAndView("users/users");
         modelAndView.addObject("users", users);
+        modelAndView.addObject("deleted", deleted);
 
         return modelAndView;
     }
@@ -54,7 +55,8 @@ public class PersonController {
     }
 
     @PostMapping
-    public ModelAndView saveUser(@Valid @ModelAttribute("user") Person user, Errors errors) throws ResourceNotFoundException {
+    public ModelAndView saveUser(@Valid @ModelAttribute("user") Person user, Errors errors)
+            throws ResourceNotFoundException {
         if (errors.hasErrors()) {
             ModelAndView modelAndView = new ModelAndView("users/new");
             modelAndView.addObject("user", user);
@@ -68,7 +70,8 @@ public class PersonController {
     }
 
     @GetMapping("/edit/{id}")
-    public ModelAndView editUserById(@PathVariable(value = "id") Long userId) throws ResourceNotFoundException {
+    public ModelAndView editUserById(@PathVariable(value = "id") Long userId)
+            throws ResourceNotFoundException {
         Person user = userService.findUserById(userId).getBody();
         UserData userData = userDataService.getUserDataForEditUser(user);
         ModelAndView modelAndView = new ModelAndView("users/edit");
@@ -79,7 +82,8 @@ public class PersonController {
     }
 
     @PostMapping("/{id}")
-    public String updateUser(@Valid @ModelAttribute("userData") UserData userData, Errors errors, @PathVariable Long id) throws ResourceNotFoundException {
+    public String updateUser(@Valid @ModelAttribute("userData") UserData userData, Errors errors, @PathVariable Long id)
+            throws ResourceNotFoundException {
         if (errors.hasErrors()) {
             return "users/edit.html";
         }
@@ -90,13 +94,18 @@ public class PersonController {
     }
 
     @GetMapping("/delete/{id}")
-    public String deleteUser(@PathVariable(value="id") Long userId) throws ResourceNotFoundException {
-        userService.deleteUser(userId);
+    public String deleteUser(@PathVariable(value="id") Long userId)
+            throws ResourceNotFoundException {
+        Map<String, Boolean> response = userService.deleteUser(userId);
+        if (response.get("deleted")) {
+            return "redirect:/users?deleted=true";
+        }
         return "redirect:/users";
     }
 
     @GetMapping("edit/password/{id}")
-    public ModelAndView editPasswordByUserId(@PathVariable(value="id") Long userId) throws ResourceNotFoundException {
+    public ModelAndView editPasswordByUserId(@PathVariable(value="id") Long userId)
+            throws ResourceNotFoundException {
         Person user = userService.findUserById(userId).getBody();
         ModelAndView modelAndView = new ModelAndView("users/profile/password");
         modelAndView.addObject("user", user);
@@ -104,7 +113,8 @@ public class PersonController {
     }
 
     @PostMapping("edit/password/{id}")
-    public String updatePassword(@Valid @ModelAttribute("user") Person user, Errors errors) throws ResourceNotFoundException {
+    public String updatePassword(@Valid @ModelAttribute("user") Person user, Errors errors)
+            throws ResourceNotFoundException {
         if (errors.hasErrors()) {
             return "users/profile/password.html";
         }

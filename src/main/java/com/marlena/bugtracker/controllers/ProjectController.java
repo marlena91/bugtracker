@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.util.List;
+import java.util.Map;
 
 @Controller
 @RequestMapping("projects")
@@ -29,12 +30,14 @@ public class ProjectController {
     private final IssueService issueService;
 
     @GetMapping
-    public ModelAndView getAllProjects(@ModelAttribute ProjectFilter filter, Pageable pageable) {
+    public ModelAndView getAllProjects(@ModelAttribute ProjectFilter filter, Pageable pageable,
+                                        @RequestParam(value="deleted", required =false) String deleted) {
         Page<Project> projects = projectService.findAll(filter, pageable);
         ModelAndView modelAndView = new ModelAndView("projects/projects");
         modelAndView.addObject("projects", projects);
         modelAndView.addObject("filter", filter);
         modelAndView.addObject("creators", projectService.findAllCreators());
+        modelAndView.addObject("deleted", deleted);
 
         return modelAndView;
     }
@@ -61,7 +64,7 @@ public class ProjectController {
             return "projects/new.html";
         }
         projectService.saveProjectDetails(project, authentication);
-        return "redirect:/projects/"+project.getId();
+        return "redirect:/projects/" + project.getId();
     }
 
     @GetMapping("/edit/{id}")
@@ -79,12 +82,15 @@ public class ProjectController {
             return "projects/edit.html";
         }
         projectService.updateProject(project);
-        return "redirect:/projects/"+project.getId();
+        return "redirect:/projects/" + project.getId();
     }
 
     @GetMapping("/delete/{id}")
-    public String deleteProject(@PathVariable(value="id") Long projectId) throws ResourceNotFoundException {
-        projectService.deleteProject(projectId);
+    public String deleteProject(@PathVariable(value = "id") Long projectId) throws ResourceNotFoundException {
+        Map<String, Boolean> response = projectService.deleteProject(projectId);
+        if (response.get("deleted")) {
+            return "redirect:/projects?deleted=true";
+        }
         return "redirect:/projects";
     }
 }
