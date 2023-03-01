@@ -12,6 +12,11 @@
 <div class="container">
 
     <div class="row justify-content-end mt-5">
+        <div th:if="${deleted} == 'true'" class="row justify-content-center">
+            <div class="col-6">
+                <div class="alert alert-info" role="alert" th:text="#{users.user.deleted}"></div>
+            </div>
+        </div>
         <div class="col-2">
             <a sec:authorize="hasRole('ROLE_MANAGE_USER')" th:href="@{/users/new}" class="btn bg-btn-dark"
                th:text="#{users.button}"></a>

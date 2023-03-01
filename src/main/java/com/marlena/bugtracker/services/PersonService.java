@@ -42,14 +42,9 @@ public class PersonService {
         return ResponseEntity.ok().body(user);
     }
 
-    public boolean saveUserDetails(Person user) {
-        boolean isSaved = false;
+    public void saveUserDetails(Person user) {
         user.setPassword(passwordEncoder.encode(user.getPassword()));
-        Person savedUser = personRepository.save(user);
-        if (null != savedUser && savedUser.getId() > 0) {
-            isSaved = true;
-        }
-        return isSaved;
+        personRepository.save(user);
     }
 
     public void updateUser(UserData userData, Long id) throws ResourceNotFoundException {
@@ -70,11 +65,12 @@ public class PersonService {
         ResponseEntity.ok(updatedUser);
     }
 
-    public ResponseEntity<Person> updateUserAuthorities(Person user) throws ResourceNotFoundException {
+    public void updateUserAuthorities(Person user) throws ResourceNotFoundException {
         Person userToUpdate = findUserById(user.getId()).getBody();
+        assert userToUpdate != null;
         userToUpdate.setAuthorities(user.getAuthorities());
         final Person updatedUser = personRepository.save(userToUpdate);
-        return ResponseEntity.ok().body(updatedUser);
+        ResponseEntity.ok().body(updatedUser);
     }
 
     public Map<String, Boolean> deleteUser(Long id) throws ResourceNotFoundException {
@@ -85,18 +81,6 @@ public class PersonService {
         Map<String, Boolean> response = new HashMap<>();
         response.put("deleted", Boolean.TRUE);
         return response;
-    }
-
-    private Set<Authority> getFullAuthorities(Authority authority) {
-        Set<Authority> enabledAuthorities = authorityService.findAllAuthorities();
-        Set<Authority> userSetAuthorities = new HashSet<>();
-        for (Authority auth:
-                enabledAuthorities) {
-            if(auth.getId() >= authority.getId()){
-                userSetAuthorities.add(auth);
-            }
-        }
-        return userSetAuthorities;
     }
 
     public void prepareAdminUser() {

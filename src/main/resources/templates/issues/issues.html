@@ -11,6 +11,11 @@
 <div class="container">
   <div class="row justify-content-center">
     <div class="col-10 mb-5 pb-5 mt-5">
+      <div th:if="${deleted} == 'true'" class="row justify-content-center">
+        <div class="col-6">
+          <div class="alert alert-info" role="alert" th:text="#{issues.issue.deleted}"></div>
+        </div>
+      </div>
       <div class="row">
         <h1 class="mt-3 text-center font-honeysuckle bold" th:text="#{home.issues}"></h1>
       </div>
@@ -77,7 +82,7 @@
             <td th:unless="${issue.getAssignee()} != null" th:text="#{issue.single.without.assignee}"></td>
             <td th:text="${issue.getProject().getName()}"></td>
             <td th:text="${issue.getId()}"></td>
-            <td th:text="${#dates.format(issue.getDateCreated(), 'dd.MM.yyyy')}"></td>
+            <td th:text="${#dates.format(issue.getCreatedDate(), 'dd.MM.yyyy')}"></td>
             <td th:text="${issue.getPriority()}"></td>
             <td th:text="${issue.getStatus()}"></td>
           </tr>

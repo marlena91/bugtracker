@@ -7,6 +7,7 @@ import com.marlena.bugtracker.models.*;
 import com.marlena.bugtracker.services.CommentService;
 import com.marlena.bugtracker.services.IssueService;
 import com.marlena.bugtracker.services.PersonService;
+import com.marlena.bugtracker.services.UploadService;
 import jakarta.persistence.EntityManager;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
@@ -20,11 +21,15 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
-import java.util.Collections;
+import java.io.IOException;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
+import java.nio.file.Path;
+
 
 @Controller
 @RequestMapping("issues")
@@ -34,17 +39,19 @@ public class IssueController {
     private final IssueService issueService;
     private final PersonService userService;
     private final CommentService commentService;
-
+    private final UploadService uploadService;
     private final EntityManager entityManager;
 
     @GetMapping
-    public ModelAndView getAllIssues(@ModelAttribute IssueFilter filter) {
+    public ModelAndView getAllIssues(@ModelAttribute IssueFilter filter,
+                                     @RequestParam(value="deleted", required =false) String deleted) {
         List<Issue> issues = issueService.findAll(filter);
         ModelAndView modelAndView = new ModelAndView("issues/issues");
         modelAndView.addObject("issues", issues);
         modelAndView.addObject("filter", filter);
         modelAndView.addObject("assignee", issueService.findAllAssigned());
         modelAndView.addObject("projects", issueService.findAllProjects());
+        modelAndView.addObject("deleted", deleted);
 
         return modelAndView;
     }
@@ -53,13 +60,13 @@ public class IssueController {
     public ModelAndView getIssueById(@PathVariable(value = "id") Long id, HttpSession httpSession) throws ResourceNotFoundException {
         ResponseEntity<Issue> issue = issueService.findById(id);
         List<Comment> comments = commentService.findAllByIssueId(issue.getBody());
-        Collections.reverse(comments);
+
         ModelAndView modelAndView = new ModelAndView("issues/single");
         modelAndView.addObject("issue", issue.getBody());
         modelAndView.addObject("comment", new Comment());
         modelAndView.addObject("assignee", new Person());
         modelAndView.addObject("comments", comments);
-        modelAndView.addObject("users", userService.findAll());
+        modelAndView.addObject("users", userService.findAllEnabled());
 
         httpSession.setAttribute("issue", issue.getBody());
         return modelAndView;
@@ -105,7 +112,10 @@ public class IssueController {
         for(Comment comment : comments) {
             commentService.deleteById(comment.getId());
         }
-        issueService.deleteIssue(id);
+        Map<String, Boolean> response = issueService.deleteIssue(id);
+        if (response.get("deleted")) {
+            return "redirect:/issues?deleted=true";
+        }
         return "redirect:/issues";
     }
 
@@ -122,9 +132,9 @@ public class IssueController {
     }
 
     @PostMapping("/addNewComment")
-    public ModelAndView addNewComment(@Valid @ModelAttribute("comment") Comment comment,
-                                      Errors errors,Authentication authentication, HttpSession httpSession)
-            throws ResourceNotFoundException {
+    public ModelAndView addNewComment(@RequestParam("image") MultipartFile file, @Valid @ModelAttribute("comment") Comment comment,
+                                      Errors errors, Authentication authentication, HttpSession httpSession)
+            throws ResourceNotFoundException, IOException {
         Issue issue = (Issue) httpSession.getAttribute("issue");
         if (errors.hasErrors()) {
             ModelAndView modelAndView = new ModelAndView("issues/single");
@@ -135,6 +145,9 @@ public class IssueController {
             return modelAndView;
         }
         commentService.saveCommentDetails(comment, authentication, httpSession);
+        Path path = uploadService.uploadImage(file, comment.getId());
+        commentService.savePathForImage(comment.getId(), path.getFileName());
+
         return getIssueById(issue.getId(), httpSession);
     }
 
