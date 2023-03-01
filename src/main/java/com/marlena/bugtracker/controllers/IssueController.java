@@ -7,6 +7,7 @@ import com.marlena.bugtracker.models.*;
 import com.marlena.bugtracker.services.CommentService;
 import com.marlena.bugtracker.services.IssueService;
 import com.marlena.bugtracker.services.PersonService;
+import com.marlena.bugtracker.services.UploadService;
 import jakarta.persistence.EntityManager;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
@@ -20,11 +21,15 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
+import java.io.IOException;
 import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
+import java.nio.file.Path;
+
 
 @Controller
 @RequestMapping("issues")
@@ -34,6 +39,7 @@ public class IssueController {
     private final IssueService issueService;
     private final PersonService userService;
     private final CommentService commentService;
+    private final UploadService uploadService;
 
     private final EntityManager entityManager;
 
@@ -122,9 +128,9 @@ public class IssueController {
     }
 
     @PostMapping("/addNewComment")
-    public ModelAndView addNewComment(@Valid @ModelAttribute("comment") Comment comment,
-                                      Errors errors,Authentication authentication, HttpSession httpSession)
-            throws ResourceNotFoundException {
+    public ModelAndView addNewComment(@RequestParam("image") MultipartFile file, @Valid @ModelAttribute("comment") Comment comment,
+                                      Errors errors, Authentication authentication, HttpSession httpSession)
+            throws ResourceNotFoundException, IOException {
         Issue issue = (Issue) httpSession.getAttribute("issue");
         if (errors.hasErrors()) {
             ModelAndView modelAndView = new ModelAndView("issues/single");
@@ -135,6 +141,9 @@ public class IssueController {
             return modelAndView;
         }
         commentService.saveCommentDetails(comment, authentication, httpSession);
+       Path path = uploadService.uploadImage(file, comment.getId());
+        commentService.savePathForImage(comment.getId(), path.getFileName());
+
         return getIssueById(issue.getId(), httpSession);
     }
 

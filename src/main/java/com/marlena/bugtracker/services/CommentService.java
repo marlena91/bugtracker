@@ -23,6 +23,7 @@ public class CommentService {
 
     private final CommentRepository commentRepository;
     private final PersonRepository personRepository;
+    private final UploadService uploadService;
 
     public List<Comment> findAll() {
         return commentRepository.findAll();
