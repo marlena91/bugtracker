@@ -25,7 +25,6 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.io.IOException;
-import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -67,7 +66,7 @@ public class IssueController {
         modelAndView.addObject("comment", new Comment());
         modelAndView.addObject("assignee", new Person());
         modelAndView.addObject("comments", comments);
-        modelAndView.addObject("users", userService.findAll());
+        modelAndView.addObject("users", userService.findAllEnabled());
 
         httpSession.setAttribute("issue", issue.getBody());
         return modelAndView;

@@ -144,6 +144,6 @@ public class IssueService {
     }
 
     public List<Issue> findAllByAssignee(Person user) {
-        return issueRepository.findAllByAssignee(user);
+        return issueRepository.findAllByAssigneeAndEnabled(user, true);
     }
 }

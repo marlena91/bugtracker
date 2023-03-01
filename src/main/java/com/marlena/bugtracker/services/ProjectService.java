@@ -34,7 +34,7 @@ public class ProjectService {
     }
 
     public List<Project> findAllByCreator(Person creator) {
-        return projectRepository.findAllByCreator(creator);
+        return projectRepository.findAllByCreatorAndEnabled(creator, true);
     }
 
     public Set<Person> findAllCreators(){
@@ -51,11 +51,10 @@ public class ProjectService {
     }
 
     public void saveProjectDetails(Project project, Authentication authentication) {
-        boolean isSaved = false;
         project.setDateCreated(new Date());
         Optional<Person> person = personRepository.findByLogin(authentication.getName());
         project.setCreator(person.get());
-        Project savedProject = projectRepository.save(project);
+        projectRepository.save(project);
     }
 
     public void updateProject(Project project) throws ResourceNotFoundException {
