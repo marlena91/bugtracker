@@ -40,7 +40,6 @@ public class IssueController {
     private final PersonService userService;
     private final CommentService commentService;
     private final UploadService uploadService;
-
     private final EntityManager entityManager;
 
     @GetMapping
@@ -59,7 +58,7 @@ public class IssueController {
     public ModelAndView getIssueById(@PathVariable(value = "id") Long id, HttpSession httpSession) throws ResourceNotFoundException {
         ResponseEntity<Issue> issue = issueService.findById(id);
         List<Comment> comments = commentService.findAllByIssueId(issue.getBody());
-        Collections.reverse(comments);
+
         ModelAndView modelAndView = new ModelAndView("issues/single");
         modelAndView.addObject("issue", issue.getBody());
         modelAndView.addObject("comment", new Comment());
@@ -141,7 +140,7 @@ public class IssueController {
             return modelAndView;
         }
         commentService.saveCommentDetails(comment, authentication, httpSession);
-       Path path = uploadService.uploadImage(file, comment.getId());
+        Path path = uploadService.uploadImage(file, comment.getId());
         commentService.savePathForImage(comment.getId(), path.getFileName());
 
         return getIssueById(issue.getId(), httpSession);

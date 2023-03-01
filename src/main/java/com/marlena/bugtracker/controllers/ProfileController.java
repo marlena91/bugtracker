@@ -4,9 +4,7 @@ import com.marlena.bugtracker.exceptions.ResourceNotFoundException;
 import com.marlena.bugtracker.models.*;
 import com.marlena.bugtracker.repositories.IssueRepository;
 import com.marlena.bugtracker.repositories.PersonRepository;
-import com.marlena.bugtracker.services.AuthorityService;
-import com.marlena.bugtracker.services.PersonService;
-import com.marlena.bugtracker.services.ProjectService;
+import com.marlena.bugtracker.services.*;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -28,18 +26,9 @@ import java.util.Objects;
 @RequiredArgsConstructor
 public class ProfileController {
     private final PersonService userService;
-    private final AuthorityService authorityService;
-
     private final ProjectService projectService;
-
-    @Autowired
-    PersonRepository personRepository;
-
-    @Autowired
-    private PasswordEncoder passwordEncoder;
-    @Autowired
-    private final IssueRepository issueRepository;
-
+    private final IssueService issueService;
+    private final ProfileService profileService;
 
     @GetMapping
     public String displayUserProfile(Model model, Authentication authentication, HttpSession httpSession) throws ResourceNotFoundException {
@@ -51,7 +40,7 @@ public class ProfileController {
 
     @GetMapping("/data")
     public ModelAndView displayProfileData(HttpSession httpSession) {
-        ProfileData profileData = getLoggedInPersonData((Person) httpSession.getAttribute("loggedInPerson"));
+        ProfileData profileData = profileService.getLoggedInPersonData((Person) httpSession.getAttribute("loggedInPerson"));
         ModelAndView modelAndView = new ModelAndView("users/profile/data");
         modelAndView.addObject("profileData", profileData);
         return modelAndView;
@@ -59,17 +48,10 @@ public class ProfileController {
 
     @GetMapping("/edit/data")
     public ModelAndView editProfileData(HttpSession httpSession) {
-        ProfileData profileData = getLoggedInPersonData((Person) httpSession.getAttribute("loggedInPerson"));
+        ProfileData profileData = profileService.getLoggedInPersonData((Person) httpSession.getAttribute("loggedInPerson"));
         ModelAndView modelAndView = new ModelAndView("users/profile/edit");
         modelAndView.addObject("profileData", profileData);
         return modelAndView;
-    }
-
-    private ProfileData getLoggedInPersonData(Person user){
-        ProfileData profileData = new ProfileData();
-        profileData.setUserRealName(user.getUserRealName());
-        profileData.setEmail(user.getEmail());
-        return profileData;
     }
 
     @PostMapping(value="/updateData")
@@ -78,9 +60,7 @@ public class ProfileController {
             return "users/profile/edit";
         }
         Person user = (Person) httpSession.getAttribute("loggedInPerson");
-        user.setUserRealName(profileData.getUserRealName());
-        user.setEmail(profileData.getEmail());
-        personRepository.save(user);
+        profileService.saveUserData(user, profileData);
         httpSession.setAttribute("loggedInPerson", user);
         return "redirect:/my-profile";
     }
@@ -99,8 +79,7 @@ public class ProfileController {
             return "users/profile/password";
         }
         Person user = (Person) httpSession.getAttribute("loggedInPerson");
-        user.setPassword(passwordEncoder.encode(userPassword.getPassword()));
-        personRepository.save(user);
+        profileService.saveUserPassword(user, userPassword);
         httpSession.setAttribute("loggedInPerson", user);
         return "redirect:/my-profile";
     }
@@ -118,7 +97,7 @@ public class ProfileController {
     @GetMapping("/issues")
     public ModelAndView displayUserIssues(HttpSession httpSession) {
         Person user = (Person) httpSession.getAttribute("loggedInPerson");
-        List<Issue> issues = issueRepository.findAllByAssignee(user);
+        List<Issue> issues = issueService.findAllByAssignee(user);
         ModelAndView modelAndView = new ModelAndView("users/profile/issues");
         modelAndView.addObject("issues", issues);
         return modelAndView;

@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -30,7 +31,9 @@ public class CommentService {
     }
 
     public List<Comment> findAllByIssueId(Issue issue) {
-        return commentRepository.findAllByIssue(issue);
+        List<Comment> comments = commentRepository.findAllByIssue(issue);
+        Collections.reverse(comments);
+        return comments;
     }
 
     public Optional<Comment> findById(Long id) {

@@ -161,4 +161,8 @@ public class IssueService {
     public void save(Issue issue) {
         issueRepository.save(issue);
     }
+
+    public List<Issue> findAllByAssignee(Person user) {
+        return issueRepository.findAllByAssignee(user);
+    }
 }

@@ -3,7 +3,6 @@ package com.marlena.bugtracker.services;
 import com.marlena.bugtracker.models.Authority;
 import com.marlena.bugtracker.models.AuthorityName;
 import com.marlena.bugtracker.repositories.AuthorityRepository;
-import com.marlena.bugtracker.repositories.PersonRepository;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
