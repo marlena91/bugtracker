@@ -23,3 +23,6 @@ spring.mail.username=youremail@gmail.com
 spring.mail.password=yoursecretpassword
 
 spring.jpa.properties.javax.persistence.validation.mode=none
+
+spring.flyway.enabled=false
+spring.flyway.baselineOnMigrate=true

@@ -96,5 +96,9 @@ public class PersonService {
         }
     }
 
-
+    public Person getRandom() {
+        List<Person> allUsers = personRepository.findAllByEnabled(true);
+        Random rand = new Random();
+        return allUsers.get(rand.nextInt(allUsers.size()));
+    }
 }
