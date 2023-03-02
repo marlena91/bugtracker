@@ -57,6 +57,10 @@ public class ProjectService {
         projectRepository.save(project);
     }
 
+    public void save(Project project){
+        projectRepository.save(project);
+    }
+
     public void updateProject(Project project) throws ResourceNotFoundException {
         Long id = project.getId();
         Project projectToUpdate = projectRepository.findById(id)
@@ -80,7 +84,5 @@ public class ProjectService {
         response.put("deleted", Boolean.TRUE);
         return response;
     }
-
-
 
 }

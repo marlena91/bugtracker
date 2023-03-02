@@ -37,6 +37,5 @@ public class Bootstrap implements InitializingBean {
 
         personService.prepareAdminUser();
 
-
     }
 }
