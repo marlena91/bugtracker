@@ -34,7 +34,7 @@ public class ProjectService {
     }
 
     public List<Project> findAllByCreator(Person creator) {
-        return projectRepository.findAllByCreator(creator);
+        return projectRepository.findAllByCreatorAndEnabled(creator, true);
     }
 
     public Set<Person> findAllCreators(){
@@ -50,27 +50,20 @@ public class ProjectService {
         return ResponseEntity.ok().body(project);
     }
 
-    public boolean saveProjectDetails(Project project, Authentication authentication) {
-        boolean isSaved = false;
+    public void saveProjectDetails(Project project, Authentication authentication) {
         project.setDateCreated(new Date());
         Optional<Person> person = personRepository.findByLogin(authentication.getName());
         project.setCreator(person.get());
-        Project savedProject = projectRepository.save(project);
-        System.out.println(savedProject);
-        if (null != savedProject && savedProject.getId() > 0) {
-            isSaved = true;
-        }
-        return isSaved;
+        projectRepository.save(project);
     }
 
-    public ResponseEntity<Project> updateProject(Project project) throws ResourceNotFoundException {
+    public void updateProject(Project project) throws ResourceNotFoundException {
         Long id = project.getId();
         Project projectToUpdate = projectRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Project not found for this id :: " + id));
         projectToUpdate.setName(project.getName());
         projectToUpdate.setDescription(project.getDescription());
-        final Project updatedProject = projectRepository.save(projectToUpdate);
-        return ResponseEntity.ok(updatedProject);
+        projectRepository.save(projectToUpdate);
     }
 
     public Map<String, Boolean> deleteProject(Long id) throws ResourceNotFoundException {

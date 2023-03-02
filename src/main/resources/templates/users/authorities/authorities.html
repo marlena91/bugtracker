@@ -37,7 +37,7 @@
                             <ul th:each="authority: ${user.getAuthorities()}" class="style-none list-group">
                                 <li>
                                     <i class="bi bi-check"></i>
-                                    <span th:text="${authority.getName()}"></span>
+                                    <span th:text="${#messages.msg('authority.label.' + authority.getName())}"></span>
                                 </li>
                             </ul>
                         </td>

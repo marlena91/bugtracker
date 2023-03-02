@@ -10,6 +10,11 @@
 
 <div class="container">
     <div class="row justify-content-end mt-5">
+        <div th:if="${deleted} == 'true'" class="row justify-content-center">
+            <div class="col-6">
+                <div class="alert alert-info" role="alert" th:text="#{projects.project.deleted}"></div>
+            </div>
+        </div>
         <div sec:authorize="hasRole('ROLE_MANAGE_PROJECT')" class="col-2">
             <a th:href="@{/projects/new}" class="btn btn-lg bg-btn-dark" th:text="#{projects.button}"></a>
         </div>
@@ -19,35 +24,7 @@
             <div class="row">
                 <h1 class="mt-3 text-center font-honeysuckle bold" th:text="#{projects.index}"></h1>
             </div>
-            <div class="row justify-content-center">
-                <form th:action="@{/projects}" th:object="${filter}" class="col-10 mt-3">
-                    <div class="row">
-                        <div class="col">
-                            <input class="form-control" th:field="*{name}" th:placeholder="#{projects.name}">
-                        </div>
-                        <div class="col">
-                            <input th:field="*{globalSearch}"
-                                   class="form-control"
-                                   th:placeholder="#{common.search.global}">
-                        </div>
-                        <div class="col">
-                            <select th:field="*{creator}"
-                                    class="form-control">
-                                <option th:value="${null}" th:text="#{projects.creator}"></option>
-                                <option th:each="c : ${creators}"
-                                        th:value="${c.getId()}"
-                                        th:text="${c.getUserRealName()}"></option>
-                            </select>
-                        </div>
-                        <div class="col">
-                            <button type="submit" th:text="#{common.search}" class="btn bg-btn-red"></button>
-                            <a class="btn bg-btn-red" th:href="@{/projects}" th:text="#{common.clear}"></a>
-                        </div>
-                    </div>
-
-                </form>
-            </div>
-
+            <div th:replace="~{projects/component/searchEngine.html :: searchEngine}"></div>
             <div th:each="project : ${projects}">
                 <div class="row justify-content-center">
                     <div class="col-10">
@@ -62,11 +39,9 @@
                                     <span th:text="#{projects.code}"></span>
                                     <span class="text-muted" th:text="${project.getId()}"></span>
                                 </small>
-
                             </div>
                         </div>
                     </div>
-
                 </div>
             </div>
             <div class="row">

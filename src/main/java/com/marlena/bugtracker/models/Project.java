@@ -17,12 +17,12 @@ public class Project {
     private Long id;
 
     @Column(nullable = false)
-    @NotBlank(message="Name must not be blank")
-    @Size(min=5, message="Name must be at least 5 characters long")
+    @NotBlank
+    @Size(min=5)
     private String name;
 
-    @NotBlank(message = "Description must not be blank")
-    @Size(min=10, message="Description must be at least 10 characters long")
+    @NotBlank
+    @Size(min=10)
     @Column(columnDefinition = "TEXT")
     private String description;
 

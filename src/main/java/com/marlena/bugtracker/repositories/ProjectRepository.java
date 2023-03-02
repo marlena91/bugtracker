@@ -18,4 +18,6 @@ public interface ProjectRepository extends JpaRepository<Project, Long>, JpaSpec
 
     List<Project> findAllByEnabled(Boolean enabled);
     List<Project> findAllByCreator(Person creator);
+
+    List<Project> findAllByCreatorAndEnabled(Person creator,Boolean enabled);
 }

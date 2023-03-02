@@ -31,7 +31,7 @@
                                     <input class="form-check-input mt-0" type="checkbox" name="tags" id="authCheckbox"
                                            th:value="${authority.getId()}" th:field="*{authorities}">
                                     <label class="form-check-label ms-1" for="authCheckbox"
-                                           th:text="${authority.getName()}">
+                                           th:text="${#messages.msg('authority.label.' + authority.getName())}">
                                     </label>
                                 </div>
                             </div>

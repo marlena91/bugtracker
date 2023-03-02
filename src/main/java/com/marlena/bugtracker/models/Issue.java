@@ -2,9 +2,7 @@ package com.marlena.bugtracker.models;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
-import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -49,17 +47,18 @@ public class Issue {
 
     @Audited
     @Column(nullable = false)
-    @NotBlank(message="Name must not be blank")
-    @Size(min=5, message="Name must be at least 5 characters long")
+    @NotBlank
+    @Size(min = 5)
     private String name;
 
     @Column(columnDefinition = "TEXT")
-    @NotBlank(message = "Description must not be blank")
-    @Size(min=10, message="Description must be at least 10 characters long")
+    @NotBlank
+    @Size(min= 10)
     private String description;
 
     @ManyToOne
-    @JoinColumn(name = "creator_id", nullable = false)
+    @JoinColumn(name = "creator_id", nullable = false, updatable = false)
+    @CreatedBy
     private Person creator;
 
     @ManyToOne
@@ -74,18 +73,11 @@ public class Issue {
             cascade = CascadeType.PERSIST, targetEntity = Comment.class)
     private Set<Comment> comments;
 
-    @Column(nullable = false)
-    private Date dateCreated;
-
-    @Column(nullable = false)
-    private Date lastUpdated;
+    @LastModifiedDate
+    private Date lastModifiedDate;
 
     @Column(nullable = false)
     private Boolean enabled = true;
-
-    @Column(updatable = false)
-    @CreatedBy
-    String createdBy;
 
     @Column(updatable = false)
     @CreatedDate
@@ -93,7 +85,4 @@ public class Issue {
 
     @LastModifiedBy
     String lastModifiedBy;
-
-    @LastModifiedDate
-    Date lastModifiedDate;
 }

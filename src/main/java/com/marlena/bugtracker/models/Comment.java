@@ -27,8 +27,8 @@ public class Comment {
     private Person author;
 
     @Column(nullable = false)
-    @NotBlank(message = "Comment must not be blank")
-    @Size(min = 10, message = "Comment must be at least 10 characters long")
+    @NotBlank
+    @Size(min = 10)
     private String content;
 
     private String imagePath;
