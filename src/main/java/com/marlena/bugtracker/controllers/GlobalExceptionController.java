@@ -14,6 +14,7 @@ public class GlobalExceptionController {
         ModelAndView errorPage = new ModelAndView();
         errorPage.setViewName("error");
         errorPage.addObject("errormsg", exception.getMessage());
+        log.info(exception.getMessage());
         return errorPage;
     }
 }

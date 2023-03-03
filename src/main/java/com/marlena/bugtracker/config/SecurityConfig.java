@@ -30,7 +30,7 @@ public class SecurityConfig {
                         .requestMatchers("/users/authorities").hasRole("MANAGE_USER")
                         .requestMatchers("/users/edit/**").hasRole("MANAGE_USER")
                         .requestMatchers("/users/delete/**").hasRole("MANAGE_USER")
-                        .requestMatchers("/users").hasRole("USER_TAB")
+                        .requestMatchers("/users").hasAnyRole("USER_TAB", "MANAGE_USER")
                         .requestMatchers("/projects/new").hasRole("MANAGE_PROJECT")
                         .requestMatchers("/projects/edit/**").hasRole("MANAGE_PROJECT")
                         .requestMatchers("/projects/delete/**").hasRole("MANAGE_PROJECT")
