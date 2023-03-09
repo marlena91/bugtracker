@@ -42,7 +42,7 @@
                                     <input type="hidden" name="issueId" th:value="${issue.getId()}">
                                     <div class="col-6">
                                         <input class="form-control form-control-sm"
-                                               name="image" accept="image/*" type="file">
+                                               name="image" accept="image/*" type="file" required>
                                     </div>
                                     <div class="col-1">
                                         <button type="submit"
@@ -93,21 +93,6 @@
                                            name="image" accept="image/*" type="file">
                                 </div>
                             </div>
-
-
-<!--                                <form class="d-flex justify-content-end" th:action="@{/upload}" method="post"-->
-<!--                                      enctype="multipart/form-data">-->
-<!--                                    <input type="hidden" name="commentId" th:value="${comment.getId()}">-->
-<!--                                    <input type="hidden" name="issueId" th:value="${issue.getId()}">-->
-
-<!--                                    <div class="col-1">-->
-<!--                                        <button type="submit"-->
-<!--                                                class="btn bg-btn-light hover-bluegrotto font-navyblue"><i-->
-<!--                                                class="bi bi-check-lg"></i></button>-->
-<!--                                    </div>-->
-<!--                                </form>-->
-
-
                             <div class="modal-footer">
                                 <button type="submit" class="btn btn-secondary">Submit</button>
                             </div>

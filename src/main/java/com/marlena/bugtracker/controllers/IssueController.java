@@ -145,8 +145,11 @@ public class IssueController {
             return modelAndView;
         }
         commentService.saveCommentDetails(comment, authentication, httpSession);
-        Path path = uploadService.uploadImage(file, comment.getId());
-        commentService.savePathForImage(comment.getId(), path.getFileName());
+        if(!file.isEmpty()){
+            Path path = uploadService.uploadImage(file, comment.getId());
+            commentService.savePathForImage(comment.getId(), path.getFileName());
+        }
+
 
         return getIssueById(issue.getId(), httpSession);
     }
