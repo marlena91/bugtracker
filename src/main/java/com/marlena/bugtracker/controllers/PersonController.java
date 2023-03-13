@@ -82,15 +82,21 @@ public class PersonController {
     }
 
     @PostMapping("/{id}")
-    public String updateUser(@Valid @ModelAttribute("userData") UserData userData, Errors errors, @PathVariable Long id)
+    public ModelAndView updateUser(@Valid @ModelAttribute("userData") UserData userData, Errors errors, @PathVariable Long id)
             throws ResourceNotFoundException {
-        if (errors.hasErrors()) {
-            return "users/edit.html";
-        }
         Person user = userService.findUserById(id).getBody();
+
+        if (errors.hasErrors()) {
+            ModelAndView modelAndView = new ModelAndView("users/edit");
+            modelAndView.addObject("user", user);
+            modelAndView.addObject("authorities", user.getAuthorities());
+
+            return modelAndView;
+        }
         userService.updateUser(userData, id);
         assert user != null;
-        return "redirect:/users/"+user.getId();
+        return getUserById(user.getId());
+
     }
 
     @GetMapping("/delete/{id}")
